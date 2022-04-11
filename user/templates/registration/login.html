@@ -2,10 +2,23 @@
 
 
 {% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <div class="animate form login_form">
   <section class="login_content">
+    {{ form.non_field_errors }}
     {% if form.errors %}
     {{form}}
+    <script>
+      window.location.hash='signin';
+    </script>
     <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
@@ -21,7 +34,7 @@
       {% csrf_token %}
       <h1>Login Form</h1>
       <div>
-        <input type="text" class="form-control" placeholder="Username" name="username" required="" />
+        <input type="text" class="form-control" placeholder="Username" name="username" value="{{form.username.value}}" required="" />
       </div>
       <div>
         <input type="password" class="form-control" placeholder="Password" name="password" required="" />
@@ -55,19 +68,61 @@
 
 <div id="register" class="animate form registration_form">
   <section class="login_content">
+    {{ f_register.non_field_errors }}
+    {% if f_register.errors %}
+    {{f_register.errors}}
+    <script>
+      window.location.hash='signup';
+    </script>
+    {% endif %}
     <form method="post" action="{% url 'user:register' %}">
       {% csrf_token %}
       <h1>Create Account</h1>
       <div>
-        <input type="text" class="form-control" placeholder="Username" name="username" required="" />
+        {% if f_register.username.errors %}
+        <!--prettier-ignore  -->
+        {% for error in f_register.username.errors %}
+        <p class="forget error">
+          <i class="fa fa-exclamation-triangle"></i> {{error}}
+        </p>
+        {% endfor %} {% endif %}
+        <input type="text" class="form-control" placeholder="Username" name="username" value="{{f_register.username.value}}" required="" />
       </div>
+
+      <div>
+        {% if f_register.email.errors %}
+        <!--prettier-ignore  -->
+        {% for error in f_register.email.errors %}
+        <p class="forget error">
+          <i class="fa fa-exclamation-triangle"></i> {{error}}
+        </p>
+        {% endfor %} {% endif %}
+        <input type="email" class="form-control" placeholder="Email" name="email" value="{{f_register.email.value}}" required="" />
+      </div>
+
       <!-- <div>
         <input type="email" class="form-control" placeholder="Email" required="" />
       </div> -->
+      
       <div>
+        {% if f_register.password1.errors %}
+        <!--prettier-ignore  -->
+        {% for error in f_register.password1.errors %}
+        <p class="forget error">
+          <i class="fa fa-exclamation-triangle"></i> {{error}}
+        </p>
+        {% endfor %} {% endif %}
         <input type="password" class="form-control" placeholder="Password" name="password1" required="" />
       </div>
+
       <div>
+        {% if f_register.password2.errors %}
+        <!--prettier-ignore  -->
+        {% for error in f_register.password2.errors %}
+        <p class="forget error">
+          <i class="fa fa-exclamation-triangle"></i> {{error}}
+        </p>
+        {% endfor %} {% endif %}
         <input type="password" class="form-control" placeholder="Confirm password" name="password2" required="" />
       </div>
       <div>
