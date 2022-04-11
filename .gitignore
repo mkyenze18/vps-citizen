@@ -5,3 +5,27 @@ db.sqlite3
 
 node_modules
 /static
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+*/node_modules
+/.pnp
+.pnp.js
+
+# testing
+vps/react//coverage
+
+# production
+vps/react/build
+
+# misc
+vps/react/.DS_Store
+vps/react/.env.local
+vps/react/.env.development.local
+vps/react/.env.test.local
+vps/react/.env.production.local
+
+vps/react/npm-debug.log*
+vps/react/yarn-debug.log*
+vps/react/yarn-error.log*
