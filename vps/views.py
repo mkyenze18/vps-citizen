@@ -60,7 +60,7 @@ from .forms import Country_Form
 # def vote(request, question_id):
 #     return HttpResponse("You're voting on question %s." % question_id)
 
-# @login_required # TODO https://docs.djangoproject.com/en/4.0/topics/auth/default/#the-login-required-decorator
+@login_required # TODO https://docs.djangoproject.com/en/4.0/topics/auth/default/#the-login-required-decorator
 def index(request, resource=None):
     return render(request, 'build/index.html')
 

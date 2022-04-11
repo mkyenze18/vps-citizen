@@ -5,7 +5,7 @@ from django.apps import apps
 from settings.models import Setting
 # Create your views here.
 
-# @login_required
+@login_required
 def index(request):
     # apps.get_app_config('admin').verbose_name
     # apps_list = []
