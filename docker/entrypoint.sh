@@ -7,7 +7,7 @@ GID=${GID:-1000}
 usermod -o -u "$UID" user1
 groupmod -o -g "$GID" user1
 
-# exec su user1
+exec su user1
 
 poetry install --no-dev --no-root
 
