@@ -1,0 +1,22 @@
+{
+  "name": "vps",
+  "version": "1.0.0",
+  "description": "Virtual Police Station (VPS) emulates the workflows in the police force",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njosh13/Interactor.git"
+  },
+  "author": "Joseph Suhudu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/njosh13/Interactor/issues"
+  },
+  "homepage": "https://github.com/njosh13/Interactor#readme",
+  "dependencies": {
+    "swagger": "^0.7.5"
+  }
+}

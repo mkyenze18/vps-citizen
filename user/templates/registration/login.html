@@ -1,0 +1,96 @@
+{% extends "registration/base.html" %}
+
+
+{% block content %}
+<div class="animate form login_form">
+  <section class="login_content">
+    {% if form.errors %}
+    {{form}}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+    <form method="post" action="{% url 'user:login' %}">
+      {% csrf_token %}
+      <h1>Login Form</h1>
+      <div>
+        <input type="text" class="form-control" placeholder="Username" name="username" required="" />
+      </div>
+      <div>
+        <input type="password" class="form-control" placeholder="Password" name="password" required="" />
+      </div>
+      <div>
+        <button class="btn btn-default submit">Log in</button>
+        <a class="reset_pass" href="{% url 'user:password_reset' %}">Lost your password?</a>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="separator">
+        <p class="change_link">New to site?
+          <a href="#signup" class="to_register"> Create Account </a>
+        </p>
+
+        <div class="clearfix"></div>
+        <br />
+
+        <div>
+          <h1>
+            <i class="fa fa-paw"></i> Virtual Police Station (VPS)
+          </h1>
+          <p>©2022 All Rights Reserved. VPS is IE Solutions product. Privacy and Terms</p>
+        </div>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+    </form>
+  </section>
+</div>
+
+<div id="register" class="animate form registration_form">
+  <section class="login_content">
+    <form method="post" action="{% url 'user:register' %}">
+      {% csrf_token %}
+      <h1>Create Account</h1>
+      <div>
+        <input type="text" class="form-control" placeholder="Username" name="username" required="" />
+      </div>
+      <!-- <div>
+        <input type="email" class="form-control" placeholder="Email" required="" />
+      </div> -->
+      <div>
+        <input type="password" class="form-control" placeholder="Password" name="password1" required="" />
+      </div>
+      <div>
+        <input type="password" class="form-control" placeholder="Confirm password" name="password2" required="" />
+      </div>
+      <div>
+        <button class="btn btn-default submit" href="index.html">Submit</button>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="separator">
+        <p class="change_link">Already a member ?
+          <a href="#signin" class="to_register"> Log in </a>
+        </p>
+
+        <div class="clearfix"></div>
+        <br />
+
+        <div>
+          <h1><i class="fa fa-paw"></i> Virtual Police Station (VPS)</h1>
+          <p>©2022 All Rights Reserved. VPS is IE Solutions product. Privacy and Terms</p>
+        </div>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+    </form>
+  </section>
+</div>
+{% endblock content %}

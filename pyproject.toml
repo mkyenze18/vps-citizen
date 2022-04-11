@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "IE Ecosystem"
+version = "0.1.0"
+description = "A collection of django-based applications build by IE Solutions"
+authors = ["Joseph Suhudu <suhudujoseph@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.0.3"
+django-cors-headers = "^3.11.0"
+django-crispy-forms = "^1.14.0"
+django-extensions = "^3.1.5"
+djangorestframework = "^3.13.1"
+Pillow = "^9.1.0"
+pyparsing = "^3.0.8"
+pydot = "^1.4.2"
+PyYAML = "^6.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,880 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "VPS"
+host: 127.0.0.1:8000
+basePath: /vps/api/v0
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+  - text/html
+paths:
+  /countries:
+    get:
+      tags:
+        - Country
+      description: Retrieves the collection of Country resources
+      summary: Retrieves the collection of Country resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Country collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/country'
+    post:
+      tags:
+          - Country
+      description: Creates a Country resource
+      summary: Creates a Country resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Country resource
+          required: true
+          type: string
+          schema:
+            # type: string
+            # example:
+            #   name: Kenya
+            #   nationality: Kenyan
+            $ref: '#/definitions/schemas/country'
+      responses:
+        "201":
+          description: Country resource created
+          schema:
+            $ref: '#/definitions/schemas/country'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /countries/{id}:
+    get:
+      tags:
+          - Country
+      description: Retrieves a Country resource
+      summary: Retrieves a Country resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Country resource
+          schema:
+            $ref: '#/definitions/schemas/country'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Country
+      description: Replaces the Country resource
+      summary: Replaces the Country resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Country resource
+          required: true
+          type: string
+          schema:
+            $ref: '#/definitions/schemas/country'
+      responses:
+        "200":
+          description: Country resource updated
+          schema:
+            $ref: '#/definitions/schemas/country'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Country
+      description: Removes the Country resource
+      summary: Removes the Country resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Country resource deleted
+        "404":
+          description: Resource not found
+
+  /genders:
+    get:
+      tags:
+        - Gender
+      description: Retrieves the collection of Gender resources
+      summary: Retrieves the collection of Gender resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Gender collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/gender'
+    post:
+      tags:
+          - Gender
+      description: Creates a Gender resource
+      summary: Creates a Gender resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Gender resource
+          required: true
+          type: string
+          schema:
+            $ref: '#/definitions/schemas/gender'
+      responses:
+        "201":
+          description: Gender resource created
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /genders/{id}:
+    get:
+      tags:
+          - Gender
+      description: Retrieves a Gender resource
+      summary: Retrieves a Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Gender resource
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Gender
+      description: Replaces the Gender resource
+      summary: Replaces the Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Gender resource
+          required: true
+          type: string
+          schema:
+            $ref: '#/definitions/schemas/gender'
+      responses:
+        "200":
+          description: Gender resource updated
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Gender
+      description: Removes the Gender resource
+      summary: Removes the Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Gender resource deleted
+        "404":
+          description: Resource not found
+
+  /iprs-persons:
+    get:
+      tags:
+        - IPRS Person
+      description: Retrieves the collection of IPRS Person resources
+      summary: Retrieves the collection of IPRS Person resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: IPRS Person collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/iprs_Person'
+    post:
+      tags:
+          - IPRS Person
+      description: Creates a IPRS Person resource
+      summary: Creates a IPRS Person resource
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/definitions/parameters/id_no'
+        - $ref: '#/definitions/parameters/passport_no'
+        - $ref: '#/definitions/parameters/first_name'
+        - $ref: '#/definitions/parameters/middle_name'
+        - $ref: '#/definitions/parameters/last_name'
+        - $ref: '#/definitions/parameters/gender'
+        - $ref: '#/definitions/parameters/nationality'
+        - $ref: '#/definitions/parameters/county_of_birth'
+        - $ref: '#/definitions/parameters/district_of_birth'
+        - $ref: '#/definitions/parameters/division_of_birth'
+        - $ref: '#/definitions/parameters/location_of_birth'
+        - $ref: '#/definitions/parameters/date_of_birth'
+        - $ref: '#/definitions/parameters/mug_shot'
+      responses:
+        "201":
+          description: IPRS Person resource created
+          schema:
+            $ref: '#/definitions/schemas/iprs_Person'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /iprs-persons/{id}:
+    get:
+      tags:
+          - IPRS Person
+      description: Retrieves a IPRS Person resource
+      summary: Retrieves a IPRS Person resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: IPRS Person resource
+          schema:
+            $ref: '#/definitions/schemas/iprs_Person'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - IPRS Person
+      description: Replaces the IPRS Person resource
+      summary: Replaces the IPRS Person resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+  
+        - $ref: '#/definitions/parameters/id_no'
+        - $ref: '#/definitions/parameters/passport_no'
+        - $ref: '#/definitions/parameters/first_name'
+        - $ref: '#/definitions/parameters/middle_name'
+        - $ref: '#/definitions/parameters/last_name'
+        - $ref: '#/definitions/parameters/gender'
+        - $ref: '#/definitions/parameters/nationality'
+        - $ref: '#/definitions/parameters/county_of_birth'
+        - $ref: '#/definitions/parameters/district_of_birth'
+        - $ref: '#/definitions/parameters/division_of_birth'
+        - $ref: '#/definitions/parameters/location_of_birth'
+        - $ref: '#/definitions/parameters/date_of_birth'
+        - $ref: '#/definitions/parameters/mug_shot'
+      responses:
+        "200":
+          description: IPRS Person resource updated
+          schema:
+            $ref: '#/definitions/schemas/iprs_Person'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - IPRS Person
+      description: Removes the IPRS Person resource
+      summary: Removes the IPRS Person resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: IPRS Person resource deleted
+        "404":
+          description: Resource not found
+
+  /ranks:
+    get:
+      tags:
+        - Rank
+      description: Retrieves the collection of Rank resources
+      summary: Retrieves the collection of Rank resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Rank collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/rank'
+    post:
+      tags:
+          - Rank
+      description: Creates a Rank resource
+      summary: Creates a Rank resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Rank resource
+          required: true
+          type: string
+          schema:
+            # type: string
+            # example:
+            #   name: Kenya
+            #   nationality: Kenyan
+            $ref: '#/definitions/schemas/rank'
+      responses:
+        "201":
+          description: Rank resource created
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /ranks/{id}:
+    get:
+      tags:
+          - Rank
+      description: Retrieves a Rank resource
+      summary: Retrieves a Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Rank resource
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Rank
+      description: Replaces the Rank resource
+      summary: Replaces the Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Rank resource
+          required: true
+          type: string
+          schema:
+            $ref: '#/definitions/schemas/rank'
+      responses:
+        "200":
+          description: Rank resource updated
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Rank
+      description: Removes the Rank resource
+      summary: Removes the Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Rank resource deleted
+        "404":
+          description: Resource not found
+  
+  /police-stations:
+    get:
+      tags:
+        - Police Station
+      description: Retrieves the collection of Police Station resources
+      summary: Retrieves the collection of Police Station resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Police Station collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/police_station'
+    post:
+      tags:
+          - Police Station
+      description: Creates a Police Station resource
+      summary: Creates a Police Station resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Police Station resource
+          required: true
+          type: string
+          schema:
+            # type: string
+            # example:
+            #   name: Kenya
+            #   nationality: Kenyan
+            $ref: '#/definitions/schemas/police_station'
+      responses:
+        "201":
+          description: Police Station resource created
+          schema:
+            $ref: '#/definitions/schemas/police_station'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /police-stations/{id}:
+    get:
+      tags:
+          - Police Station
+      description: Retrieves a Police Station resource
+      summary: Retrieves a Police Station resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Police Station resource
+          schema:
+            $ref: '#/definitions/schemas/police_station'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Police Station
+      description: Replaces the Police Station resource
+      summary: Replaces the Police Station resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Police Station resource
+          required: true
+          type: string
+          schema:
+            $ref: '#/definitions/schemas/police_station'
+      responses:
+        "200":
+          description: Police Station resource updated
+          schema:
+            $ref: '#/definitions/schemas/police_station'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Police Station
+      description: Removes the Police Station resource
+      summary: Removes the Police Station resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Police Station resource deleted
+        "404":
+          description: Resource not found
+
+  /police-officers:
+    get:
+      tags:
+        - Police Officer
+      description: Retrieves the collection of Police Officer resources
+      summary: Retrieves the collection of Police Officer resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Police Officer collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/police_officer'
+    post:
+      tags:
+          - Police Officer
+      description: Creates a Police Officer resource
+      summary: Creates a Police Officer resource
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/definitions/parameters/user'
+        - $ref: '#/definitions/parameters/iprs_person'
+        - $ref: '#/definitions/parameters/service_number'
+        - $ref: '#/definitions/parameters/email_address'
+        - $ref: '#/definitions/parameters/mobile_phone'
+        - $ref: '#/definitions/parameters/rank'
+        - $ref: '#/definitions/parameters/mug_shot'
+      responses:
+        "201":
+          description: Police Officer resource created
+          schema:
+            $ref: '#/definitions/schemas/police_officer'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /police-officers/{id}:
+    get:
+      tags:
+          - Police Officer
+      description: Retrieves a Police Officer resource
+      summary: Retrieves a Police Officer resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Police Officer resource
+          schema:
+            $ref: '#/definitions/schemas/police_officer'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Police Officer
+      description: Replaces the Police Officer resource
+      summary: Replaces the Police Officer resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+  
+        - $ref: '#/definitions/parameters/user'
+        - $ref: '#/definitions/parameters/iprs_person'
+        - $ref: '#/definitions/parameters/service_number'
+        - $ref: '#/definitions/parameters/email_address'
+        - $ref: '#/definitions/parameters/mobile_phone'
+        - $ref: '#/definitions/parameters/rank'
+        - $ref: '#/definitions/parameters/mug_shot'
+      responses:
+        "200":
+          description: Police Officer resource updated
+          schema:
+            $ref: '#/definitions/schemas/police_officer'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Police Officer
+      description: Removes the Police Officer resource
+      summary: Removes the Police Officer resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Police Officer resource deleted
+        "404":
+          description: Resource not found
+
+# TODO https://idratherbewriting.com/learnapidoc/pubapis_openapi_step5_components_object.html
+definitions:
+  schemas:
+    country:
+      title: Country
+      description: A country
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this country
+          example: 1
+        name:
+          type: string
+          description: The name of this country
+          example: Kenya
+        nationality:
+          type: string
+          description: The nationality of this country
+          example: Kenyan
+    gender:
+      title: Gender
+      description: A Gender
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this gender
+          example: 1
+        name:
+          type: string
+          description: The name of this gender
+          example: Male
+    iprs_Person:
+      title: IPRS Person
+      description: An IPRS person
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this IPRS person
+          example: 1
+        id_no:
+          type: string
+          description: The national identification number of this IPRS person
+          example: 123456789
+        passport_no:
+          type: string
+          description: The passport number of this IPRS person
+          example: 123456789
+        first_name:
+          type: string
+          description: The first name of this IPRS person
+          example: John
+        middle_name:
+          type: string
+          description: The middle name of this IPRS person
+          example: Smeth
+        last_name:
+          type: string
+          description: The last name of this IPRS person
+          example: Smith
+        gender:
+          type: number
+          description: The gender of this IPRS person
+          example: 1
+        nationality:
+          type: number
+          description: The nationality of this IPRS person
+          example: 1
+        county_of_birth:
+          type: string
+          description: The county of birth of this IPRS person
+          example: Nairobi
+        district_of_birth:
+          type: string
+          description: The district of birth of this IPRS person
+          example: Nairobi
+        division_of_birth:
+          type: string
+          description: The division of birth of this IPRS person
+          example: Nairobi
+        location_of_birth:
+          type: string
+          description: The location of birth of this IPRS person
+          example: Nairobi
+        date_of_birth:
+          type: string
+          description: The date of birth of this IPRS person
+          example: '2022-04-06T03:15:00Z'
+        mug_shot:
+          type: string
+          readOnly: true
+          description: The mug shot of this IPRS person
+          example: /media/iprs_person_None/IMG_20211002_081708_568_OeWUrs7.jpg
+    rank:
+      title: Rank
+      description: A rank
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this rank
+          example: 1
+        name:
+          type: string
+          description: The name of this rank
+          example: Constable
+    police_station:
+      title: Police Station
+      description: A police station
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this police station
+          example: 1
+        name:
+          type: string
+          description: The location of this police station
+          example: Spring Valley Police Station
+        country:
+          type: integer
+          description: The country of this police station
+          example: 1
+        location:
+          type: string
+          description: The location of this police station
+          example: 100 Lower Kabete Road
+    police_officer:
+      title: Police Office
+      description: A police officer
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this police officer
+          example: 1
+        user:
+          type: integer
+          description: The user for this police officer
+          example: 1
+        iprs_person:
+          type: integer
+          description: The IPRS Person for this police officer
+          example: 1
+        service_number:
+          type: string
+          description: The service number of this police officer
+          example: 123456789
+        email_address:
+          type: string
+          description: The email of this police officer
+          example: officer@police.com
+        mobile_phone:
+          type: string
+          description: The mobile number of this police officer
+          example: +1234567890987
+        rank:
+          type: integer
+          description: The rank of this police officer
+          example: 1
+        mug_shot:
+          type: string
+          readOnly: true
+          description: The mug shot of this police officer
+          example: /media/police_officer_None/IMG_20211002_081708_568_OeWUrs7.jpg
+  parameters:
+    page:
+      name: page
+      in: query
+      description: The collection page number
+      type: number
+      allowEmptyValue: true
+      default: 1
+    id:
+      name: id
+      in: path
+      description: Resource identifier
+      required: true
+      type: number
+    
+    mug_shot:
+      name: mug_shot
+      in: formData
+      description: mug shot
+      # required: true
+      type: file
+
+    id_no:
+      name: id_no
+      in: formData
+      description: National identification number
+      type: string
+    passport_no:
+      name: passport_no
+      in: formData
+      description: Passport number
+      type: string
+    first_name:
+      name: first_name
+      in: formData
+      description: First name
+      # required: true
+      type: string
+    middle_name:
+      name: middle_name
+      in: formData
+      description: Middle name
+      type: string
+    last_name:
+      name: last_name
+      in: formData
+      description: Last name
+      # required: true
+      type: string
+    gender:
+      name: gender
+      in: formData
+      description: Gender
+      # required: true
+      type: number
+    nationality:
+      name: nationality
+      in: formData
+      description: Nationality
+      # required: true
+      type: number
+    county_of_birth:
+      name: county_of_birth
+      in: formData
+      description: County of Birth
+      # required: true
+      type: string
+    district_of_birth:
+      name: district_of_birth
+      in: formData
+      description: District of Birth
+      # required: true
+      type: string
+    division_of_birth:
+      name: division_of_birth
+      in: formData
+      description: Division of Birth
+      # required: true
+      type: string
+    location_of_birth:
+      name: location_of_birth
+      in: formData
+      description: Location of Birth
+      # required: true
+      type: string
+    date_of_birth:
+      name: date_of_birth
+      in: formData
+      description: Date of Birth
+      # required: true
+      type: string
+
+
+    user:
+      name: user
+      in: formData
+      description: User
+      type: integer
+    iprs_person:
+      name: iprs_person
+      in: formData
+      description: IPRS Person
+      type: integer
+    service_number:
+      name: service_number
+      in: formData
+      description: Service number
+      type: string
+    email_address:
+      name: email_address
+      in: formData
+      description: Email
+      type: string
+    mobile_phone:
+      name: mobile_phone
+      in: formData
+      description: Mobile phone
+      type: string
+    rank:
+      name: rank
+      in: formData
+      description: Rank
+      type: integer
