@@ -5,7 +5,7 @@ description = "A collection of django-based applications build by IE Solutions"
 authors = ["Joseph Suhudu <suhudujoseph@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 Django = "^4.0.3"
 django-cors-headers = "^3.11.0"
 django-crispy-forms = "^1.14.0"
