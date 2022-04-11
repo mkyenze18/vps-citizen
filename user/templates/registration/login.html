@@ -14,12 +14,12 @@
 <div class="animate form login_form">
   <section class="login_content">
     {{ form.non_field_errors }}
-    {% if form.errors %}
+    <!-- {% if form.errors %}
     <script>
       window.location.hash='signin';
     </script>
     <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+    {% endif %} -->
 
     {% if next %}
         {% if user.is_authenticated %}
