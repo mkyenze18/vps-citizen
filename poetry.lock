@@ -146,10 +146,21 @@ category = "main"
 optional = false
 python-versions = ">=2"
 
+[[package]]
+name = "werkzeug"
+version = "2.1.1"
+description = "The comprehensive WSGI web application library."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+watchdog = ["watchdog"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5e82dbc71016350920e30692f47491748fe8c7f0ff2e9e86a0aac667741407bd"
+content-hash = "b63ec8418af6733db35b43cb6b5fecc45b7735991bcefd3db29d0a4fe8d2a1a9"
 
 [metadata.files]
 asgiref = [
@@ -288,4 +299,8 @@ sqlparse = [
 tzdata = [
     {file = "tzdata-2022.1-py2.py3-none-any.whl", hash = "sha256:238e70234214138ed7b4e8a0fab0e5e13872edab3be586ab8198c407620e2ab9"},
     {file = "tzdata-2022.1.tar.gz", hash = "sha256:8b536a8ec63dc0751342b3984193a3118f8fca2afe25752bb9b7fffd398552d3"},
+]
+werkzeug = [
+    {file = "Werkzeug-2.1.1-py3-none-any.whl", hash = "sha256:3c5493ece8268fecdcdc9c0b112211acd006354723b280d643ec732b6d4063d6"},
+    {file = "Werkzeug-2.1.1.tar.gz", hash = "sha256:f8e89a20aeabbe8a893c24a461d3ee5dad2123b05cc6abd73ceed01d39c3ae74"},
 ]
