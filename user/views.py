@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -13,6 +14,8 @@ from .serializer import UserSerializer
 # Create your views here.
 
 def register(request):
+    raise PermissionDenied # temporarily suspending sign ups as the system is still on the internet even during development
+
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
