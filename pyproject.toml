@@ -16,6 +16,7 @@ pyparsing = "^3.0.8"
 pydot = "^1.4.2"
 PyYAML = "^6.0"
 Werkzeug = "^2.1.1"
+pyOpenSSL = "^22.0.0"
 
 [tool.poetry.dev-dependencies]
 
