@@ -199,7 +199,7 @@ REST_FRAMEWORK = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = "index:index"
+LOGIN_REDIRECT_URL = "index:dashboard"
 
 # TODO https://django-extensions.readthedocs.io/en/latest/graph_models.html#default-settings
 # GRAPH_MODELS = {

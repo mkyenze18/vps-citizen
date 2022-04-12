@@ -74,6 +74,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { config } from '../../Constants'
 import MyVerticallyCenteredModal from '../../components/modal_react_bootstrap';
 import { toast } from 'react-toastify';
 import FormValidator from '@yaireo/validator';
@@ -84,7 +85,11 @@ import { handleErrorAxios } from '../../utility/notification';
 import { getInvoice, deleteInvoice } from "../../data";
 
 const axios = require('axios').default;
-  
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
+
 export default function Resource(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [resourcesGender, setResourcesGender] = useState([]);
@@ -147,7 +152,7 @@ export default function Resource(props) {
 
   // TODO https://axios-http.com/docs/instance
   const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/',
+    baseURL: url,
     timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'},
     // TODO https://axios-http.com/docs/handling_errors
@@ -267,7 +272,7 @@ export default function Resource(props) {
 
         // hideDropzone(); // Falied for some resource, may be state related
         if(result["mug_shot"]) {
-            mugShotRef.current.src = "http://127.0.0.1:8000"+result["mug_shot"];
+            mugShotRef.current.src = url+result["mug_shot"];
 
             setDropzoneShow(false);
 
@@ -478,7 +483,7 @@ export default function Resource(props) {
     // TODO https://docs.dropzone.dev/configuration/tutorials/combine-form-data-with-files#show-me-the-code
     Dropzone.options.uploadForm = { // The camelized version of the ID of the form element
 
-      url: `http://127.0.0.1:8000/vps/api/v0/iprs-persons/${params.resourceId}`,
+      url: `${url}/vps/api/v0/iprs-persons/${params.resourceId}`,
       paramName: "mug_shot", // The name that will be used to transfer the file
       method: "put",
       // withCredentials: true,

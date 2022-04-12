@@ -8,10 +8,15 @@ import {
   useNavigate,
   Outlet
 } from "react-router-dom";
+import { config } from '../../Constants'
 import { handleErrorAxios } from '../../utility/notification';
 import { getCountries } from '../../services/countries';
 
 const axios = require('axios').default;
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
 
 export default function Gender() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -43,7 +48,7 @@ export default function Gender() {
   //   );
 
   function getResources() {
-    axios.get('http://127.0.0.1:8000/vps/api/v0/genders')
+    axios.get(`${url}/vps/api/v0/genders`)
     .then(function (response) {
       // handle success
       console.log(response);

@@ -74,6 +74,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { config } from '../../Constants'
 import MyVerticallyCenteredModal from '../../components/modal_react_bootstrap';
 import { toast } from 'react-toastify';
 import FormValidator from '@yaireo/validator';
@@ -82,7 +83,11 @@ import { handleErrorAxios } from '../../utility/notification';
 import { getInvoice, deleteInvoice } from "../../data";
 
 const axios = require('axios').default;
-  
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
+
 export default function Rank(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
@@ -106,7 +111,7 @@ export default function Rank(props) {
 
   // TODO https://axios-http.com/docs/instance
   const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/',
+    baseURL: url,
     timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'},
     // TODO https://axios-http.com/docs/handling_errors

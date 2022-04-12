@@ -5,8 +5,11 @@ from django.apps import apps
 from settings.models import Setting
 # Create your views here.
 
-@login_required
 def index(request):
+    return render(request, 'index/index.html')
+
+@login_required
+def dashboard(request):
     # apps.get_app_config('admin').verbose_name
     # apps_list = []
     # for app in apps:
@@ -22,4 +25,4 @@ def index(request):
     context = {
         'app_settings': app_settings
     }
-    return render(request, 'index/index.html', context)
+    return render(request, 'index/dashoard.html', context)

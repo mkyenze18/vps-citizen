@@ -8,11 +8,16 @@ import {
   useNavigate,
   Outlet
 } from "react-router-dom";
+import { config } from '../../Constants'
 import IPRS_Person from './resource'
 import { handleErrorAxios } from '../../utility/notification';
 import { getResources } from '../../services/countries';
 
 const axios = require('axios').default;
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
 
 export default function Collection() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,7 +30,7 @@ export default function Collection() {
 
   // TODO https://axios-http.com/docs/instance
   const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/',
+    baseURL: url,
     timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'},
     // TODO https://axios-http.com/docs/handling_errors
@@ -159,11 +164,11 @@ export default function Collection() {
                 <tr>
                     <th>#</th>
                     <th>ID No</th>
-                    <th>Passport</th>
+                    <th className="d-none d-md-block d-lg-none">Passport</th>
                     <th>First name</th>
                     <th>Last name</th>
-                    <th>Nationality</th>
-                    <th>Gender</th>
+                    <th className="d-none d-md-block d-lg-none">Nationality</th>
+                    <th className="d-none d-md-block d-lg-none">Gender</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -171,11 +176,11 @@ export default function Collection() {
                     <tr key={item.id} onClick={(e) => getResource(item.id, e)}>
                       <th scope="row">{item.id}</th>
                       <td>{item.id_no ? item.id_no : '-'}</td>
-                      <td>{item.passport_no ? item.passport_no : '-' }</td>
+                      <td className="d-none d-md-block d-lg-none">{item.passport_no ? item.passport_no : '-' }</td>
                       <td>{item.first_name}</td>
                       <td>{item.last_name}</td>
-                      <td>{resourcesCountry[item.nationality]}</td>
-                      <td>{resourcesGender[item.gender]}</td>
+                      <td className="d-none d-md-block d-lg-none">{resourcesCountry[item.nationality]}</td>
+                      <td className="d-none d-md-block d-lg-none">{resourcesGender[item.gender]}</td>
                     </tr>
                 ))}
                 </tbody>

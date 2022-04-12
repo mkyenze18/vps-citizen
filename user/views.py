@@ -14,6 +14,7 @@ from .serializer import UserSerializer
 # Create your views here.
 
 def register(request):
+    # TODO https://docs.djangoproject.com/en/4.0/ref/views/#the-403-http-forbidden-view
     raise PermissionDenied # temporarily suspending sign ups as the system is still on the internet even during development
 
     if request.method == 'POST':

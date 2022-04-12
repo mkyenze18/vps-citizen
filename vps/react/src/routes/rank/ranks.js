@@ -8,10 +8,15 @@ import {
   useNavigate,
   Outlet
 } from "react-router-dom";
+import { config } from '../../Constants'
 import { handleErrorAxios } from '../../utility/notification';
 import { getResources } from '../../services/countries';
 
 const axios = require('axios').default;
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
 
 export default function Ranks() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -43,7 +48,7 @@ export default function Ranks() {
   //   );
 
   function getResources() {
-    axios.get('http://127.0.0.1:8000/vps/api/v0/ranks')
+    axios.get(`${url}/vps/api/v0/ranks`)
     .then(function (response) {
       // handle success
       console.log(response);

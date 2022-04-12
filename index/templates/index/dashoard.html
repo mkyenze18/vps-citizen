@@ -1,0 +1,223 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fontawesome -->
+    <link href="{% static 'suspended/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+
+
+    <title>IE Ecosystem</title>
+
+    <style>
+        #bg{
+
+            background-repeat: no-repeat;
+            background-position: top;
+            background-size: 1950px 1100px;
+            background-attachment: fixed; 
+
+
+
+
+        }
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .body-wrapper {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to top, white, transparent 20%);
+        }
+
+        nav {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        nav .logo {
+            width: 50px;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links .nav-item{
+            font-family: 'Abel', sans-serif;
+        }
+
+        .nav-links .nav-item a{
+            color: black;
+        }
+
+        .nav-links .nav-item i{
+            color: grey;
+        }
+
+        .items-wrapper {
+            flex: auto;
+        }
+
+        .items .list-item {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            color: black;
+            margin: 20px;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .items .list-item i{
+            font-size: 50px;
+        }
+
+        .items .list-item .image-wrapper{
+            height: 70px;
+        }
+
+        footer {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        footer .image-wrapper {
+            width: 150px;
+        }
+
+        @media only screen and (min-width: 992px) {
+            .items-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex: auto;
+            }
+
+            .items{
+                display: flex;
+            }
+
+            .items .list-item {
+                flex: 1;
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .items .list-item i{
+                margin-bottom: 20px;
+            }
+
+            footer .image-wrapper {
+                width: 300px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .xs-full-width {
+                width: 100%;
+            }
+        }
+    </style>
+
+
+ 
+</head>
+<body id="bg" style="background-image: url('');">
+    <div class="body-wrapper">
+        <nav>
+            <div class="logo">
+                <img src="{% static 'vps/img/logo-white.png' %}" alt="IE Solutions logo"
+                width="400"
+                height="100">
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="{% url 'user:logout' %}">
+                        LOGOUT
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+
+        <div style="text-align: center;">     
+            <h1 > IE Ecosystem </h1>
+        </div>
+
+
+        
+
+
+        <div class="items-wrapper">
+            <div class="items">
+
+                <a href="{% url 'vps:index' %}" class="list-item">
+                    <i class="fas fa-chart-line"></i>
+                    <div>Virtual Police Station</div>
+                </a>
+
+                {% if user.is_staff %}
+                <a href="{% url 'user:users' %}" class="list-item">
+                    <i class="fas fa-user-cog"></i>
+                    <div>Users</div>
+                </a>
+                {% endif %}
+                
+                <a href="{% url 'settings:index' %}" class="list-item">
+                    <i class="fas fa-tools"></i>
+                    <div>Settings</div>
+                </a>
+            </div>
+        </div>
+        <footer>
+            <div style="flex: auto;">
+
+            </div>
+            <div class="image-wrapper">
+                <img src="{% static 'vps/img/logo-white.png' %}" alt="ie" style="object-fit: contain; ">
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
