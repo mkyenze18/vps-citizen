@@ -2,9 +2,9 @@ poetry install --no-dev --no-root
 
 poetry run python manage.py migrate
 
-poetry run python manage.py runserver 0.0.0.0:8000
+# poetry run python manage.py runserver 0.0.0.0:8000
 
-# TODO ie_ecosystem
+# TODO https://django-extensions.readthedocs.io/en/latest/runserver_plus.html#getting-started
 # poetry run python manage.py runserver_plus 0.0.0.0:8000
 # TODO https://django-extensions.readthedocs.io/en/latest/runserver_plus.html#ssl
 poetry run python manage.py runserver_plus 0.0.0.0:8000 --cert-file cert.crt
