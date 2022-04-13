@@ -12,7 +12,9 @@
 {% endblock %}
 
 {% block create %}
+{% if can_delete %}
     <a href="{% url 'task_manager:tasks_delete' item.id %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-user-plus fa-sm text-white-50"></i> Delete task</a>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -28,61 +30,64 @@
             {% csrf_token %}
             {{ form.non_field_errors }}
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Title</label>
-                {% if form.title.help_text %}
-                    <p class="help">{{ form.title.help_text|safe }}</p>
-                {% endif %}
-                <input type="text" name="title" class="form-control" id="exampleInputEmail1" 
-                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.title}}" 
-                required>
-                {{ form.title.errors }}
-            </div>
+            <fieldset disabled>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Title</label>
+                    {% if form.title.help_text %}
+                        <p class="help">{{ form.title.help_text|safe }}</p>
+                    {% endif %}
+                    <input type="text" name="title" class="form-control" id="exampleInputEmail1" 
+                    aria-describedby="emailHelp" placeholder="Enter title" value="{{item.title}}" 
+                    required>
+                    {{ form.title.errors }}
+                </div>
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Assign</label>
-                {% if form.assigned_to.help_text %}
-                    <p class="help">{{ form.assigned_to.help_text|safe }}</p>
-                {% endif %}
-                <!-- <input type="text" name="assigned_to" class="form-control" id="exampleInputEmail1" 
-                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.assigned_to}}" 
-                required> -->
-                {{ form.assigned_to }}
-                {{ form.assigned_to.errors }}
-            </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Assign</label>
+                    {% if form.assigned_to.help_text %}
+                        <p class="help">{{ form.assigned_to.help_text|safe }}</p>
+                    {% endif %}
+                    <!-- <input type="text" name="assigned_to" class="form-control" id="exampleInputEmail1" 
+                    aria-describedby="emailHelp" placeholder="Enter title" value="{{item.assigned_to}}" 
+                    required> -->
+                    {{ form.assigned_to }}
+                    {{ form.assigned_to.errors }}
+                </div>
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Status</label>
-                {% if form.status.help_text %}
-                    <p class="help">{{ form.status.help_text|safe }}</p>
-                {% endif %}
-                <!-- <input type="text" name="status" class="form-control" id="exampleInputEmail1" 
-                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.status}}" 
-                required> -->
-                {{ form.status }}
-                {{ form.status.errors }}
-            </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Status</label>
+                    {% if form.status.help_text %}
+                        <p class="help">{{ form.status.help_text|safe }}</p>
+                    {% endif %}
+                    <!-- <input type="text" name="status" class="form-control" id="exampleInputEmail1" 
+                    aria-describedby="emailHelp" placeholder="Enter title" value="{{item.status}}" 
+                    required> -->
+                    {{ form.status }}
+                    {{ form.status.errors }}
+                </div>
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Deadline</label>
-                {% if form.deadline.help_text %}
-                    <p class="help">{{ form.deadline.help_text|safe }}</p>
-                {% endif %}
-                <input type="text" name="deadline" class="form-control datepicker" id="exampleInputEmail1" 
-                aria-describedby="emailHelp" placeholder="Enter deadline" value="{{item.deadline|default:''}}" disabled>
-                {{ form.deadline.errors }}
-            </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Deadline</label>
+                    {% if form.deadline.help_text %}
+                        <p class="help">{{ form.deadline.help_text|safe }}</p>
+                    {% endif %}
+                    <input type="text" name="deadline" class="form-control datepicker" id="exampleInputEmail1" 
+                    aria-describedby="emailHelp" placeholder="Enter deadline" value="{{item.deadline|default:''}}" disabled>
+                    {{ form.deadline.errors }}
+                </div>
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Description</label>
-                {% if form.description.help_text %}
-                    <p class="help">{{ form.description.help_text|safe }}</p>
-                {% endif %}
-                <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3">{{form.description.value|default:''}}</textarea>
-                {{ form.description.errors }}
-            </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Description</label>
+                    {% if form.description.help_text %}
+                        <p class="help">{{ form.description.help_text|safe }}</p>
+                    {% endif %}
+                    <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3">{{form.description.value|default:''}}</textarea>
+                    {{ form.description.errors }}
+                </div>
+            </fieldset>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary">update</button>
+                <button type="submit" class="btn btn-primary" style="display: none;" id="buttonSubmit">update</button>
+                <button type="button" class="btn btn-info" id="buttonToggleForm" onclick="toggleForm()">Edit</button>
                 <div class="p-2 flex-fill"></div>
                 <button class="btn btn-warning" type="button" id="notifyButton" onclick="postNotification({{item.id}})">
                     <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
@@ -209,6 +214,20 @@
             document.querySelector('#notifyButton .sr-only').textContent = 'Send notification';
             document.querySelector('.spinner-grow').style = "display: none";
         });
+    }
+
+    let formEditable = false
+    function toggleForm() {
+        formEditable = !formEditable;
+        if(formEditable) {
+            document.querySelector('form fieldset').disabled  = false;
+            document.querySelector('#buttonSubmit').style  = "display: inline";
+            document.querySelector('#buttonToggleForm').textContent ="Cancel";
+        } else {
+            document.querySelector('form fieldset').disabled  = true;
+            document.querySelector('#buttonSubmit').style  = "display: none";
+            document.querySelector('#buttonToggleForm').textContent ="Edit";
+        }
     }
 </script>
 {% endblock %}

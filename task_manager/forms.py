@@ -9,6 +9,24 @@ class TaskForm(ModelForm):
         model = Task
         fields = ['id', 'title', 'assigned_to', 'status', 'deadline', 'description']
         widgets = {
+            'assigned_to': SelectMultiple(attrs={'class': 'form-control', 'disabled': ""}),
+            'status': Select(attrs={'class': 'form-control', 'disabled': ""}),
+        }
+
+class TaskFormAssignee(ModelForm):
+    class Meta:
+        model = Task
+        fields = ['id', 'title', 'assigned_to', 'status', 'deadline', 'description']
+        widgets = {
+            'assigned_to': SelectMultiple(attrs={'class': 'form-control', 'disabled': ""}),
+            'status': Select(attrs={'class': 'form-control'}),
+        }
+
+class TaskFormSupervisor(ModelForm):
+    class Meta:
+        model = Task
+        fields = ['id', 'title', 'assigned_to', 'status', 'deadline', 'description']
+        widgets = {
             'assigned_to': SelectMultiple(attrs={'class': 'form-control'}),
             'status': Select(attrs={'class': 'form-control'}),
         }

@@ -18,3 +18,17 @@ class Task(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     supervised_by = models.ManyToManyField(User, related_name='supervised_by')
+
+    def __str__(self):
+        return self.title
+
+class Notification(models.Model):
+    NOTIFICATION_TYPE = (
+        ('EML', 'Email'),
+        ('STM', 'System'),
+    )
+    task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='sent_notifications', null=True, blank=True)
+    recipients = models.ManyToManyField(User, related_name='received_notifications', blank=True)
+    message = models.TextField()
+    type = models.CharField(max_length=3, choices=NOTIFICATION_TYPE, default='STM') # TODO https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.Field.choices

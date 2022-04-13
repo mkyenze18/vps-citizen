@@ -3,8 +3,8 @@ from django.core.mail import send_mass_mail
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Task
-from .forms import TaskForm
+from .models import Task, Notification
+from .forms import TaskForm, TaskFormSupervisor, TaskFormAssignee
 # Create your views here.
 
 # TAKSK
@@ -17,7 +17,7 @@ def tasks_create(request):
         # https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#the-save-method
         # Create a form to edit an existing Article, but use
         # POST data to populate the form.
-        f = TaskForm(request.POST)
+        f = TaskFormSupervisor(request.POST)
         if f.is_valid():
             instance = f.save()
 
@@ -30,17 +30,26 @@ def tasks_create(request):
         else:
             return render( request, 'task_manager/tasks/create.html', {'form':f})
 
-    f = TaskForm(request.POST)
+    f = TaskFormSupervisor(request.POST)
     return render( request, 'task_manager/tasks/create.html', {'form':f})
 
 def tasks_update(request, item_id=None):
     instance = get_object_or_404(Task, pk=item_id)
 
+    can_delete = False
+
     if request.method == 'POST':
         # https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#the-save-method
         # Create a form to edit an existing Article, but use
         # POST data to populate the form.
-        f = TaskForm(request.POST, instance=instance)
+
+        if request.user == instance.created_by or request.user in instance.supervised_by.all():
+            f = TaskFormSupervisor(request.POST, instance=instance)
+        elif request.user in instance.assigned_to.all():
+            f = TaskFormAssignee(request.POST, instance=instance)
+        else:
+            f = TaskForm(request.POST, instance=instance)
+
         if f.is_valid():
             f.save( commit=False )
 
@@ -56,9 +65,15 @@ def tasks_update(request, item_id=None):
 
             return redirect('task_manager:tasks_update', instance.id)
     else:
-        f = TaskForm(instance=instance)
+        if request.user == instance.created_by or request.user in instance.supervised_by.all():
+            f = TaskFormSupervisor(instance=instance)
+            can_delete = True
+        elif request.user in instance.assigned_to.all():
+            f = TaskFormAssignee(instance=instance)
+        else:
+            f = TaskForm(instance=instance)
 
-    return render( request, 'task_manager/tasks/update.html', {'item': instance, 'form':f})
+    return render( request, 'task_manager/tasks/update.html', {'item': instance, 'form':f, 'can_delete':can_delete})
 
 def tasks_delete(request, item_id):
     instance = get_object_or_404(Task, pk=item_id)
@@ -88,16 +103,19 @@ def tasks_notify(request, item_id=None):
         subject = f'Task Update: {instance.title}'
 
         assigned_to_array = instance.assigned_to.all()
-        recipient_list_username = map(lambda assigned_to: assigned_to.username, assigned_to_array)
+        assigned_to_array_username = map(lambda assigned_to: assigned_to.username, assigned_to_array)
+        link = reverse('task_manager:tasks_update', args=[instance.id], request=request)
         message = f"""
             Title: {instance.title},
-            Assigned to: {', '.join(recipient_list_username)},
+            Assigned to: {', '.join(assigned_to_array_username)},
             Status: {TASK_STATUS[instance.status]},
             Created: {instance.created_at},
             Deadline: { instance.deadline if instance.deadline else 'Not set'},
             
             Description
             {instance.description if instance.description else '-'}
+
+            {link}
         """
 
         supervised_by_array = instance.supervised_by.all()
@@ -107,6 +125,15 @@ def tasks_notify(request, item_id=None):
         
         message1 = (subject, message, 'not-reply@task_manager.vps', recipient_list_email)
         send_mass_mail((message1,), fail_silently=False)
+
+        notification = Notification(task=instance, sender=request.user, message=message, type='EML')
+        notification.save()
+
+        if len(assigned_to_array):
+            notification.recipients.set(assigned_to_array)
+        if len(supervised_by_array):
+            notification.recipients.set(supervised_by_array)
+
         return Response('notification sent successfully')
     
 
