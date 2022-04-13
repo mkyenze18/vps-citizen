@@ -1,0 +1,22 @@
+{% extends "rest_framework/base.html" %}
+<!-- TODO https://www.django-rest-framework.org/topics/browsable-api/#customizing -->
+
+<!-- ...  # Override blocks with required customizations -->
+
+<!-- TODO https://www.django-rest-framework.org/topics/browsable-api/#overriding-the-default-theme -->
+<!-- {% comment %}
+    {% block bootstrap_theme %}
+        <link rel="stylesheet" href="/path/to/my/bootstrap.css" type="text/css">
+    {% endblock %}
+{% endcomment %} -->
+
+<!-- {% comment %} {% extends "rest_framework/base.html" %} {% endcomment %} -->
+
+{% comment %}
+{% load static %}
+{% block bootstrap_theme %}
+    <link rel="stylesheet" href="{% static 'morph/bootstrap.min.css' %}" type="text/css">
+{% endblock %}
+
+{% block bootstrap_navbar_variant %}{% endblock %}
+{% endcomment %}
