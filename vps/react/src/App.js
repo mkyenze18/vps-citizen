@@ -307,13 +307,14 @@ export default function App() {
                     <img src="/static/gentelella/production/images/img.jpg" alt=""/>John Doe
                   </a>
                   <div className="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a className="dropdown-item"  href="javascript:;"> Profile</a>
-                      <a className="dropdown-item"  href="javascript:;">
-                        <span className="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                  <a className="dropdown-item"  href="javascript:;">Help</a>
-                    <a className="dropdown-item"  href="login.html"><i className="fa fa-sign-out pull-right"></i> Log Out</a>
+                    {/* <a className="dropdown-item"  href="javascript:;"> Profile</a>
+                    <a className="dropdown-item"  href="javascript:;">
+                      <span className="badge bg-red pull-right">50%</span>
+                      <span>Settings</span>
+                    </a>
+                    <a className="dropdown-item"  href="javascript:;">Help</a> */}
+                    <a className="dropdown-item"  href="/task_manager/tasks"><i className="fa fa-tasks pull-right"></i> Tasks</a>
+                    <a className="dropdown-item"  href="/user/logout"><i className="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
                 </li>
 
