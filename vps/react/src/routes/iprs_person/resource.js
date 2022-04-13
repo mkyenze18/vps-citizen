@@ -151,15 +151,15 @@ export default function Resource(props) {
   // let resolveAfterSuccess;
 
   // TODO https://axios-http.com/docs/instance
-  const instance = axios.create({
-    baseURL: url,
-    timeout: 1000,
-    // headers: {'X-Custom-Header': 'foobar'},
-    // TODO https://axios-http.com/docs/handling_errors
-    // validateStatus: function (status) {
-    //   return status < 500; // Resolve only if the status code is less than 500
-    // }
-  });
+  // const instance = axios.create({
+  //   baseURL: url,
+  //   timeout: 1000,
+  //   // headers: {'X-Custom-Header': 'foobar'},
+  //   // TODO https://axios-http.com/docs/handling_errors
+  //   // validateStatus: function (status) {
+  //   //   return status < 500; // Resolve only if the status code is less than 500
+  //   // }
+  // });
 
   let IPRS_PersonClassName = 'col-sm-12';
   if (params.resourceId) {
@@ -201,7 +201,7 @@ export default function Resource(props) {
 
   // REST ACTIIONS
   function getResourcesGender() {
-    instance.get('vps/api/v0/genders')
+    axios.get(`${url}/vps/api/v0/genders`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -221,7 +221,7 @@ export default function Resource(props) {
   }
 
   function getResourcesCountry() {
-    instance.get('vps/api/v0/countries')
+    axios.get(`${url}/vps/api/v0/countries`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -241,7 +241,7 @@ export default function Resource(props) {
   }
 
   function getResource(id) {
-    instance.get(`vps/api/v0/iprs-persons/${id}`)
+    axios.get(`${url}/vps/api/v0/iprs-persons/${id}`)
     .then(function (response) {
         // handle success
         console.log(response);
@@ -306,7 +306,7 @@ export default function Resource(props) {
   }
 
   function postResource(data) {
-    instance.post(`vps/api/v0/iprs-persons`, data)
+    axios.post(`${url}/vps/api/v0/iprs-persons`, data)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -332,7 +332,7 @@ export default function Resource(props) {
   }
 
   function putResource(id, data) {
-    instance.put(`vps/api/v0/iprs-persons/${id}`, data)
+    axios.put(`${url}/vps/api/v0/iprs-persons/${id}`, data)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -360,7 +360,7 @@ export default function Resource(props) {
   function deleteResource() {
     const id = idInput.current.value
 
-    instance.delete(`vps/api/v0/iprs-persons/${id}`)
+    axios.delete(`${url}/vps/api/v0/iprs-persons/${id}`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -418,7 +418,7 @@ export default function Resource(props) {
   function resetMugShot() {
     const id = idInput.current.value;
     
-    instance.put(`vps/api/v0/iprs-persons/${id}/reset-mug`)
+    axios.put(`${url}/vps/api/v0/iprs-persons/${id}/reset-mug`)
       .then(function (response) {
         // handle success
         console.log(response);

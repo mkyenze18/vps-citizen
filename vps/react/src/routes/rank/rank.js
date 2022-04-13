@@ -110,15 +110,15 @@ export default function Rank(props) {
   const submitButton = useRef(null);
 
   // TODO https://axios-http.com/docs/instance
-  const instance = axios.create({
-    baseURL: url,
-    timeout: 1000,
-    // headers: {'X-Custom-Header': 'foobar'},
-    // TODO https://axios-http.com/docs/handling_errors
-    // validateStatus: function (status) {
-    //   return status < 500; // Resolve only if the status code is less than 500
-    // }
-  });
+  // const instance = axios.create({
+  //   baseURL: url,
+  //   timeout: 1000,
+  //   // headers: {'X-Custom-Header': 'foobar'},
+  //   // TODO https://axios-http.com/docs/handling_errors
+  //   // validateStatus: function (status) {
+  //   //   return status < 500; // Resolve only if the status code is less than 500
+  //   // }
+  // });
 
   useEffect(() => {
     if(params.resourceId) {
@@ -168,7 +168,7 @@ export default function Rank(props) {
   }, [params.resourceId])
 
   function getResource(id) {
-    instance.get(`vps/api/v0/ranks/${id}`)
+    axios.get(`${url}/vps/api/v0/ranks/${id}`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -196,7 +196,7 @@ export default function Rank(props) {
   }
 
   function postResource(data) {
-    instance.post(`vps/api/v0/ranks`, data)
+    axios.post(`${url}/vps/api/v0/ranks`, data)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -222,7 +222,7 @@ export default function Rank(props) {
   }
 
   function putResource(id, data) {
-    instance.put(`vps/api/v0/ranks/${id}`, data)
+    axios.put(`${url}/vps/api/v0/ranks/${id}`, data)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -250,7 +250,7 @@ export default function Rank(props) {
   function deleteResource() {
     const id = idInput.current.value
 
-    instance.delete(`vps/api/v0/ranks/${id}`)
+    axios.delete(`${url}/vps/api/v0/ranks/${id}`)
     .then(function (response) {
       // handle success
       console.log(response);
