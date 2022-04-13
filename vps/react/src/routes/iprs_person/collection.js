@@ -29,15 +29,15 @@ export default function Collection() {
   let params = useParams();
 
   // TODO https://axios-http.com/docs/instance
-  const instance = axios.create({
-    baseURL: url,
-    timeout: 1000,
-    // headers: {'X-Custom-Header': 'foobar'},
-    // TODO https://axios-http.com/docs/handling_errors
-    // validateStatus: function (status) {
-    //   return status < 500; // Resolve only if the status code is less than 500
-    // }
-  });
+  // const instance = axios.create({
+  //   baseURL: url,
+  //   timeout: 1000,
+  //   // headers: {'X-Custom-Header': 'foobar'},
+  //   // TODO https://axios-http.com/docs/handling_errors
+  //   // validateStatus: function (status) {
+  //   //   return status < 500; // Resolve only if the status code is less than 500
+  //   // }
+  // });
 
   // Note: the empty deps array [] means
   // this useEffect will run once
@@ -64,7 +64,7 @@ export default function Collection() {
   //   );
 
   function getResourcesGender() {
-    instance.get('vps/api/v0/genders')
+    axios.get(`${url}/vps/api/v0/genders`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -89,7 +89,7 @@ export default function Collection() {
   }
 
   function getResourcesCountry() {
-    instance.get('vps/api/v0/countries')
+    axios.get(`${url}/vps/api/v0/countries`)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -114,7 +114,7 @@ export default function Collection() {
   }
 
   function getResources() {
-    instance.get('vps/api/v0/iprs-persons')
+    axios.get(`${url}/vps/api/v0/iprs-persons`)
     .then(function (response) {
       // handle success
       console.log(response);
