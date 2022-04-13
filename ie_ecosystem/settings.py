@@ -258,3 +258,12 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 
 # TODO https://docs.djangoproject.com/en/4.0/topics/auth/default/#the-login-required-decorator
 LOGIN_URL = "user:login"
+
+# TODO https://docs.djangoproject.com/en/4.0/topics/email/#module-django.core.mail
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "bungevirtual@gmail.com"
+EMAIL_HOST_PASSWORD = "Bungemail123."
+
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True

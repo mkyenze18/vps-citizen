@@ -25,6 +25,11 @@ urlpatterns =[
         auth_views.PasswordResetView.as_view(success_url='/user/password_reset/done'),
         name="password_reset"
     ),
+    path(
+        'reset/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(success_url='/user/reset/done'),
+        name="password_reset_complete"
+    ),
     path('', include('django.contrib.auth.urls')), #https://docs.djangoproject.com/en/4.0/topics/auth/default/#using-the-views-1
 ]
 
