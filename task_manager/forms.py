@@ -7,7 +7,7 @@ from .models import Task
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['id', 'title', 'assigned_to', 'assigned_by', 'created_by', 'status', 'deadline']
+        fields = ['id', 'title', 'assigned_to', 'status', 'deadline', 'description']
         widgets = {
             'assigned_to': Select(attrs={'class': 'form-control'}),
             'status': Select(attrs={'class': 'form-control'}),

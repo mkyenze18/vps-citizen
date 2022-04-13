@@ -16,13 +16,13 @@ def tasks_create(request):
         # POST data to populate the form.
         f = TaskForm(request.POST)
         if f.is_valid():
-            f.save( commit=False )
+            instance = f.save()
 
+            instance.created_by = request.user
             if f.cleaned_data.get('assigned_to', None):
-                f.assigned_by = request.user
-
-            f.created_by = request.user
-            f.save()
+                instance.assigned_by = request.user
+            instance.save()
+            
             return redirect('task_manager:tasks')
         else:
             return render( request, 'task_manager/tasks/create.html', {'form':f})
@@ -43,8 +43,12 @@ def tasks_update(request, item_id=None):
 
             if f.cleaned_data.get('assigned_to', None):
                 if instance.assigned_to.id != f.cleaned_data.get('assigned_to', None):
-                    f.assigned_by = request.user
-
+                    instance.assigned_by = request.user
+                    instance.save()
+                    f = TaskForm(request.POST, instance=instance)
+                    if f.is_valid():
+                        f.save()
+                        
             f.save()
     else:
         f = TaskForm(instance=instance)

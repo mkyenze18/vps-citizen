@@ -70,10 +70,17 @@
  <!-- Page level plugins -->
  <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
  <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 
  <!-- Page level custom scripts -->
  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
  <script>
+     const TASK_STATUS = {
+        'OP': 'Open',
+        'CL': 'Closed',
+        'IP': 'In-progress',
+        'PE': 'Pending',
+     }
     //  TODO https://axios-http.com/docs/example
     // Optionally the request above could also be done as
     axios.get('/task_manager/api/tasks', {
@@ -90,15 +97,21 @@
         for (let index = 0; index < array.length; index++) {
             // const element = array[index];
             const item = array[index];
+
+            let deadline = '-';
+            if(item.deadline){
+                deadline = moment(item.deadline).format('DD/MM/YYYY');
+            }
+
             // https://api.jquery.com/append/
             $('table#dataTable tbody').first().append(
                 `<tr>
                     <td>${item.id}</td>
                     <td><a href="/task_manager/tasks_update/${item.id}">${item.title}</a></td>
-                    <td>${item.assigned_to}</td>
-                    <td>${item.created_at}</td>
-                    <td>${item.deadline}</td>
-                    <td>${item.status}</td>
+                    <td>${item.assigned_to.username}</td>
+                    <td>${moment(item.created_at).format('DD/MM/YYYY')}</td>
+                    <td>${deadline}</td>
+                    <td>${TASK_STATUS[item.status]}</td>
                 </tr>`
             )
         }
