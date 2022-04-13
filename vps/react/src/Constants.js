@@ -2,8 +2,8 @@
 // Constants.js
 const prod = {
     url: {
-     API_URL: 'http://client.ingenious.or.ke:5059',
-     API_URL_USERS: 'http://client.ingenious.or.ke:5059/users'}
+     API_URL: '',
+     API_URL_USERS: '/users'}
    };
    const dev = {
     url: {
