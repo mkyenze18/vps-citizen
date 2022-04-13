@@ -84,7 +84,11 @@
             <div class="d-flex">
                 <button type="submit" class="btn btn-primary">update</button>
                 <div class="p-2 flex-fill"></div>
-                <button type="button" class="btn btn-warning" onclick="postNotification({{item.id}})">Send notification</button>
+                <button class="btn btn-warning" type="button" id="notifyButton" onclick="postNotification({{item.id}})">
+                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Send notification</span>
+                    Send notification
+                </button>
             </div>
         </form>
 
@@ -172,6 +176,14 @@
     });
 
     function postNotification(id) {
+        document.querySelector('#notifyButton').disabled = true;
+        document.querySelector('#notifyButton .sr-only').textContent = 'Loading...';
+        document.querySelector('.spinner-grow').style = "display: inline-block";
+
+        // TODO https://vsupalov.com/avoid-csrf-errors-axios-django/#set-axios-defaults-to-pass-along-csrf-tokens
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
         axios.post(`/task_manager/tasks_notify/${id}`)
         .then(function (response) {
             // handle success
@@ -179,7 +191,7 @@
             const result = response.data
 
             iziToast.success({
-                    title: 'error',
+                    title: 'Success',
                     message: 'Notification posted successfully',
                     position: 'topRight',
             });
@@ -193,6 +205,9 @@
         })
         .then(function () {
             // always executed
+            document.querySelector('#notifyButton').disabled = false;
+            document.querySelector('#notifyButton .sr-only').textContent = 'Send notification';
+            document.querySelector('.spinner-grow').style = "display: none";
         });
     }
 </script>
