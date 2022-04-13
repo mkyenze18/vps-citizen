@@ -20,6 +20,8 @@ urlpatterns += [
     path('api/tasks/<int:pk>',
         views.task_detail,
         name='task-detail'),
+
+    path('tasks_notify/<item_id>', views.tasks_notify, name='tasks_notify'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

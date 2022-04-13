@@ -3,7 +3,8 @@
 
 {% block stylesheet %}
 <!-- Custom styles for this page -->
-<link href="{% static 'suspended/vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+<link href="{% static 'task_manager/iziToast/dist/css/iziToast.min.css'%}" rel="stylesheet">
+
 {% endblock %}
 
 {% block page_title %}
@@ -80,8 +81,11 @@
                 <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3">{{form.description.value|default:''}}</textarea>
                 {{ form.description.errors }}
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary">update</button>
+                <div class="p-2 flex-fill"></div>
+                <button type="button" class="btn btn-warning" onclick="postNotification({{item.id}})">Send notification</button>
+            </div>
         </form>
 
     </div>
@@ -95,15 +99,101 @@
 
 {% block script %}
  <!-- Page level plugins -->
- <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
- <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <script src="{% static 'task_manager/iziToast/dist/js/iziToast.min.js'%}" type="text/javascript"></script>
  <!-- Page level custom scripts -->
+ <script>
+     function handleErrorAxios(error, resorceName=null) {
+        console.log(error)
+        // TODO https://axios-http.com/docs/handling_errors
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
+
+            if(error.response.data) {
+                Object.keys(error.response.data).forEach(element => {
+                    const mesaage = Array.isArray(error.response.data[element])
+                    ? `${element}: ${error.response.data[element][0]}`
+                    : `${element}: ${error.response.data[element]}`;
+                    iziToast.error({
+                        title: 'error',
+                        message: mesaage,
+                        position: 'topRight',
+                    });
+                });
+            } else {
+                if(error.response.status == 404) {
+                    iziToast.error({
+                        title: 'error',
+                        message: `${resorceName} not found`,
+                        position: 'topRight',
+                    });
+                } else {
+                    iziToast.error({
+                        title: 'error',
+                        message: 'Operation failed',
+                        position: 'topRight',
+                    });
+                }
+            }
+            
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            console.log('Error', error.message);
+            iziToast.error({
+                title: 'error',
+                message: 'A network error has occured',
+                position: 'topLeft',
+                timeout: false
+            });
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            iziToast.error({
+                title: 'error',
+                message: 'Operation failed',
+                position: 'topRight',
+            });
+        }
+    }
+ </script>
  <script>
     const today = new Date();
     $('.datepicker').datepicker({
        format: 'dd/mm/yyyy',
        startView: 0,
     });
+
+    function postNotification(id) {
+        axios.post(`/task_manager/tasks_notify/${id}`)
+        .then(function (response) {
+            // handle success
+            console.log(response);
+            const result = response.data
+
+            iziToast.success({
+                    title: 'error',
+                    message: 'Notification posted successfully',
+                    position: 'topRight',
+            });
+
+        })
+        .catch(function(error){
+            // handle error
+            console.error(error);
+            
+            handleErrorAxios(error)
+        })
+        .then(function () {
+            // always executed
+        });
+    }
 </script>
 {% endblock %}

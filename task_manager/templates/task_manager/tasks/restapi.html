@@ -98,6 +98,12 @@
             // const element = array[index];
             const item = array[index];
 
+            let assigned_to = '-';
+            if(item.assigned_to.length > 0){
+                const assigned_to_array = item.assigned_to.map((user) => user.username);
+                assigned_to = assigned_to_array.toString();
+            }
+
             let deadline = '-';
             if(item.deadline){
                 deadline = moment(item.deadline).format('DD/MM/YYYY');
@@ -108,7 +114,7 @@
                 `<tr>
                     <td>${item.id}</td>
                     <td><a href="/task_manager/tasks_update/${item.id}">${item.title}</a></td>
-                    <td>${item.assigned_to ? item.assigned_to.username : '-'}</td>
+                    <td>${assigned_to}</td>
                     <td>${moment(item.created_at).format('DD/MM/YYYY')}</td>
                     <td>${deadline}</td>
                     <td>${TASK_STATUS[item.status]}</td>

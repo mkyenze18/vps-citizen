@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mass_mail
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import Task
 from .forms import TaskForm
@@ -41,13 +44,13 @@ def tasks_update(request, item_id=None):
         if f.is_valid():
             f.save( commit=False )
 
-            if f.cleaned_data.get('assigned_to', None):
-                if instance.assigned_to.id != f.cleaned_data.get('assigned_to', None):
-                    instance.assigned_by = request.user
-                    instance.save()
-                    f = TaskForm(request.POST, instance=instance)
-                    if f.is_valid():
-                        f.save()
+            # if f.cleaned_data.get('assigned_to', None):
+            #     if instance.assigned_to.id != f.cleaned_data.get('assigned_to', None):
+            #         instance.assigned_by = request.user
+            #         instance.save()
+            #         f = TaskForm(request.POST, instance=instance)
+            #         if f.is_valid():
+            #             f.save()
                         
             f.save()
 
@@ -65,11 +68,53 @@ def tasks_delete(request, item_id):
 
     return render( request, 'task_manager/tasks/confirm.html')
 
+TASK_STATUS = {
+    'OP': 'Open',
+    'CL': 'Closed',
+    'IP': 'In-progress',
+    'PE': 'Pending',
+}
+
+@api_view(['POST'])
+def tasks_notify(request, item_id=None):
+    if request.method == 'POST':
+        instance = get_object_or_404(Task, pk=item_id)
+
+        # TODO https://docs.djangoproject.com/en/4.0/topics/email/#send-mass-mail
+        # message1 = ('Subject here', 'Here is the message', 'from@example.com', ['first@example.com', 'other@example.com'])
+        # message2 = ('Another Subject', 'Here is another message', 'from@example.com', ['second@test.com'])
+        # send_mass_mail((message1, message2), fail_silently=False)
+
+        subject = f'Task Update: {instance.title}'
+
+        assigned_to_array = instance.assigned_to.all()
+        recipient_list_username = map(lambda assigned_to: assigned_to.username, assigned_to_array)
+        message = f"""
+            Title: {instance.title},
+            Assigned to: {', '.join(recipient_list_username)},
+            Status: {TASK_STATUS[instance.status]},
+            Created: {instance.created_at},
+            Deadline: { instance.deadline if instance.deadline else 'Not set'},
+            
+            Description
+            {instance.description if instance.description else '-'}
+        """
+
+        supervised_by_array = instance.supervised_by.all()
+        assigned_to_email_array = list(map(lambda assigned_to: assigned_to.email, assigned_to_array))
+        supervised_by_email_array = list(map(lambda supervised_by: supervised_by.email, supervised_by_array))
+        recipient_list_email = assigned_to_email_array + supervised_by_email_array
+        
+        message1 = (subject, message, 'not-reply@task_manager.vps', recipient_list_email)
+        send_mass_mail((message1,), fail_silently=False)
+        return Response('notification sent successfully')
+    
+
 
 # TODO https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#pulling-it-all-together
 from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
