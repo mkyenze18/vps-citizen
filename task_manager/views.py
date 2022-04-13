@@ -50,6 +50,8 @@ def tasks_update(request, item_id=None):
                         f.save()
                         
             f.save()
+
+            return redirect('task_manager:tasks_update', instance.id)
     else:
         f = TaskForm(instance=instance)
 
