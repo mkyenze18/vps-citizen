@@ -1,0 +1,86 @@
+{%  extends 'task_manager/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block stylesheet %}
+<!-- Custom styles for this page -->
+<link href="{% static 'suspended/vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block page_title %}
+    <h1 class="h3 mb-0 text-gray-800">Create task</h1>
+{% endblock %}
+
+{% block content %}
+    
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+        <p class="mb-4">This table represents the data collected over the mobile application phone.</p> -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Title</label>
+                <input type="text" name="title" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter title" value="{{form.title.value|default:''}}" 
+                required>
+                {{ form.title.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Assign</label>
+                <!-- <input type="text" name="name" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter name" value="{{form.name.value}}" 
+                required> -->
+                {{ form.assigned_to }}
+                {{ form.assigned_to.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Status</label>
+                <!-- <input type="text" name="name" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter name" value="{{form.name.value}}" 
+                required> -->
+                {{ form.status }}
+                {{ form.status.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Deadline</label>
+                <input type="text" name="deadline" class="form-control datepicker" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter deadline" value="{{form.deadline.value|default:''}}" >
+                {{ form.deadline.errors }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+    
+
+{% endblock %}
+
+{% block script %}
+ <!-- Page level plugins -->
+ <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
+ <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <!-- Page level custom scripts -->
+ <script>
+     const today = new Date();
+     $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        startView: 0,
+     });
+ </script>
+{% endblock %}

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'user',
     'index',
     'vps',
+    'task_manager',
 
     'django.contrib.admin',
     'django.contrib.auth',

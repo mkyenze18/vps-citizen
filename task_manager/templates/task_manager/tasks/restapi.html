@@ -1,0 +1,117 @@
+{%  extends '../base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<!-- Custom styles for this page -->
+<link href="{% static 'suspended/vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+        <h1 class="h3 mb-0 text-gray-800">Tasks</h1>
+{% endblock %}
+
+{% block create %}
+    <a href="{% url 'task_manager:tasks_create' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-user-plus fa-sm text-white-50"></i> Create task</a>
+{% endblock %}
+
+{% block content %}
+    
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+        <p class="mb-4">This table represents the data collected over the mobile application phone.</p> -->
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <td>ID</td>
+                            <td>Title</td>
+                            <td>Assigned</td>
+                            <td>Created</td>
+                            <td>Deadline</td>
+                            <td>Status</td>
+                        </thead>
+                        
+                        <tbody>
+                            <!-- populated with javascript using axios, see further down -->
+                        </tbody>
+                        <tfoot>
+                            <td>ID</td>
+                            <td>Title</td>
+                            <td>Assigned</td>
+                            <td>Created</td>
+                            <td>Deadline</td>
+                            <td>Status</td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+    
+
+{% endblock %}
+
+{% block script %}
+ <!-- Page level plugins -->
+ <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
+ <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+
+ <!-- Page level custom scripts -->
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <script>
+    //  TODO https://axios-http.com/docs/example
+    // Optionally the request above could also be done as
+    axios.get('/task_manager/api/tasks', {
+        params: {
+        ID: 12345
+        }
+    })
+    .then(function (response) {
+        // console.log(response);
+        // console.log(response.data);
+
+        // https://axios-http.com/docs/res_schema
+        const array = response.data
+        for (let index = 0; index < array.length; index++) {
+            // const element = array[index];
+            const item = array[index];
+            // https://api.jquery.com/append/
+            $('table#dataTable tbody').first().append(
+                `<tr>
+                    <td>${item.id}</td>
+                    <td><a href="/task_manager/tasks_update/${item.id}">${item.title}</a></td>
+                    <td>${item.assigned_to}</td>
+                    <td>${item.created_at}</td>
+                    <td>${item.deadline}</td>
+                    <td>${item.status}</td>
+                </tr>`
+            )
+        }
+
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    }); 
+ </script>
+{% endblock %}

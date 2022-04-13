@@ -197,6 +197,12 @@
                     <div>Virtual Police Station</div>
                 </a>
 
+                <a href="{% url 'task_manager:tasks' %}" class="list-item">
+                    <i class="fas fa-tasks"></i>
+                    <div>Task Manager</div>
+                </a>
+
+
                 {% if user.is_staff %}
                 <a href="{% url 'user:users' %}" class="list-item">
                     <i class="fas fa-user-cog"></i>

@@ -31,6 +31,7 @@ urlpatterns = [
     path('settings/', include('settings.urls')),
     path('', include('index.urls')),
     path('vps/', include('vps.urls')),
+    path('task_manager/', include('task_manager.urls')),
 ]
 
 

@@ -1,0 +1,94 @@
+{%  extends 'task_manager/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<!-- Custom styles for this page -->
+<link href="{% static 'suspended/vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+    <h1 class="h3 mb-0 text-gray-800">Update task</h1>
+{% endblock %}
+
+{% block create %}
+    <a href="{% url 'task_manager:tasks_delete' item.id %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-user-plus fa-sm text-white-50"></i> Delete task</a>
+{% endblock %}
+
+{% block content %}
+    
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+        <p class="mb-4">This table represents the data collected over the mobile application phone.</p> -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Title</label>
+                {% if form.title.help_text %}
+                    <p class="help">{{ form.title.help_text|safe }}</p>
+                {% endif %}
+                <input type="text" name="title" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.title}}" 
+                required>
+                {{ form.title.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Assign</label>
+                {% if form.assigned_to.help_text %}
+                    <p class="help">{{ form.assigned_to.help_text|safe }}</p>
+                {% endif %}
+                <!-- <input type="text" name="assigned_to" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.assigned_to}}" 
+                required> -->
+                {{ form.assigned_to }}
+                {{ form.assigned_to.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Status</label>
+                {% if form.status.help_text %}
+                    <p class="help">{{ form.status.help_text|safe }}</p>
+                {% endif %}
+                <!-- <input type="text" name="status" class="form-control" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter title" value="{{item.status}}" 
+                required> -->
+                {{ form.status }}
+                {{ form.status.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Deadline</label>
+                {% if form.deadline.help_text %}
+                    <p class="help">{{ form.deadline.help_text|safe }}</p>
+                {% endif %}
+                <input type="text" name="deadline" class="form-control datepicker" id="exampleInputEmail1" 
+                aria-describedby="emailHelp" placeholder="Enter deadline" value="{{item.deadline}}" 
+                required>
+                {{ form.datepicker.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+    
+
+{% endblock %}
+
+{% block script %}
+ <!-- Page level plugins -->
+ <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
+ <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+
+ <!-- Page level custom scripts -->
+{% endblock %}

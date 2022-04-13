@@ -1,0 +1,60 @@
+{%  extends 'task_manager/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<!-- Custom styles for this page -->
+<link href="{% static 'suspended/vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+    <h1 class="h3 mb-0 text-gray-800">Delete task</h1>
+{% endblock %}
+
+{% block content %}
+    
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+        <p class="mb-4">This table represents the data collected over the mobile application phone.</p> -->
+
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Are you sure</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                This action cannot be undone
+
+                <form method="POST" >
+                    {% csrf_token %}
+                    <a href="{% url 'task_manager:tasks' %}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
+                        <i class="fas fa-user-plus fa-sm text-white-50"></i> cancel
+                    </a>
+                    <button type="submit" class="d-none d-sm-inline-block btn btn-danger shadow-sm">
+                        <i class="fas fa-user-plus fa-sm text-white-50"></i> Delete task
+                    </button>
+                  </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+    
+
+{% endblock %}
+
+{% block script %}
+ <!-- Page level plugins -->
+ <script src="{% static 'suspended/vendor/datatables/jquery.dataTables.min.js'%}"></script>
+ <script src="{%static 'suspended/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+
+ <!-- Page level custom scripts -->
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock %}
