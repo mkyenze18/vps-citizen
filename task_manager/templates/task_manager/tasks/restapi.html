@@ -109,7 +109,7 @@
                     <td>${item.id}</td>
                     <td><a href="/task_manager/tasks_update/${item.id}">${item.title}</a></td>
                     <td>${item.assigned_to ? item.assigned_to.username : '-'}</td>
-                    <td>${moment(item.created_at).format('DD/MM/YYrYY')}</td>
+                    <td>${moment(item.created_at).format('DD/MM/YYYY')}</td>
                     <td>${deadline}</td>
                     <td>${TASK_STATUS[item.status]}</td>
                 </tr>`
