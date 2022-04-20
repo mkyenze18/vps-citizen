@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mass_mail
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -9,9 +10,11 @@ from .forms import TaskForm, TaskFormSupervisor, TaskFormAssignee
 
 # TAKSK
 
+@login_required
 def tasks(request):
     return render( request, 'task_manager/tasks/restapi.html')
 
+@login_required
 def tasks_create(request):
     if request.method == 'POST':
         # https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#the-save-method
@@ -33,6 +36,7 @@ def tasks_create(request):
     f = TaskFormSupervisor(request.POST)
     return render( request, 'task_manager/tasks/create.html', {'form':f})
 
+@login_required
 def tasks_update(request, item_id=None):
     instance = get_object_or_404(Task, pk=item_id)
 
@@ -75,6 +79,7 @@ def tasks_update(request, item_id=None):
 
     return render( request, 'task_manager/tasks/update.html', {'item': instance, 'form':f, 'can_delete':can_delete})
 
+@login_required
 def tasks_delete(request, item_id):
     instance = get_object_or_404(Task, pk=item_id)
     if request.method == 'POST':

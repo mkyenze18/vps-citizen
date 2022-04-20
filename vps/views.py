@@ -65,9 +65,11 @@ def index(request, resource=None):
     return render(request, 'build/index.html')
 
 # Country
+@login_required
 def countries(request):
     return render( request, 'core/index.html')
 
+@login_required
 def create_country(request):
      if request.method == 'POST':
           f = Country_Form(request.POST)
@@ -78,6 +80,7 @@ def create_country(request):
           f = Country_Form()
      return render ( request, 'core/index.html', {'f' : f})
 
+@login_required
 def country_update(request, item_id=None):
     instance = get_object_or_404(Country, pk=item_id)
 
@@ -90,6 +93,7 @@ def country_update(request, item_id=None):
 
     return render( request, 'core/index.html', {'item': instance, 'f' : f})
 
+@login_required
 def country_delete(request, item_id):
     instance = get_object_or_404(Country, pk=item_id)
     if request.method == 'POST':
