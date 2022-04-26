@@ -850,7 +850,7 @@ paths:
         - $ref: '#/definitions/parameters/id'
       responses:
         "204":
-          description: evidence resource deleted
+          description: evidenceimage resource deleted
         "404":
           description: Resource not found
   /evidences/:
@@ -863,10 +863,8 @@ paths:
         - $ref: '#/definitions/parameters/page'
       responses:
         "200":
-          description: evidences collection
+          description: evidence collection
           schema:
-            type: array
-            items:
               $ref: '#/definitions/schemas/evidence'
     post:
       tags:
@@ -892,7 +890,7 @@ paths:
           description: Unprocessable entity
   /evidence/{id}:
     get:
-      tags:
+      tags: 
           - Evidence
       description: Retrieves an evidence resource
       summary: Retrieves an evidence resource
@@ -989,7 +987,7 @@ paths:
         - $ref: '#/definitions/parameters/id'
       responses:
         "200":
-          description: item resource
+          description: occurrence resource
           schema:
             $ref: '#/definitions/schemas/occurrence'
         "404":
@@ -1010,7 +1008,7 @@ paths:
             $ref: '#/definitions/schemas/occurrence'
       responses:
         "200":
-          description: item resource updated
+          description: occurrence resource updated
           schema:
             $ref: '#/definitions/schemas/occurrence'
         "400":
