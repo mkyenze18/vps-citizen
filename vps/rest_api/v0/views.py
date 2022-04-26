@@ -1,5 +1,6 @@
 from pickle import FALSE
 from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -107,11 +108,12 @@ from datetime import datetime, timezone, date
 
 # TODO https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#adding-optional-format-suffixes-to-our-urls
 from django.db import IntegrityError
-from vps.models import (Country, Gender, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
+from vps.models import (Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
 ItemCategory, Item
 )
 from helpers.file_system_manipulation import delete_folder_in_media
-from .serializers import ( CountrySerializer, GenderSerializer, IPRS_PersonSerializer, 
+from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
+from .serializers import ( CountrySerializer, EvidenceCategorySerializer, EvidenceImageSerializer, EvidenceSerializer, GenderSerializer, IPRS_PersonSerializer, ItemCategorySerializer, ItemSerializer, OccurrenceCategorySerializer, OccurrenceSerializer, 
 RankSerializer, PoliceStationSerializer, PoliceOfficerSerializer
 )
 
@@ -456,6 +458,223 @@ def policeOfficer_detail(request, pk, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class ItemListView(BaseListView):
+    """
+    """
+    model = Item
+    serializer_class = ItemSerializer
+    read_serializer_class = ItemSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ItemDetailView(BaseDetailView):
+    """
+    """
+    model = Item
+    serializer_class = ItemSerializer
+    read_serializer_class = ItemSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class ItemCategoryListView(BaseListView):
+    """
+    """
+    model = ItemCategory
+    serializer_class = ItemCategorySerializer
+    read_serializer_class = ItemCategorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ItemCategoryDetailView(BaseDetailView):
+    """
+    """
+    model = ItemCategory
+    serializer_class = ItemCategorySerializer
+    read_serializer_class = ItemCategorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class EvidenceListView(BaseListView):
+    """
+    """
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class EvidenceDetailView(BaseDetailView):
+    """
+    """
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class EvidenceCategoryListView(BaseListView):
+    """
+    """
+    model = EvidenceCategory
+    serializer_class = EvidenceCategorySerializer
+    read_serializer_class = EvidenceCategorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class EvidenceCategoryDetailView(BaseDetailView):
+    """
+    """
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class EvidenceImageListView(ImageBaseListView):
+    """
+    """
+    model = EvidenceImage
+    serializer_class = EvidenceImageSerializer
+    read_serializer_class = EvidenceImageSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request) 
+
+class EvidenceImageDetailView(ImageBaseDetailView):
+    """
+    """
+    model = EvidenceImage
+    serializer_class = EvidenceImageSerializer
+    read_serializer_class = EvidenceImageSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk) 
+
+class OccurrenceListView(BaseListView):
+    """
+    """
+    model = Occurrence
+    serializer_class = OccurrenceSerializer
+    read_serializer_class = OccurrenceSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OccurrenceDetailView(BaseDetailView):
+    """
+    """
+    model = Occurrence
+    serializer_class = OccurrenceSerializer
+    read_serializer_class = OccurrenceSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class OccurrenceCategoryListView(BaseListView):
+    """
+    """
+    model = OccurrenceCategory
+    serializer_class = OccurrenceCategorySerializer
+    read_serializer_class = OccurrenceCategorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OccurrenceCategoryDetailView(BaseDetailView):
+    """
+    """
+    model = OccurrenceCategory
+    serializer_class = OccurrenceCategorySerializer
+    read_serializer_class = OccurrenceCategorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -474,4 +693,10 @@ def api_root(request, format=None):
         'ranks': reverse(f'{app_name}:{pre}-rank-list', request=request, format=format),
         'police stations': reverse(f'{app_name}:{pre}-police-station-list', request=request, format=format),
         'police offices': reverse(f'{app_name}:{pre}-police-officer-list', request=request, format=format),
+        'items': reverse(f'{app_name}:{pre}-item-list', request=request, format=format),
+        'item/categories': reverse(f'{app_name}:{pre}-item-categories', request=request, format=format),
+        'evidences': reverse(f'{app_name}:{pre}-evidence', request=request, format=format),
+        'evidenceimages': reverse(f'{app_name}:{pre}-evidenceimage', request=request, format=format),
+        'occurrences': reverse(f'{app_name}:{pre}-occurrences', request=request, format=format),
+        'occurrence/categories': reverse(f'{app_name}:{pre}-occurrence-categories', request=request, format=format),
     })

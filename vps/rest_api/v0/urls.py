@@ -79,6 +79,48 @@ urlpatterns = [
     path('police-officers/<int:pk>',
         views.policeOfficer_detail,
         name=f'{pre}-police-officer-detail'),
+
+    path("items/", 
+        views.ItemListView.as_view(), 
+        name=f'{pre}-item-list'),
+    path("item/<int:pk>", 
+        views.ItemDetailView.as_view(), 
+        name=f'{pre}-item-detail'),
+
+    path("item/categories/", 
+        views.ItemCategoryListView.as_view(), 
+        name=f'{pre}-item-categories'), 
+    path("item/category/<int:pk>", 
+        views.ItemCategoryDetailView.as_view(), 
+        name=f'{pre}-item-category-details'),
+    
+    path("evidences/", 
+        views.EvidenceListView.as_view(), 
+        name=f'{pre}-evidence'), 
+    path("evidence/<int:pk>", 
+        views.EvidenceDetailView.as_view(), 
+        name=f'{pre}-evidence-details'),
+
+    path("evidencesimage/", 
+        views.EvidenceImageListView.as_view(), 
+        name=f'{pre}-evidenceimage'), 
+    path("evidenceimage/<int:pk>", 
+        views.EvidenceImageDetailView.as_view(), 
+        name=f'{pre}-evidenceimage-details'),
+
+    path("occurrences/", 
+        views.OccurrenceListView.as_view(), 
+        name=f'{pre}-occurrences'), 
+    path("occurrence/<int:pk>", 
+        views.OccurrenceDetailView.as_view(), 
+        name=f'{pre}-occurrence-details'),
+
+    path("occurrence/categories", 
+        views.OccurrenceCategoryListView.as_view(), 
+        name=f'{pre}-occurrence-categories'), 
+    path("occurrence-category/<int:pk>", 
+        views.OccurrenceCategoryDetailView.as_view(), 
+        name=f'{pre}-occurrence-category-details'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'client.ingenious.or.ke',
     '192.168.1.55',
+    '0.0.0.0'
 ]
 
 

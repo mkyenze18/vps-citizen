@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/njosh13/Interactor#readme",
   "dependencies": {
-    "swagger": "^0.7.5"
+    "package.json": "^2.0.1",
+    "swagger": "^0.6.0",
+    "swagger-ui": "^4.10.3"
   }
 }

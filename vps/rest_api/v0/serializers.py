@@ -37,9 +37,10 @@ from rest_framework import serializers
 #         model = Snippet
 #         fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
-from vps.models import (Country, Gender, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
+from vps.models import (Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
 ItemCategory, Item
 )
+from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
 class GenderSerializer(serializers.ModelSerializer):
     # TODO https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
@@ -77,3 +78,54 @@ class PoliceOfficerSerializer(serializers.ModelSerializer):
         model = PoliceOfficer
         fields = ['id', 'user', 'iprs_person', 'service_number', 'email_address',
         'mobile_phone', 'rank', 'mug_shot']
+
+
+class ItemCategorySerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = ItemCategory
+
+class ItemSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Item
+
+class EvidenceSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Evidence
+
+class EvidenceCategorySerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = EvidenceCategory
+
+class EvidenceImageSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = EvidenceImage
+class OccurrenceSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Occurrence
+
+class OccurrenceCategorySerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = OccurrenceCategory
+
+
