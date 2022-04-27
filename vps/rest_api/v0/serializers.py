@@ -37,7 +37,7 @@ from rest_framework import serializers
 #         model = Snippet
 #         fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
-from vps.models import (Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
+from vps.models import (Arrestee, Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, MugShots, Next_of_keen, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
 ItemCategory, Item
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
@@ -127,5 +127,26 @@ class OccurrenceCategorySerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = OccurrenceCategory
+
+class ArresteeSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Arrestee
+
+class NextofkeenSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Next_of_keen
+
+class MugShotsSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = MugShots
 
 
