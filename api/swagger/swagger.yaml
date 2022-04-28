@@ -619,7 +619,7 @@ paths:
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /item/{id}:
+  /items/{id}:
     get:
       tags:
           - Item
@@ -712,7 +712,7 @@ paths:
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /item/category/{id}:
+  /item/categories/{id}:
     get:
       tags:
           - ItemCategory
@@ -888,7 +888,7 @@ paths:
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /evidence/{id}:
+  /evidences/{id}:
     get:
       tags: 
           - Evidence
@@ -977,7 +977,7 @@ paths:
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /occurrence/{id}:
+  /occurrences/{id}:
     get:
       tags:
           - Occurrence
