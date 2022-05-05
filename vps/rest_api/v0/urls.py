@@ -142,6 +142,55 @@ urlpatterns = [
     path("mugshots/<int:pk>", 
         views.MugShotsDetailView.as_view(), 
         name=f'{pre}-mugshots-details'),
+
+    path("offences/", 
+        views.OffenseListView.as_view(), 
+        name=f'{pre}-offences'), 
+    path("offences/<int:pk>", 
+        views.OffenseDetailView.as_view(), 
+        name=f'{pre}-offences-details'),
+
+    path("chargesheets/", 
+        views.ChargeSheetListView.as_view(), 
+        name=f'{pre}-chargesheets'), 
+    path("chargesheets/<int:pk>", 
+        views.ChargeSheetDetailView.as_view(), 
+        name=f'{pre}-chargesheets-details'),
+
+    path("chargesheetpersons/", 
+        views.ChargeSheetPersonListView.as_view(), 
+        name=f'{pre}-chargesheetpersons'), 
+    path("chargesheetpersons/<int:pk>", 
+        views.ChargeSheetPersonDetailView.as_view(), 
+        name=f'{pre}-chargesheetpersons-details'),
+
+    path("courtfiles/", 
+        views.CourtFileListView.as_view(), 
+        name=f'{pre}-courtfiles'), 
+    path("courtfiles/<int:pk>", 
+        views.CourtFileDetailView.as_view(), 
+        name=f'{pre}-courtfiles-details'),
+
+    path("fingerprints/", 
+        views.FingerPrintsListView.as_view(), 
+        name=f'{pre}-fingerprints'), 
+    path("fingerprints/<int:pk>", 
+        views.FingerPrintsDetailView.as_view(), 
+        name=f'{pre}-fingerprints-details'),
+
+    path("policecells/", 
+        views.PoliceCellListView.as_view(), 
+        name=f'{pre}-policecells'), 
+    path("policecells/<int:pk>", 
+        views.PoliceCellDetailView.as_view(), 
+        name=f'{pre}-policecells-details'),
+
+    path("warrant_of_arrests/", 
+        views.WarrantofarrestListView.as_view(), 
+        name=f'{pre}-warrantofarrests'), 
+    path("warrant_of_arrests/<int:pk>", 
+        views.WarrantofarrestDetailView.as_view(), 
+        name=f'{pre}-warrantofarrests-details'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

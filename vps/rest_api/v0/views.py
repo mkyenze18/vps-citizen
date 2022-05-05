@@ -108,13 +108,13 @@ from datetime import datetime, timezone, date
 
 # TODO https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#adding-optional-format-suffixes-to-our-urls
 from django.db import IntegrityError
-from vps.models import (Arrestee, Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, MugShots, Next_of_keen, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
-ItemCategory, Item
+from vps.models import (Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile, Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, Next_of_keen, Occurrence, OccurrenceCategory, Offense, PoliceCell, Rank, PoliceStation, PoliceOfficer,
+ItemCategory, Item, Warrant_of_arrest
 )
 from helpers.file_system_manipulation import delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
-from .serializers import (ArresteeSerializer, CountrySerializer, EvidenceCategorySerializer, EvidenceImageSerializer, EvidenceSerializer, GenderSerializer, IPRS_PersonSerializer, ItemCategorySerializer, ItemSerializer, MugShotsSerializer, NextofkeenSerializer, OccurrenceCategorySerializer, OccurrenceSerializer, 
-RankSerializer, PoliceStationSerializer, PoliceOfficerSerializer
+from .serializers import (ArresteeSerializer, ChargeSheetPersonSerializer, ChargeSheetSerializer, CountrySerializer, CourtFileSerializer, EvidenceCategorySerializer, EvidenceImageSerializer, EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializer, ItemCategorySerializer, ItemSerializer, MugShotsSerializer, NextofkeenSerializer, OccurrenceCategorySerializer, OccurrenceSerializer, OffenseSerializer, PoliceCellSerializer, 
+RankSerializer, PoliceStationSerializer, PoliceOfficerSerializer, WarrantofarrestSerializer
 )
 
 import yaml
@@ -465,7 +465,7 @@ class ItemListView(BaseListView):
     model = Item
     serializer_class = ItemSerializer
     read_serializer_class = ItemSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -480,7 +480,7 @@ class ItemDetailView(BaseDetailView):
     model = Item
     serializer_class = ItemSerializer
     read_serializer_class = ItemSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -498,7 +498,7 @@ class ItemCategoryListView(BaseListView):
     model = ItemCategory
     serializer_class = ItemCategorySerializer
     read_serializer_class = ItemCategorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -513,7 +513,7 @@ class ItemCategoryDetailView(BaseDetailView):
     model = ItemCategory
     serializer_class = ItemCategorySerializer
     read_serializer_class = ItemCategorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -531,7 +531,7 @@ class EvidenceListView(BaseListView):
     model = Evidence
     serializer_class = EvidenceSerializer
     read_serializer_class = EvidenceSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -546,7 +546,7 @@ class EvidenceDetailView(BaseDetailView):
     model = Evidence
     serializer_class = EvidenceSerializer
     read_serializer_class = EvidenceSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -564,7 +564,7 @@ class EvidenceCategoryListView(BaseListView):
     model = EvidenceCategory
     serializer_class = EvidenceCategorySerializer
     read_serializer_class = EvidenceCategorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -579,7 +579,7 @@ class EvidenceCategoryDetailView(BaseDetailView):
     model = Evidence
     serializer_class = EvidenceSerializer
     read_serializer_class = EvidenceSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -597,7 +597,7 @@ class EvidenceImageListView(ImageBaseListView):
     model = EvidenceImage
     serializer_class = EvidenceImageSerializer
     read_serializer_class = EvidenceImageSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -612,7 +612,7 @@ class EvidenceImageDetailView(ImageBaseDetailView):
     model = EvidenceImage
     serializer_class = EvidenceImageSerializer
     read_serializer_class = EvidenceImageSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -630,7 +630,7 @@ class OccurrenceListView(BaseListView):
     model = Occurrence
     serializer_class = OccurrenceSerializer
     read_serializer_class = OccurrenceSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -645,7 +645,7 @@ class OccurrenceDetailView(BaseDetailView):
     model = Occurrence
     serializer_class = OccurrenceSerializer
     read_serializer_class = OccurrenceSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -663,7 +663,7 @@ class OccurrenceCategoryListView(BaseListView):
     model = OccurrenceCategory
     serializer_class = OccurrenceCategorySerializer
     read_serializer_class = OccurrenceCategorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -679,7 +679,7 @@ class OccurrenceCategoryDetailView(BaseDetailView):
     model = OccurrenceCategory
     serializer_class = OccurrenceCategorySerializer
     read_serializer_class = OccurrenceCategorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -697,7 +697,7 @@ class ArresteeListView(BaseListView):
     model = Arrestee
     serializer_class = ArresteeSerializer
     read_serializer_class = ArresteeSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -713,7 +713,7 @@ class ArresteeDetailView(BaseDetailView):
     model = Arrestee
     serializer_class = ArresteeSerializer
     read_serializer_class = ArresteeSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -731,7 +731,7 @@ class NextofkeenListView(BaseListView):
     model = Arrestee
     serializer_class = ArresteeSerializer
     read_serializer_class = ArresteeSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -747,7 +747,7 @@ class NextofkeenDetailView(BaseDetailView):
     model = Next_of_keen
     serializer_class = NextofkeenSerializer
     read_serializer_class = NextofkeenSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -765,7 +765,7 @@ class MugShotsListView(ImageBaseListView):
     model = MugShots
     serializer_class = MugShotsSerializer
     read_serializer_class = MugShotsSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request):
         return super().get(request)
@@ -781,7 +781,7 @@ class MugShotsDetailView(ImageBaseDetailView):
     model = MugShots
     serializer_class = MugShotsSerializer
     read_serializer_class = MugShotsSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request, pk=None):
         return super().get(request, pk)
@@ -791,6 +791,245 @@ class MugShotsDetailView(ImageBaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
+
+class OffenseListView(BaseListView):
+    """
+    List all Offense, or create a new Offense.
+    """
+    model = Offense
+    serializer_class = OffenseSerializer
+    read_serializer_class = OffenseSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OffenseDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an Offense.
+    """
+    model = Offense
+    serializer_class = OffenseSerializer
+    read_serializer_class = OffenseSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class ChargeSheetListView(BaseListView):
+    """
+    List all ChargeSheet, or create a new ChargeSheet
+    """
+    model = ChargeSheet
+    serializer_class = ChargeSheetSerializer
+    read_serializer_class = ChargeSheetSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ChargeSheetDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an ChargeSheet.
+    """
+    model = ChargeSheet
+    serializer_class = ChargeSheetSerializer
+    read_serializer_class = ChargeSheetSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class ChargeSheetPersonListView(BaseListView):
+    """
+    List all ChargeSheetPerson, or create a new ChargeSheetPerson
+    """
+    model = ChargeSheet_Person
+    serializer_class = ChargeSheetPersonSerializer
+    read_serializer_class = ChargeSheetPersonSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ChargeSheetPersonDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an ChargeSheetPerson
+    """
+    model = ChargeSheet_Person
+    serializer_class = ChargeSheetPersonSerializer
+    read_serializer_class = ChargeSheetPersonSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class CourtFileListView(BaseListView):
+    """
+    List all CourtFile, or create a new CourtFile.
+    """
+    model = CourtFile
+    serializer_class = CourtFileSerializer
+    read_serializer_class = CourtFileSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class CourtFileDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an CourtFile.
+    """
+    model = CourtFile
+    serializer_class = CourtFileSerializer
+    read_serializer_class = CourtFileSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class FingerPrintsListView(ImageBaseListView):
+    """
+    List all FingerPrints, or create a new FingerPrints.
+    """
+    model = FingerPrints
+    serializer_class = FingerPrintsSerializer
+    read_serializer_class = FingerPrintsSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class FingerPrintsDetailView(ImageBaseDetailView):
+
+    """
+    Retrieve , updates and delete an FingerPrints.
+    """
+    model = FingerPrints
+    serializer_class = FingerPrintsSerializer
+    read_serializer_class = FingerPrintsSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class PoliceCellListView(BaseListView):
+    """
+    List all PoliceCell, or create a new PoliceCell.
+    """
+    model = PoliceCell
+    serializer_class = PoliceCellSerializer
+    read_serializer_class = PoliceCellSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class PoliceCellDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an PoliceCell.
+    """
+    model = PoliceCell
+    serializer_class = PoliceCellSerializer
+    read_serializer_class = PoliceCellSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class WarrantofarrestListView(BaseListView):
+    """
+    List all Warrantofarrest, or create a new Warrantofarrest.
+    """
+    model = Warrant_of_arrest
+    serializer_class = WarrantofarrestSerializer
+    read_serializer_class = WarrantofarrestSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class WarrantofarrestDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an Warrantofarrest.
+    """
+    model = Warrant_of_arrest
+    serializer_class = WarrantofarrestSerializer
+    read_serializer_class = WarrantofarrestSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
 
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
@@ -819,4 +1058,11 @@ def api_root(request, format=None):
         'arrestees': reverse(f'{app_name}:{pre}-arrestees', request=request, format=format),
         'Next_of_keen_list': reverse(f'{app_name}:{pre}-Next_of_keen_list', request=request, format=format),
         'mugshots': reverse(f'{app_name}:{pre}-mugshots', request=request, format=format),
+        'offenses': reverse(f'{app_name}:{pre}-offences', request=request, format=format),
+        'chargesheets': reverse(f'{app_name}:{pre}-chargesheets', request=request, format=format),
+        'chargesheetpersons': reverse(f'{app_name}:{pre}-chargesheetpersons', request=request, format=format),
+        'courtfiles': reverse(f'{app_name}:{pre}-courtfiles', request=request, format=format),
+        'fingerprints': reverse(f'{app_name}:{pre}-fingerprints', request=request, format=format),
+        'policecells': reverse(f'{app_name}:{pre}-policecells', request=request, format=format),
+        'warrant_of_arrests': reverse(f'{app_name}:{pre}-warrantofarrests', request=request, format=format),
     })

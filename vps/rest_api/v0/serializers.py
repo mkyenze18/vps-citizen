@@ -37,8 +37,10 @@ from rest_framework import serializers
 #         model = Snippet
 #         fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
-from vps.models import (Arrestee, Country, Evidence, EvidenceCategory, EvidenceImage, Gender, IPRS_Person, MugShots, Next_of_keen, Occurrence, OccurrenceCategory, Rank, PoliceStation, PoliceOfficer,
-ItemCategory, Item
+from vps.models import (Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile,
+ Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, 
+ Next_of_keen, Occurrence, OccurrenceCategory, Offense, PoliceCell, Rank, PoliceStation, 
+ PoliceOfficer,ItemCategory, Item, Warrant_of_arrest
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
@@ -149,4 +151,52 @@ class MugShotsSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = MugShots
 
+class OffenseSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Offense
+
+class ChargeSheetSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = ChargeSheet
+
+class ChargeSheetPersonSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = ChargeSheet_Person
+
+class CourtFileSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = CourtFile
+
+class FingerPrintsSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = FingerPrints
+
+class PoliceCellSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = PoliceCell
+
+class WarrantofarrestSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Warrant_of_arrest
 
