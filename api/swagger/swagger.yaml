@@ -1070,15 +1070,15 @@ paths:
     get:
       tags:
           - OccurrenceCategory
-      description: Retrieves an ItemCategory resource
-      summary: Retrieves an ItemCategory resource
+      description: Retrieves an OccurrenceCategory resource
+      summary: Retrieves an OccurrenceCategory resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "200":
-          description: ItemCategory resource
+          description: OccurrenceCategory resource
           schema:
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/occurrencecategory'
         "404":
           description: Resource not found         
     put:
