@@ -120,6 +120,19 @@
     <!-- Custom Theme Scripts -->
     <!-- <script src="/static/gentelella/build/js/custom.min.js"></script> -->
 
+    <script>
+      // 
+      // window.police_officer = 2;
+      // window.police_station = 1;
+
+      // central
+      // window.police_officer = 2;
+      // window.police_station = 3;
+
+      window.police_officer = "%REACT_APP_POLICE_OFFICER%";
+      window.police_station = "%REACT_APP_POLICE_STATION%";
+    </script>
+
     <!-- ! form_validation.html  -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
     <!-- <script src="/static/gentelella/vendors/validator/multifield.js"></script> -->
@@ -141,6 +154,20 @@
 
     <!-- Custom Theme Scripts -->
     <!-- <script src="/static/gentelella/build/js/custom.min.js"></script> -->
+    
+    <!-- 
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcxRmrE37n0y80yc9iN4Y0lqjD5ZI6aIQ&callback=initMap&v=weekly"
+      defer
+    ></script>
+    <script>
+      window.google = google;
+    </script>
 </body>
 
 </html>
