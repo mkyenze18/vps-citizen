@@ -10,7 +10,7 @@ export function handleErrorAxios(error, resorceName=null) {
         // console.log(error.response.status);
         // console.log(error.response.headers);
 
-        if(error.response.data) {
+        if(error.response.data && error.response.headers['Content-Type'] === 'application/json') {
             Object.keys(error.response.data).forEach(element => {
                 // TODO https://fkhadra.github.io/react-toastify/positioning-toast
                 const mesaage = Array.isArray(error.response.data[element])
