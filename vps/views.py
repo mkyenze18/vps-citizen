@@ -1,5 +1,6 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 # Create your views here.
 
 from django.http import HttpResponse
@@ -62,7 +63,15 @@ from .forms import Country_Form
 
 @login_required # TODO https://docs.djangoproject.com/en/4.0/topics/auth/default/#the-login-required-decorator
 def index(request, resource=None):
-    return render(request, 'build/index.html')
+    police_officer = PoliceOfficer.objects.filter(user=request.user.id)
+    context = {}
+    if police_officer.count():
+        context = {
+            "police_officer" : police_officer.id,
+            "police_station" : police_officer.police_station.id,
+        }
+        
+    return render(request, 'build/index.html', context)
 
 # Country
 @login_required
