@@ -15,7 +15,7 @@ def IPRS_person_mugshot_directory_path(instance, filename):
     return 'iprs_person_{0}/{1}'.format(instance.id, filename)
 
 def policeOfficer_mugshot_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/arrestee_<id>/<view>
+    # file will be uploaded to MEDIA_ROOT/police_officer_<id>/<view>
     return 'police_officer_{0}/{1}'.format(instance.id, filename)
 
 def arrestee_mugshot_directory_path(instance, filename):

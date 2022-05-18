@@ -23,5 +23,8 @@ urlpatterns = [
     path('api', views.api_root),
     path('api/v0/', include('vps.rest_api.v0.urls')),
 
-    path('<path:resource>', views.index, name='remaining_urls'), # TODO https://stackoverflow.com/questions/51084909/how-can-i-use-a-catch-all-route-using-path-or-re-path-so-that-django-passes
+    # SUSPENDED
+    # ! For now don't be too nice. Wrong URL should be treated as an illegal move
+    # TODO https://stackoverflow.com/questions/51084909/how-can-i-use-a-catch-all-route-using-path-or-re-path-so-that-django-passes
+    # path('<path:resource>', views.index, name='remaining_urls'),
 ]

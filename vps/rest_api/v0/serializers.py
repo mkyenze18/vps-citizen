@@ -37,12 +37,23 @@ from rest_framework import serializers
 #         model = Snippet
 #         fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
+from django.contrib.auth.models import User
 from vps.models import (Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile,
- Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, 
- Next_of_keen, Occurrence, OccurrenceCategory, Offense, PoliceCell, Rank, PoliceStation, 
+ Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, Reporter,
+ Next_of_keen, Occurrence, OccurrenceCategory, OccurrenceCategoryInput, OccurrenceDetail,
+ Offense, PoliceCell, Rank, PoliceStation, 
  PoliceOfficer,ItemCategory, Item, Warrant_of_arrest
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
+
+class UserSerializer(serializers.ModelSerializer):
+    # TODO https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
+    # questions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+        read_only_fields = ['username']
 
 class GenderSerializer(serializers.ModelSerializer):
     # TODO https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
@@ -75,12 +86,30 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         model = PoliceStation
         fields = ['id', 'name', 'country', 'location']
 
-class PoliceOfficerSerializer(serializers.ModelSerializer):
+class PoliceOfficerReadSerializer(serializers.ModelSerializer):
+    # exclude user details when reading police officer object
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    
     class Meta:
         model = PoliceOfficer
         fields = ['id', 'user', 'iprs_person', 'service_number', 'email_address',
-        'mobile_phone', 'rank', 'mug_shot']
+        'mobile_phone', 'rank', 'police_station', 'mug_shot']
+        depth = 1
 
+class PoliceOfficerWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PoliceOfficer
+        fields = ['id', 'user', 'iprs_person', 'service_number', 'email_address',
+        'mobile_phone', 'rank', 'police_station', 'mug_shot']
+
+class ReporterSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Reporter
+        fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email_address',
+        'county_of_residence', 'sub_county_of_residence']
 
 class ItemCategorySerializer(BaseModelSerializer):
     """
@@ -116,7 +145,16 @@ class EvidenceImageSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = EvidenceImage
-class OccurrenceSerializer(BaseModelSerializer):
+
+class OccurrenceReadSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Occurrence
+        depth = 1
+
+class OccurrenceWriteSerializer(BaseModelSerializer):
     """
     """
 
@@ -129,6 +167,18 @@ class OccurrenceCategorySerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = OccurrenceCategory
+
+class OccurrenceCategoryInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccurrenceCategoryInput
+        fields = ['id', 'occurrence_category', 'label', 'type', 'name', 'order', 'choices' ]
+
+class OccurrenceDetailSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = OccurrenceDetail
 
 class ArresteeSerializer(BaseModelSerializer):
     """

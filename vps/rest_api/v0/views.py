@@ -107,14 +107,32 @@ from datetime import datetime, timezone, date
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # TODO https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#adding-optional-format-suffixes-to-our-urls
+from django.contrib.auth.models import User
 from django.db import IntegrityError
-from vps.models import (Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile, Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, Next_of_keen, Occurrence, OccurrenceCategory, Offense, PoliceCell, Rank, PoliceStation, PoliceOfficer,
-ItemCategory, Item, Warrant_of_arrest
+from django.core.mail import send_mass_mail
+from django.core.mail import EmailMessage
+from django.conf import settings
+
+
+from vps.models import (
+    Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile,
+    Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots,
+    Reporter, Next_of_keen, Occurrence, OccurrenceCategory, OccurrenceCategoryInput, OccurrenceDetail, 
+    Offense, PoliceCell, Rank,
+    PoliceStation, PoliceOfficer, ItemCategory, Item, Warrant_of_arrest
 )
 from helpers.file_system_manipulation import delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
-from .serializers import (ArresteeSerializer, ChargeSheetPersonSerializer, ChargeSheetSerializer, CountrySerializer, CourtFileSerializer, EvidenceCategorySerializer, EvidenceImageSerializer, EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializer, ItemCategorySerializer, ItemSerializer, MugShotsSerializer, NextofkeenSerializer, OccurrenceCategorySerializer, OccurrenceSerializer, OffenseSerializer, PoliceCellSerializer, 
-RankSerializer, PoliceStationSerializer, PoliceOfficerSerializer, WarrantofarrestSerializer
+from .serializers import ( UserSerializer,
+    ArresteeSerializer, ChargeSheetPersonSerializer, ChargeSheetSerializer,
+    CountrySerializer, CourtFileSerializer, EvidenceCategorySerializer, EvidenceImageSerializer,
+    EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializer,
+    ItemCategorySerializer, ItemSerializer, MugShotsSerializer, ReporterSerializer, 
+    NextofkeenSerializer,
+    OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceWriteSerializer, OccurrenceReadSerializer,
+    OccurrenceDetailSerializer, OffenseSerializer, PoliceCellSerializer, 
+    RankSerializer, PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
+    WarrantofarrestSerializer
 )
 
 import yaml
@@ -123,6 +141,8 @@ import json
 import glob
 import os
 from . import name_prefix
+
+from rest_framework import filters
 
 # SWAGGER
 def swagger(request):
@@ -155,6 +175,22 @@ def swagger(request):
         "swagger_json": swagger_json
     }
     return render(request, 'vps/swagger.html', context)
+
+# USER
+class UserListView(BaseListView):
+    """
+    List all items, or create a new item.
+    """
+    model = User
+    serializer_class = UserSerializer
+    read_serializer_class = UserSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().get(request)
 
 # GENDER
 @api_view(['GET', 'POST'])
@@ -256,6 +292,15 @@ def iprsPerson_list(request, format=None):
     """
     if request.method == 'GET':
         resources = IPRS_Person.objects.all()
+
+        id_no = request.query_params.get('id_no', None)
+        if id_no:
+            resources = resources.filter(id_no__icontains=id_no)
+
+        passport_no = request.query_params.get('passport_no', None)
+        if passport_no:
+            resources = resources.filter(passport_no__icontains=passport_no)
+
         serializer = IPRS_PersonSerializer(resources, many=True)
         return Response(serializer.data)
 
@@ -372,7 +417,7 @@ def policeStation_list(request, format=None):
     List all police stations, or create a new police station.
     """
     if request.method == 'GET':
-        resources = PoliceStation.objects.all()
+        resources = PoliceStation.objects.all()       
         serializer = PoliceStationSerializer(resources, many=True)
         return Response(serializer.data)
 
@@ -419,11 +464,16 @@ def policeOfficer_list(request, format=None):
     """
     if request.method == 'GET':
         resources = PoliceOfficer.objects.all()
-        serializer = PoliceOfficerSerializer(resources, many=True)
+
+        user = request.query_params.get('user', None)
+        if user:
+            resources = resources.filter(user=user)
+
+        serializer = PoliceOfficerReadSerializer(resources, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = PoliceOfficerSerializer(data=request.data)
+        serializer = PoliceOfficerWriteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -440,11 +490,11 @@ def policeOfficer_detail(request, pk, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PoliceOfficerSerializer(resource)
+        serializer = PoliceOfficerReadSerializer(resource)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = PoliceOfficerSerializer(resource, data=request.data, partial=True)
+        serializer = PoliceOfficerWriteSerializer(resource, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -457,6 +507,66 @@ def policeOfficer_detail(request, pk, format=None):
             return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['GET', 'PUT', 'DELETE'])
+def policeOfficer_restMug(request, pk, format=None):
+    """
+    Retrieve, update or delete a IPRS person.
+    """
+    try:
+        resource = PoliceOfficer.objects.get(pk=pk)
+    except PoliceOfficer.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = PoliceOfficerReadSerializer(resource)
+        resource.mug_shot.delete()
+        return Response(serializer.data)
+
+class ReporterListView(BaseListView):
+    """
+    List all items, or create a new item.
+    """
+    model = Reporter
+    serializer_class = ReporterSerializer
+    read_serializer_class = ReporterSerializer
+    permission_classes = ()
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Reporter.objects.all()
+        occurrence = self.request.query_params.get('occurrence')
+        if occurrence is not None:
+            queryset = queryset.filter(occurrence=occurrence)
+
+        return queryset
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ReporterDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an item
+    """
+    model = Reporter
+    serializer_class = ReporterSerializer
+    read_serializer_class = ReporterSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
 class ItemListView(BaseListView):
     """
@@ -628,9 +738,28 @@ class OccurrenceListView(BaseListView):
     List all Occurrence, or create a new Occurrence.
     """
     model = Occurrence
-    serializer_class = OccurrenceSerializer
-    read_serializer_class = OccurrenceSerializer
+    serializer_class = OccurrenceWriteSerializer
+    read_serializer_class = OccurrenceReadSerializer
     permission_classes = ()
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#specifying-a-default-ordering
+    # "...Typically you'd instead control this by setting order_by on the initial queryset,"
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Occurrence.objects.all()
+        police_station = self.request.query_params.get('police_station')
+        if police_station is not None:
+            queryset = queryset.filter(police_station=police_station)
+
+        police_officer = self.request.query_params.get('police_officer')
+        if police_officer is not None:
+            queryset = queryset.filter(police_officer=police_officer)
+
+        queryset = queryset.order_by('-id')
+        return queryset
 
     def get(self, request):
         return super().get(request)
@@ -643,8 +772,8 @@ class OccurrenceDetailView(BaseDetailView):
     Retrieve , updates and delete an Occurrence.
     """
     model = Occurrence
-    serializer_class = OccurrenceSerializer
-    read_serializer_class = OccurrenceSerializer
+    serializer_class = OccurrenceWriteSerializer
+    read_serializer_class = OccurrenceReadSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -690,6 +819,200 @@ class OccurrenceCategoryDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
+class OccurrenceCategoryInputListView(BaseListView):
+    """
+    List all occurrence category inputs, or create a new occurrence category input.
+    """
+    model = OccurrenceCategoryInput
+    serializer_class = OccurrenceCategoryInputSerializer
+    read_serializer_class = OccurrenceCategoryInputSerializer
+    permission_classes = ()
+    # SUSPENDED
+    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#searchfilter
+    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#specifying-which-fields-may-be-ordered-against
+    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # search_fields = ['occurrence_category']
+    # ordering_fields = ['order']
+    # ordering = ['order'] # https://www.django-rest-framework.org/api-guide/filtering/#specifying-a-default-ordering
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = OccurrenceCategoryInput.objects.all()
+        occurrence_category = self.request.query_params.get('occurrence_category')
+        if occurrence_category is not None:
+            queryset = queryset.filter(occurrence_category=occurrence_category)
+
+        queryset = queryset.order_by('order')
+        return queryset
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OccurrenceCategoryInputDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an occurrence category input.
+    """
+    model = OccurrenceCategoryInput
+    serializer_class = OccurrenceCategoryInputSerializer
+    read_serializer_class = OccurrenceCategoryInputSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+class OccurrenceDetailListView(BaseListView):
+    """
+    List all occurrence category inputs, or create a new occurrence category input.
+    """
+    model = OccurrenceDetail
+    serializer_class = OccurrenceDetailSerializer
+    read_serializer_class = OccurrenceDetailSerializer
+    permission_classes = ()
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = OccurrenceDetail.objects.all()
+        occurrence = self.request.query_params.get('occurrence')
+        if occurrence is not None:
+            queryset = queryset.filter(occurrence=occurrence)
+
+        category = self.request.query_params.get('category')
+        if category is not None:
+            queryset = queryset.filter(category=category)
+
+        return queryset
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OccurrenceDetailDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an occurrence category input.
+    """
+    model = OccurrenceDetail
+    serializer_class = OccurrenceDetailSerializer
+    read_serializer_class = OccurrenceDetailSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+# TODO https://docs.djangoproject.com/en/4.0/howto/outputting-pdf/#write-your-view
+import io
+# from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def occurrence_emailAbstract(request, pk, format=None):
+    """
+    Retrieve, update or delete a IPRS person.
+    """
+    try:
+        resource = Occurrence.objects.get(pk=pk)
+    except Occurrence.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        media_folder = f'{settings.MEDIA_ROOT}/abstract'
+        os.makedirs(media_folder, exist_ok=True)
+
+        # TODO https://docs.djangoproject.com/en/4.0/howto/outputting-pdf/#write-your-view
+        # Create a file-like buffer to receive PDF data.
+        # buffer = io.BytesIO()
+        # + https://docs.python.org/3/library/io.html#binary-i-o
+        # f = open("myfile.jpg", "rb")
+        buffer = open(f'{media_folder}/Abstract_{resource.id}.pdf', "w+b")
+
+        # Create the PDF object, using the buffer as its "file."
+        p = canvas.Canvas(buffer)
+
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        # p.drawString(100, 100, "Hello world.")
+        p.drawString(100, 100, f'Abstract {resource.id}')
+
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
+        p.save()
+
+        # FileResponse sets the Content-Disposition header so that browsers
+        # present the option to save the file.
+        buffer.seek(0)
+        # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+        # TODO https://docs.djangoproject.com/en/4.0/topics/email/#send-mass-mail
+        # message1 = ('Subject here', 'Here is the message', 'from@example.com', ['first@example.com', 'other@example.com'])
+        # message2 = ('Another Subject', 'Here is another message', 'from@example.com', ['second@test.com'])
+        # send_mass_mail((message1, message2), fail_silently=False)
+
+        instance = resource
+
+        subject = f'Police Absract #{resource.id}'
+
+        message = f"""
+see attachment for the abstract
+"""
+
+        reporters = instance.reporter_set.all()
+        reporters_email_array = list(map(lambda recipient: recipient.email_address, reporters))
+        recipient_list_email = reporters_email_array
+        
+#         message1 = (subject, message, 'not-reply@task_manager.vps', recipient_list_email)
+#         send_mass_mail((message1,), fail_silently=False)
+
+        # TODO https://docs.djangoproject.com/en/4.0/topics/email/#the-emailmessage-class
+        # email = EmailMessage(
+        #     'Hello',
+        #     'Body goes here',
+        #     'from@example.com',
+        #     ['to1@example.com', 'to2@example.com'],
+        #     ['bcc@example.com'],
+        #     reply_to=['another@example.com'],
+        #     headers={'Message-ID': 'foo'},
+        # )
+        # message.attach_file('/images/weather_map.png')
+        email = EmailMessage(
+            subject,
+            message,
+            'not-reply@task_manager.vps',
+            recipient_list_email,
+            [],
+            # reply_to=['another@example.com'],
+            # headers={'Message-ID': 'foo'},
+        )
+        email.attach_file(f'{media_folder}/Abstract_{resource.id}.pdf')
+        email.send(fail_silently=False)
+
+        return Response({'status': 'successful'})
+        
 class ArresteeListView(BaseListView):
     """
     List all arrestee, or create a new arrestee.
@@ -1043,26 +1366,39 @@ from . import name_prefix as pre
 def api_root(request, format=None):
     return Response({
         'swagger': reverse(f'{app_name}:{pre}-swagger', request=request, format=format),
+
+        'users': reverse(f'{app_name}:{pre}-user-list', request=request, format=format),
+
         'genders': reverse(f'{app_name}:{pre}-gender-list', request=request, format=format),
         'countries': reverse(f'{app_name}:{pre}-country-list', request=request, format=format),
         'IPRS persons': reverse(f'{app_name}:{pre}-iprs-person-list', request=request, format=format),
+        'mugshots': reverse(f'{app_name}:{pre}-mugshots', request=request, format=format),
+
         'ranks': reverse(f'{app_name}:{pre}-rank-list', request=request, format=format),
         'police stations': reverse(f'{app_name}:{pre}-police-station-list', request=request, format=format),
         'police offices': reverse(f'{app_name}:{pre}-police-officer-list', request=request, format=format),
-        'items': reverse(f'{app_name}:{pre}-item-list', request=request, format=format),
-        'item/categories': reverse(f'{app_name}:{pre}-item-categories', request=request, format=format),
-        'evidences': reverse(f'{app_name}:{pre}-evidence', request=request, format=format),
-        'evidenceimages': reverse(f'{app_name}:{pre}-evidenceimage', request=request, format=format),
+
+        'reporters': reverse(f'{app_name}:{pre}-reporter-list', request=request, format=format),
+        'occurrence categories': reverse(f'{app_name}:{pre}-occurrence-categories', request=request, format=format),
+        'occurrence categories inputs': reverse(f'{app_name}:{pre}-occurrence-category-inputs', request=request, format=format),
         'occurrences': reverse(f'{app_name}:{pre}-occurrences', request=request, format=format),
-        'occurrence/categories': reverse(f'{app_name}:{pre}-occurrence-categories', request=request, format=format),
+        'occurrences details': reverse(f'{app_name}:{pre}-occurrence-details', request=request, format=format),
+
         'arrestees': reverse(f'{app_name}:{pre}-arrestees', request=request, format=format),
-        'Next_of_keen_list': reverse(f'{app_name}:{pre}-Next_of_keen_list', request=request, format=format),
-        'mugshots': reverse(f'{app_name}:{pre}-mugshots', request=request, format=format),
-        'offenses': reverse(f'{app_name}:{pre}-offences', request=request, format=format),
-        'chargesheets': reverse(f'{app_name}:{pre}-chargesheets', request=request, format=format),
-        'chargesheetpersons': reverse(f'{app_name}:{pre}-chargesheetpersons', request=request, format=format),
-        'courtfiles': reverse(f'{app_name}:{pre}-courtfiles', request=request, format=format),
+        'next of keen': reverse(f'{app_name}:{pre}-Next_of_keen_list', request=request, format=format),
         'fingerprints': reverse(f'{app_name}:{pre}-fingerprints', request=request, format=format),
-        'policecells': reverse(f'{app_name}:{pre}-policecells', request=request, format=format),
-        'warrant_of_arrests': reverse(f'{app_name}:{pre}-warrantofarrests', request=request, format=format),
+        'police cells': reverse(f'{app_name}:{pre}-policecells', request=request, format=format),
+        'warrant of arrests': reverse(f'{app_name}:{pre}-warrantofarrests', request=request, format=format),
+        
+        'items': reverse(f'{app_name}:{pre}-item-list', request=request, format=format),
+        'item categories': reverse(f'{app_name}:{pre}-item-categories', request=request, format=format),
+
+        'evidences': reverse(f'{app_name}:{pre}-evidence', request=request, format=format),
+        'evidence images': reverse(f'{app_name}:{pre}-evidenceimage', request=request, format=format),
+
+        'offenses': reverse(f'{app_name}:{pre}-offences', request=request, format=format),
+
+        'chargesheets': reverse(f'{app_name}:{pre}-chargesheets', request=request, format=format),
+        'chargesheet persons': reverse(f'{app_name}:{pre}-chargesheetpersons', request=request, format=format),
+        'courtfiles': reverse(f'{app_name}:{pre}-courtfiles', request=request, format=format),
     })
