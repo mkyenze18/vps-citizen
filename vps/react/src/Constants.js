@@ -4,8 +4,9 @@ const prod = {
     url: {
      API_URL: '',
      API_URL_USERS: '/users'}
-   };
-   const dev = {
+};
+
+const dev = {
     url: {
      API_URL: 'http://localhost:8000'
     }

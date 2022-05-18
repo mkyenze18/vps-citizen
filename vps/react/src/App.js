@@ -55,17 +55,35 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  useNavigate
+} from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
+import { config } from './Constants'
+import { handleErrorAxios } from './utility/notification';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const axios = require('axios').default;
+
+// TODO https://a-carreras-c.medium.com/development-and-production-variables-for-react-apps-c04af8b430a5
+var url = config.url.API_URL
+// var url_users = config.url.API_URL_USERS
+
 export default function App() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedResourcePoliceOfficer, setSelectedResourcePoliceOfficer] = useState(null);
+
+  let navigate = useNavigate();
+
 	function doSomething(e) {
         // 
     }
 
 	useEffect(() => {
+    getResourcePoliceOfficer(window.police_officer);
+
     // const stylesheets = [
 		// 	'/static/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css', // Bootstrap
     //   '/static/gentelella/vendors/font-awesome/css/font-awesome.min.css', // Font Awesome
@@ -126,7 +144,27 @@ export default function App() {
 			  document.body.removeChild(script);
 			}
 		});
-	});
+	}, [selectedResourcePoliceOfficer?.id]);
+
+  function getResourcePoliceOfficer(id) {
+    axios.get(`${url}/vps/api/v0/police-officers/${id}`)
+    .then(function (response) {
+      // handle success
+      console.log(response);
+      setIsLoaded(true);
+      setSelectedResourcePoliceOfficer(response.data);
+    })
+    .catch(function(error){
+      // handle error
+      console.error(error);
+      setIsLoaded(true);
+      
+      handleErrorAxios(error)
+    })
+    .then(function () {
+      // always executed
+    });
+  }
 
   return (
     <div className="container body">
@@ -134,7 +172,7 @@ export default function App() {
         <div className="col-md-3 left_col">
           <div className="left_col scroll-view">
             <div className="navbar nav_title" style={{ border: 0 }}>
-              <Link to="vps" className="site_title">
+              <Link to="/vps" className="site_title">
                 {/* <i className="fa fa-paw"></i> */}
                 <img src="/static/vps/logo.png" alt="ie" style={{ objectFit: "contain" }} />
                 {/* <span>VPS</span> */}
@@ -146,11 +184,11 @@ export default function App() {
             {/* <!-- menu profile quick info --> */}
             <div className="profile clearfix">
               <div className="profile_pic">
-                <img src="/static/gentelella/production/images/img.jpg" alt="..." className="img-circle profile_img"/>
+                <img src={selectedResourcePoliceOfficer ? url+selectedResourcePoliceOfficer?.mug_shot : "/static/gentelella/production/images/img.jpg"} alt="..." className="img-circle profile_img"/>
               </div>
               <div className="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <h2>{selectedResourcePoliceOfficer?.service_number}</h2>
               </div>
             </div>
             {/* <!-- /menu profile quick info --> */}
@@ -162,12 +200,16 @@ export default function App() {
               <div className="menu_section">
                 <h3>General</h3>
                 <ul className="nav side-menu">
+                  <li><Link to="occurrences"><i className="fa fa-book"></i>Occurrences</Link></li>
+                  <li><Link to="police-officers"><i className="fa fa-user"></i>Police Officer</Link></li>
                   <li><Link to="iprs-persons"><i className="fa fa-users"></i>IPRS Person</Link></li>
                   <li><a><i className="fa fa-cogs"></i> System <span className="fa fa-chevron-down"></span></a>
                     <ul className="nav child_menu">
                       <li><Link to="genders">Genders</Link></li>
                       <li><Link to="countries">Countries</Link></li>
                       <li><Link to="ranks">Ranks</Link></li>
+                      <li><Link to="police-stations">Police Stations</Link></li>
+                      <li><Link to="occurrence-categories">Occurrence Categories</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -304,7 +346,7 @@ export default function App() {
               <ul className=" navbar-right">
                 <li className="nav-item dropdown open" style={{ paddingeft: '15px' }}>
                   <a href="javascript:;" className="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="/static/gentelella/production/images/img.jpg" alt=""/>John Doe
+                    <img src={selectedResourcePoliceOfficer ? url+selectedResourcePoliceOfficer?.mug_shot : "/static/gentelella/production/images/img.jpg"} alt=""/>{selectedResourcePoliceOfficer?.service_number}
                   </a>
                   <div className="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     {/* <a className="dropdown-item"  href="javascript:;"> Profile</a>

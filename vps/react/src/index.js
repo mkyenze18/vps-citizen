@@ -136,6 +136,9 @@ import {
 import Wrapper from "./Wrapper";
 import App from "./App";
 import Landing from "./Landing";
+import Page_403 from "./Page_403";
+
+import Home from "./routes/home";
 
 import Index1 from "./routes/gentellela/index1";
 import Form from "./routes/gentellela/form";
@@ -149,6 +152,25 @@ import Country from "./routes/country/country";
 import IPRS_Persons from "./routes/iprs_person";
 import IPRS_PersonCollection from "./routes/iprs_person/collection";
 import IPRS_PersonResource from "./routes/iprs_person/resource";
+
+import Police_Stations from "./routes/police_station/police_stations";
+import Police_Station from "./routes/police_station/police_station";
+
+import Police_Officers from "./routes/police_officer";
+import Police_OfficerCollection from "./routes/police_officer/collection";
+import Police_OfficerResource from "./routes/police_officer/resource";
+
+import Occurrences from "./routes/occurrence";
+import OccurrenceCollection from "./routes/occurrence/collection";
+import OccurrenceResource from "./routes/occurrence/resource";
+
+import OccurrenceBooks from "./routes/occurrence_book";
+import OccurrenceBookCollection from "./routes/occurrence_book/collection";
+import OccurrenceBookResource from "./routes/occurrence_book/resource";
+
+import OccurrenceCategories from "./routes/occurrence_category";
+import OccurrenceCategoryCollection from "./routes/occurrence_category/collection";
+import OccurrenceCategoryResource from "./routes/occurrence_category/resource";
 
 import Ranks from "./routes/rank/ranks";
 import Rank from "./routes/rank/rank";
@@ -166,7 +188,8 @@ render(
               element={<Landing />}
             />
           <Route path="vps" element={<App />}>
-            <Route path="index1" index element={<Index1 />} />
+            <Route index element={<Home />} />
+            <Route path="index1" element={<Index1 />} />
             <Route path="form" element={<Form />} />
             {/* <Route path="countries" element={<Countries />} /> */}
             <Route path="genders" element={<Genders />}>
@@ -214,6 +237,54 @@ render(
               />
               <Route path=":resourceId" element={<Rank />} />
             </Route>
+            <Route path="police-stations" element={<Police_Stations />}>
+              {/* <Route
+                index
+                element={
+                  <main style={{ padding: "1rem" }}>
+                    <p>Select an invoice</p>
+                  </main>
+                }
+              /> */}
+              <Route
+                index
+                element={<Police_Station />}
+              />
+              <Route path=":resourceId" element={<Police_Station />} />
+            </Route>
+            <Route path="police-officers" element={<Police_Officers />}>
+              <Route
+                index
+                element={<Police_OfficerCollection />}
+              />
+              <Route path="add" element={<Police_OfficerResource />} />
+              <Route path=":resourceId" element={<Police_OfficerResource />} />
+            </Route>
+            <Route path="occurrences" element={<Occurrences />}>
+              <Route
+                index
+                element={<OccurrenceCollection />}
+              />
+              {/* <Route path="add" element={<OccurrenceResource />} /> */}
+              <Route path=":resourceId" element={<OccurrenceResource />} />
+            </Route>
+            {/* Occurrence Book Module */}
+            <Route path="occurrence-book" element={<OccurrenceBooks />}>
+              <Route
+                index
+                element={<OccurrenceBookCollection />}
+              />
+              <Route path="add" element={<OccurrenceBookResource />} />
+              <Route path=":resourceId" element={<OccurrenceBookResource />} />
+            </Route>
+            <Route path="occurrence-categories" element={<OccurrenceCategories />}>
+              <Route
+                index
+                element={<OccurrenceCategoryCollection />}
+              />
+              <Route path="add" element={<OccurrenceCategoryResource />} />
+              <Route path=":resourceId" element={<OccurrenceCategoryResource />} />
+            </Route>
             {/* <Route path="invoices" element={<Invoices />}>
               <Route
                 index
@@ -234,6 +305,7 @@ render(
               }
             />
           </Route>
+          <Route path="403" element={<Page_403 />}></Route>
       </Route>
     </Routes>
     
