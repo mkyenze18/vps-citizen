@@ -47,7 +47,8 @@ class PoliceOfficer(models.Model):
     rank = models.ForeignKey(Rank, on_delete=models.PROTECT)
     # date_of_retirement = models.DateTimeField()
     # date_of_death = models.DateTimeField()
-    mug_shot = models.ImageField(upload_to=policeOfficer_mugshot_directory_path)
+    police_station = models.OneToOneField(PoliceStation, on_delete=models.PROTECT, null=True, blank=True)
+    mug_shot = models.ImageField(upload_to=policeOfficer_mugshot_directory_path, null=True, blank=True)
 
 class ItemCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -60,27 +61,37 @@ class Item(models.Model):
     serial_no = models.CharField(max_length=100)
 
 # ! Focus on OB (report) module
+class OccurrenceCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+class OccurrenceCategoryInput(models.Model):
+    occurrence_category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
+    label = models.CharField(max_length=100)
+    type = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
+    choices = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0)
+
+class Occurrence(models.Model):
+    location = models.CharField(max_length=100)
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
+    police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
+    module = models.CharField(max_length=30)
+    is_closed = models.BooleanField(default=False)
+    posted_date = models.DateTimeField(auto_now_add=True)
+
+class OccurrenceDetail(models.Model):
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+    category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
+    details = models.JSONField()
+
 class Reporter(models.Model):
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=30)
     email_address = models.EmailField()
     county_of_residence = models.CharField(max_length=100)
     sub_county_of_residence = models.CharField(max_length=100)
-
-class OccurrenceCategory(models.Model):
-    name = models.CharField(max_length=100)
-
-class Occurrence(models.Model):
-    reporter = models.ManyToManyField(Reporter, blank=True)
-    location = models.CharField(max_length=100)
-    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
-    police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
-    posted_date = models.DateTimeField()
-
-class OccurrenceDetail(models.Model):
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
-    category = models.ManyToManyField(OccurrenceCategory)
-    details = models.JSONField()
 
 # SUSPENDED
 # class BuglaryOccurrence(models.Model):
