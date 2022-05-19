@@ -83,6 +83,7 @@ import moment from 'moment';
 import { updateQueryStringParameter } from '../../utility/url';
 import { handleErrorAxios } from '../../utility/notification';
 import { getInvoice, deleteInvoice } from "../../data";
+import Cookies from 'js-cookie'
 
 const axios = require('axios').default;
 
@@ -197,7 +198,14 @@ export default function Resource(props) {
   }
 
   function postResource(data) {
-    axios.post(`${url}/vps/api/v0/occurrence-categories`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.post(`${url}/vps/api/v0/occurrence-categories`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -326,7 +334,14 @@ export default function Resource(props) {
   }
 
   function postResourceOccurrenceCategoryInput(data) {
-    axios.post(`${url}/vps/api/v0/occurrence-category-inputs`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.post(`${url}/vps/api/v0/occurrence-category-inputs`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);

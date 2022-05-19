@@ -81,6 +81,7 @@ import { config } from '../../Constants'
 import { updateQueryStringParameter } from '../../utility/url';
 import { handleErrorAxios } from '../../utility/notification';
 import { getInvoice, deleteInvoice } from "../../data";
+import Cookies from 'js-cookie'
 
 const axios = require('axios').default;
 
@@ -179,7 +180,14 @@ export default function Gender(props) {
   }
 
   function postResource(data) {
-    axios.post(`${url}/vps/api/v0/genders`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.post(`${url}/vps/api/v0/genders`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);

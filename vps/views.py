@@ -1,6 +1,7 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import ensure_csrf_cookie
 # Create your views here.
 
 from django.http import HttpResponse
@@ -62,10 +63,12 @@ from .forms import Country_Form
 #     return HttpResponse("You're voting on question %s." % question_id)
 
 @login_required # TODO https://docs.djangoproject.com/en/4.0/topics/auth/default/#the-login-required-decorator
+@ensure_csrf_cookie # https://docs.djangoproject.com/en/4.0/ref/csrf/#page-uses-ajax-without-any-html-form
 def index(request, resource=None):
     police_officer = PoliceOfficer.objects.filter(user=request.user.id)
     context = {}
     if police_officer.count():
+        police_officer = police_officer.first()
         context = {
             "police_officer" : police_officer.id,
             "police_station" : police_officer.police_station.id,

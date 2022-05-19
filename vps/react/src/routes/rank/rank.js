@@ -81,6 +81,7 @@ import FormValidator from '@yaireo/validator';
 import { updateQueryStringParameter } from '../../utility/url';
 import { handleErrorAxios } from '../../utility/notification';
 import { getInvoice, deleteInvoice } from "../../data";
+import Cookies from 'js-cookie'
 
 const axios = require('axios').default;
 
@@ -196,7 +197,14 @@ export default function Rank(props) {
   }
 
   function postResource(data) {
-    axios.post(`${url}/vps/api/v0/ranks`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.post(`${url}/vps/api/v0/ranks`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);
