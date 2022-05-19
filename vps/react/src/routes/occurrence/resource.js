@@ -454,7 +454,14 @@ export default function Resource(props) {
   }
 
   function putResource(id, data) {
-    axios.put(`${url}/vps/api/v0/police-officers/${id}`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/police-officers/${id}`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -560,7 +567,14 @@ export default function Resource(props) {
   function resetMugShot() {
     const id = idInput.current.value;
     
-    axios.put(`${url}/vps/api/v0/police-officers/${id}/reset-mug`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/police-officers/${id}/reset-mug`, config)
       .then(function (response) {
         // handle success
         console.log(response);

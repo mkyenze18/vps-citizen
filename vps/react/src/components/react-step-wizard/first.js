@@ -13,7 +13,7 @@ import FormValidator from '@yaireo/validator';
 import moment from 'moment';
 import { updateQueryStringParameter } from '../../utility/url';
 import { handleErrorAxios } from '../../utility/notification';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 const axios = require('axios').default;
 
@@ -290,7 +290,14 @@ export default function First(props) {
   }
 
   function putResource(id, data) {
-    axios.put(`${url}/vps/api/v0/occurrences/${id}`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/occurrences/${id}`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -400,7 +407,14 @@ export default function First(props) {
   }
 
   function putResourceReporter(id, data) {
-    axios.put(`${url}/vps/api/v0/reporters/${id}`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/reporters/${id}`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);

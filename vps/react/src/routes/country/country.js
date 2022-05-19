@@ -232,7 +232,14 @@ export default function Country(props) {
   }
 
   function putResource(id, data) {
-    axios.put(`${url}/vps/api/v0/countries/${id}`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/countries/${id}`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);

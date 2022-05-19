@@ -153,7 +153,14 @@ export default function Second(props) {
   }
 
   function putResourceOccurrenceDetail(id, data) {
-    axios.put(`${url}/vps/api/v0/occurrence-details/${id}`, data)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.put(`${url}/vps/api/v0/occurrence-details/${id}`, data, config)
     .then(function (response) {
       // handle success
       console.log(response);
