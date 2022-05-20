@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from . import views
 
@@ -27,4 +27,7 @@ urlpatterns = [
     # ! For now don't be too nice. Wrong URL should be treated as an illegal move
     # TODO https://stackoverflow.com/questions/51084909/how-can-i-use-a-catch-all-route-using-path-or-re-path-so-that-django-passes
     # path('<path:resource>', views.index, name='remaining_urls'),
+    # TODO https://stackoverflow.com/a/6259570/10401826
+    # for non-api calls take them to react app to avoid 404 errors when you reload the browser
+    re_path(r'^((?!api).)*$', views.index, name='remaining_urls'),
 ]
