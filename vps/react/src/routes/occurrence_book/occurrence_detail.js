@@ -12,6 +12,7 @@ import { updateQueryStringParameter } from '../../utility/url';
 import { handleErrorAxios } from '../../utility/notification';
 import 'icheck/skins/all.css'; // or single skin css
 import {Checkbox, Radio, RadioGroup } from 'react-icheck';
+import Cookies from 'js-cookie'
 
 const axios = require('axios').default;
 
@@ -207,7 +208,14 @@ export default function OccurrenceDetail(props) {
   function deleteResourceReporter() {
     const id = selectedResourceOccurrenceDetailID;
 
-    axios.delete(`${url}/vps/api/v0/occurrence-details/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/occurrence-details/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);

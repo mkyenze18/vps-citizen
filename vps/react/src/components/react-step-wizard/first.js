@@ -442,7 +442,14 @@ export default function First(props) {
   function deleteResourceReporter() {
     const id = selectedResourceReporter;
 
-    axios.delete(`${url}/vps/api/v0/reporters/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/reporters/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);

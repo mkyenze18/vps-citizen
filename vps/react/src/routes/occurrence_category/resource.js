@@ -266,7 +266,14 @@ export default function Resource(props) {
   function deleteResource() {
     const id = idInput.current.value
 
-    axios.delete(`${url}/vps/api/v0/occurrence-categories/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/occurrence-categories/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -411,7 +418,14 @@ export default function Resource(props) {
   function deleteResourceOccurrenceCategoryInput() {
     const id = selectedResourceOccurrenceCategoryInput;
 
-    axios.delete(`${url}/vps/api/v0/occurrence-category-inputs/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/occurrence-category-inputs/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);

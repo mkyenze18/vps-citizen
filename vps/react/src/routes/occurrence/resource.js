@@ -489,7 +489,14 @@ export default function Resource(props) {
   function deleteResource() {
     const id = idInput.current.value
 
-    axios.delete(`${url}/vps/api/v0/police-officers/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/police-officers/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);
@@ -574,7 +581,7 @@ export default function Resource(props) {
         'X-CSRFToken': Cookies.get('csrftoken'),
       },
     };
-    axios.put(`${url}/vps/api/v0/police-officers/${id}/reset-mug`, config)
+    axios.put(`${url}/vps/api/v0/police-officers/${id}/reset-mug`, {}, config)
       .then(function (response) {
         // handle success
         console.log(response);

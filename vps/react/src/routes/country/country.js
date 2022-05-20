@@ -267,7 +267,14 @@ export default function Country(props) {
   function deleteResource() {
     const id = idInput.current.value
 
-    axios.delete(`${url}/vps/api/v0/countries/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/countries/${id}`, config)
     .then(function (response) {
       // handle success
       console.log(response);

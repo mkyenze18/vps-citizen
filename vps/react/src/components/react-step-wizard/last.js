@@ -99,7 +99,14 @@ export default function Last(props) {
   function deleteResource() {
     const id = params.resourceId
 
-    axios.delete(`${url}/vps/api/v0/occurrences/${id}`)
+    const config = {
+      // `headers` are custom headers to be sent
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+    };
+    axios.delete(`${url}/vps/api/v0/occurrences/${id}`, config)
         .then(function (response) {
             // handle success
             console.log(response);
@@ -141,7 +148,7 @@ export default function Last(props) {
         'X-CSRFToken': Cookies.get('csrftoken'),
       },
     };
-    axios.put(`${url}/vps/api/v0/occurrences/${id}/email-abstract`, config)
+    axios.put(`${url}/vps/api/v0/occurrences/${id}/email-abstract`, {}, config)
       .then(function (response) {
         // handle success
         console.log(response);
