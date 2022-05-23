@@ -68,13 +68,24 @@ class CountrySerializer(serializers.ModelSerializer):
         model = Country
         fields = ['id', 'name', 'nationality']
 
-class IPRS_PersonSerializer(serializers.ModelSerializer):
+class IPRS_PersonSerializerRead(serializers.ModelSerializer):
     class Meta:
         model = IPRS_Person
         fields = ['id', 'id_no', 'passport_no',
                 'first_name', 'middle_name', 'last_name', 'nationality', 'gender',
                 'nationality', 'county_of_birth', 'district_of_birth', 'division_of_birth',
                 'location_of_birth', 'date_of_birth', 'mug_shot']
+        depth = 1
+
+class IPRS_PersonSerializerWrite(serializers.ModelSerializer):
+    class Meta:
+        model = IPRS_Person
+        fields = ['id', 'id_no', 'passport_no',
+                'first_name', 'middle_name', 'last_name', 'nationality', 'gender',
+                'nationality', 'county_of_birth', 'district_of_birth', 'division_of_birth',
+                'location_of_birth', 'date_of_birth', 'mug_shot']
+
+
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:

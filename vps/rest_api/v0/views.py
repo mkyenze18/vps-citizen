@@ -126,7 +126,7 @@ from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBase
 from .serializers import ( UserSerializer,
     ArresteeSerializer, ChargeSheetPersonSerializer, ChargeSheetSerializer,
     CountrySerializer, CourtFileSerializer, EvidenceCategorySerializer, EvidenceImageSerializer,
-    EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializer,
+    EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite,
     ItemCategorySerializer, ItemSerializer, MugShotsSerializer, ReporterSerializer, 
     NextofkeenSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceWriteSerializer, OccurrenceReadSerializer,
@@ -301,11 +301,11 @@ def iprsPerson_list(request, format=None):
         if passport_no:
             resources = resources.filter(passport_no__icontains=passport_no)
 
-        serializer = IPRS_PersonSerializer(resources, many=True)
+        serializer = IPRS_PersonSerializerRead(resources, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = IPRS_PersonSerializer(data=request.data)
+        serializer = IPRS_PersonSerializerWrite(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -322,11 +322,11 @@ def iprsPerson_detail(request, pk, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = IPRS_PersonSerializer(resource)
+        serializer = IPRS_PersonSerializerRead(resource)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = IPRS_PersonSerializer(resource, data=request.data, partial=True)
+        serializer = IPRS_PersonSerializerWrite(resource, data=request.data, partial=True)
         if serializer.is_valid():
 
             if serializer.validated_data.get("mug_shot", None):
@@ -360,7 +360,7 @@ def iprsPerson_restMug(request, pk, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
-        serializer = IPRS_PersonSerializer(resource)
+        serializer = IPRS_PersonSerializerWrite(resource)
         resource.mug_shot.delete()
         return Response(serializer.data)
         
