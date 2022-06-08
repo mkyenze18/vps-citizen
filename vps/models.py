@@ -73,6 +73,7 @@ class OccurrenceCategoryInput(models.Model):
     order = models.IntegerField(default=0)
 
 class Occurrence(models.Model):
+    ob_no = models.CharField(max_length=30, null=True, blank=True)
     location = models.CharField(max_length=100)
     police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
     police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
