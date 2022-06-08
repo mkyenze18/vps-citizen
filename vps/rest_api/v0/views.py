@@ -770,7 +770,7 @@ class OccurrenceListView(BaseListView):
         serializer = self.get_serializer_class()(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            instance.ob_no = f'OB/{instance.id}/{instance.date_posted.strftime("%m/%d/%Y")}'
+            instance.ob_no = f'OB/{instance.id}/{instance.posted_date.strftime("%m/%d/%Y")}'
             instance.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
