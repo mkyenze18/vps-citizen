@@ -1,6 +1,7 @@
 
 # TODO https://www.django-rest-framework.org/tutorial/1-serialization/#creating-a-serializer-class
 
+from xml.etree.ElementInclude import include
 from rest_framework import serializers
 # from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 
@@ -163,6 +164,9 @@ class OccurrenceReadSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Occurrence
+        fields  = ["location", "police_station", "police_officer", "module", "is_closed",
+                    "reporters", "details",
+                    "posted_date"] # TODO https://www.django-rest-framework.org/api-guide/relations/#reverse-relations
         depth = 1
 
 class OccurrenceWriteSerializer(BaseModelSerializer):

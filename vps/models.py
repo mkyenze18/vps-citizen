@@ -81,12 +81,12 @@ class Occurrence(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True)
 
 class OccurrenceDetail(models.Model):
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='details')
     category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
     details = models.JSONField()
 
 class Reporter(models.Model):
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='reporters')
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=30)
     email_address = models.EmailField()
