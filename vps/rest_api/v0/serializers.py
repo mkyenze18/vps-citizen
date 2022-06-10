@@ -167,7 +167,7 @@ class OccurrenceReadSerializer(BaseModelSerializer):
         fields  = ["ob_no", "location", "police_station", "police_officer", "module", "is_closed",
                     "reporters", "details",
                     "posted_date"] # TODO https://www.django-rest-framework.org/api-guide/relations/#reverse-relations
-        depth = 1
+        depth = 2
 
 class OccurrenceWriteSerializer(BaseModelSerializer):
     """
