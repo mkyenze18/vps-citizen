@@ -302,65 +302,9 @@ def iprsPerson_list(request, format=None):
             resources = resources.filter(id_no__icontains=id_no)
             if resources.count() < 1:
                 try:
-                    iprs_person = enhanced_kyc(id_no, "NATIONAL_ID") # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
-                    iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
-                    # print(iprs_person)
-                    
-                    nationality = get_object_or_404(Country, nationality__iexact=iprs_person["FullData"]['Citizenship'])
-
-                    GENDER_CHOICES = {
-                        "M": "male",
-                        "F": "female"
-                    }
-                    gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['Gender']])
-
-                    county_of_birth = None
-                    district_of_birth = None
-                    division_of_birth = None
-                    location_of_birth = None
-                    
-                    place_of_birth = iprs_person['FullData']['Place_of_Birth'] # KISUMU EAST\nDISTRICT - KISUMU EAST
-                    place_of_birth = place_of_birth.split("\n")
-                    for place_entry in place_of_birth:
-                        place = place_entry.split('-')
-                        print(place)
-                        if len(place) > 1:
-                            if place[0].strip().lower() == 'county':
-                                county_of_birth = place[1].title()
-                            elif place[0].strip().lower() == 'district':
-                                district_of_birth = place[1].title()
-                            elif place[0].strip().lower() == 'division':
-                                division_of_birth = place[1].title()
-                            elif place[0].strip().lower() == 'location':
-                                location_of_birth = place[1].title()
-
-                    # TODO https://www.programiz.com/python-programming/examples/string-to-datetime
-                    my_date_string = iprs_person['FullData']['Date_of_Birth'] # 6/1/1998 12:00:00 AM
-                    datetime_object = datetime.strptime(my_date_string, '%d/%m/%Y %I:%M:%S %p')
-
-
-                    # + https://requests.readthedocs.io/en/latest/user/quickstart/#more-complicated-post-requests
-                    payload = {
-                        'id_no': iprs_person['FullData']['ID_Number'],
-                        # 'passport_no': iprs_person['FullData']['value2'],
-                        'first_name': iprs_person['FullData']['First_Name'].capitalize(),
-                        'middle_name': iprs_person['FullData']['Other_Name'].title(),
-                        'last_name': iprs_person['FullData']['Surname'].capitalize(),
-                        'nationality': nationality.id,
-                        'gender': gender.id,
-                        'county_of_birth': county_of_birth,
-                        'district_of_birth': district_of_birth,
-                        'division_of_birth': division_of_birth,
-                        'location_of_birth': location_of_birth,
-                        'date_of_birth': datetime_object.isoformat(),
-                    }
-
-                    r = requests.post(f"{request.scheme}://{request.get_host()}/vps/api/v0/iprs-persons", data=payload)
-                    # print(r.text)
-                    # + https://requests.readthedocs.io/en/latest/user/quickstart/#response-status-codes
-                    r.raise_for_status()
-
-                    resources = IPRS_Person.objects.filter(id_no__icontains=id_no)
+                    success = save_iprs_person_from_smile_identity(request, id_no, "NATIONAL_ID")
+                    if success:
+                        resources = IPRS_Person.objects.filter(id_no__icontains=id_no)
                 except ValueError:
                     return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
                 except ServerError:
@@ -373,6 +317,19 @@ def iprsPerson_list(request, format=None):
         passport_no = request.query_params.get('passport_no', None)
         if passport_no:
             resources = resources.filter(passport_no__icontains=passport_no)
+            if resources.count() < 1:
+                try:
+                    success = save_iprs_person_from_smile_identity(request, passport_no, "PASSPORT")
+                    if success:
+                        resources = IPRS_Person.objects.filter(passport_no__icontains=passport_no)
+                except ValueError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                except ServerError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
+                # except BaseException as err:
+                #     print(err)
+                #     raise
 
         serializer = IPRS_PersonSerializerRead(resources, many=True)
         return Response(serializer.data)
@@ -1434,6 +1391,67 @@ class WarrantofarrestDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
+def save_iprs_person_from_smile_identity(request, id_no, id_type):
+    iprs_person = enhanced_kyc(id_no, id_type) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
+    iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
+    # print(iprs_person)
+    if iprs_person['ResultCode'] != "1012":
+        return
+    
+    nationality = get_object_or_404(Country, nationality__iexact=iprs_person["FullData"]['Citizenship'])
+
+    GENDER_CHOICES = {
+        "M": "male",
+        "F": "female"
+    }
+    gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['Gender']])
+
+    county_of_birth = None
+    district_of_birth = None
+    division_of_birth = None
+    location_of_birth = None
+    
+    place_of_birth = iprs_person['FullData']['Place_of_Birth'] # KISUMU EAST\nDISTRICT - KISUMU EAST
+    place_of_birth = place_of_birth.split("\n")
+    for place_entry in place_of_birth:
+        place = place_entry.split('-')
+        print(place)
+        if len(place) > 1:
+            if place[0].strip().lower() == 'county':
+                county_of_birth = place[1].title()
+            elif place[0].strip().lower() == 'district':
+                district_of_birth = place[1].title()
+            elif place[0].strip().lower() == 'division':
+                division_of_birth = place[1].title()
+            elif place[0].strip().lower() == 'location':
+                location_of_birth = place[1].title()
+
+    # TODO https://www.programiz.com/python-programming/examples/string-to-datetime
+    my_date_string = iprs_person['FullData']['Date_of_Birth'] # 6/1/1998 12:00:00 AM
+    datetime_object = datetime.strptime(my_date_string, '%d/%m/%Y %I:%M:%S %p')
+
+
+    # + https://requests.readthedocs.io/en/latest/user/quickstart/#more-complicated-post-requests
+    payload = {
+        'id_no': iprs_person['FullData']['ID_Number'],
+        # 'passport_no': iprs_person['FullData']['value2'],
+        'first_name': iprs_person['FullData']['First_Name'].capitalize(),
+        'middle_name': iprs_person['FullData']['Other_Name'].title(),
+        'last_name': iprs_person['FullData']['Surname'].capitalize(),
+        'nationality': nationality.id,
+        'gender': gender.id,
+        'county_of_birth': county_of_birth,
+        'district_of_birth': district_of_birth,
+        'division_of_birth': division_of_birth,
+        'location_of_birth': location_of_birth,
+        'date_of_birth': datetime_object.isoformat(),
+    }
+
+    r = requests.post(f"{request.scheme}://{request.get_host()}/vps/api/v0/iprs-persons", data=payload)
+    # print(r.text)
+    # + https://requests.readthedocs.io/en/latest/user/quickstart/#response-status-codes
+    r.raise_for_status()
+    return True
 
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
