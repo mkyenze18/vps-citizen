@@ -23,12 +23,15 @@ class IPRS_Person(models.Model):
     last_name = models.CharField(max_length=100)
     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
     nationality = models.ForeignKey(Country, on_delete=models.PROTECT)
-    county_of_birth = models.CharField(max_length=30)
-    district_of_birth = models.CharField(max_length=30)
-    division_of_birth = models.CharField(max_length=30)
-    location_of_birth = models.CharField(max_length=30)
+    county_of_birth = models.CharField(max_length=30, null=True, blank=True)
+    district_of_birth = models.CharField(max_length=30, null=True, blank=True)
+    division_of_birth = models.CharField(max_length=30, null=True, blank=True)
+    location_of_birth = models.CharField(max_length=30, null=True, blank=True)
     date_of_birth = models.DateTimeField()
     mug_shot = models.ImageField(upload_to=IPRS_person_mugshot_directory_path, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
 
 class Rank(models.Model):
     name = models.CharField(max_length=30, unique=True)

@@ -17,6 +17,7 @@ pydot = "^1.4.2"
 PyYAML = "^6.0"
 reportlab = "^3.6.9"
 gunicorn = "^20.1.0"
+smile-id-core = "^1.0.8"
 
 [tool.poetry.dev-dependencies]
 

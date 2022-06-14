@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
+from .models import (Country, Gender, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
 ItemCategory, Item
 )
 # Register your models here.
@@ -12,6 +12,7 @@ ItemCategory, Item
 
 # admin.site.register(Questionnaire, QuestionnairesAdmin)
 admin.site.register(Country)
+admin.site.register(Gender)
 admin.site.register(IPRS_Person)
 admin.site.register(Rank)
 admin.site.register(PoliceStation)
