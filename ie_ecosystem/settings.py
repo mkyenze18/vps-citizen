@@ -261,10 +261,10 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 LOGIN_URL = "user:login"
 
 # TODO https://docs.djangoproject.com/en/4.0/topics/email/#module-django.core.mail
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "bungevirtual@gmail.com"
-EMAIL_HOST_PASSWORD = "Bungemail123."
+EMAIL_HOST = "mail.ingenious.or.ke"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "noreply-ie@ingenious.or.ke"
+EMAIL_HOST_PASSWORD = "v~M2J[qc!,4W"
 
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
