@@ -74,7 +74,7 @@ class IPRS_PersonSerializerRead(serializers.ModelSerializer):
         model = IPRS_Person
         fields = ['id', 'id_no', 'passport_no',
                 'first_name', 'middle_name', 'last_name', 'nationality', 'gender',
-                'nationality', 'county_of_birth', 'district_of_birth', 'division_of_birth',
+                'county_of_birth', 'district_of_birth', 'division_of_birth',
                 'location_of_birth', 'date_of_birth', 'mug_shot']
         depth = 1
 
@@ -164,7 +164,7 @@ class OccurrenceReadSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Occurrence
-        fields  = ["ob_no", "location", "police_station", "police_officer", "module", "is_closed",
+        fields  = ["id", "ob_no", "location", "police_station", "police_officer", "module", "is_closed",
                     "reporters", "details",
                     "posted_date"] # TODO https://www.django-rest-framework.org/api-guide/relations/#reverse-relations
         depth = 2
