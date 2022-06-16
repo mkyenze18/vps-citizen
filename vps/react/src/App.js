@@ -144,7 +144,7 @@ export default function App() {
 			  document.body.removeChild(script);
 			}
 		});
-	}, [selectedResourcePoliceOfficer?.id]);
+	}, [window.police_officer]); // is this really necessary?
 
   function getResourcePoliceOfficer(id) {
     axios.get(`${url}/vps/api/v0/police-officers/${id}`)
