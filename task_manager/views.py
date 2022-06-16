@@ -128,7 +128,7 @@ def tasks_notify(request, item_id=None):
         supervised_by_email_array = list(map(lambda supervised_by: supervised_by.email, supervised_by_array))
         recipient_list_email = assigned_to_email_array + supervised_by_email_array
         
-        message1 = (subject, message, 'not-reply@task_manager.vps', recipient_list_email)
+        message1 = (subject, message, 'not-reply@taskmanager.vps', recipient_list_email)
         send_mass_mail((message1,), fail_silently=False)
 
         notification = Notification(task=instance, sender=request.user, message=message, type='EML')
