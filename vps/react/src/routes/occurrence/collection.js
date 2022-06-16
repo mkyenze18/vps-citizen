@@ -99,6 +99,21 @@ export default function Collection() {
     }
   }
 
+  // This is a react js component
+  function Reporters(props) {
+    let reporters = [];
+    for(const index in props.reporters) {
+      const full_name = props.reporters[index].iprs_person.first_name + " " + props.reporters[index].iprs_person.last_name
+      const id_no = props.reporters[index].iprs_person.id_no
+      ? `_${props.reporters[index].iprs_person.id_no} `
+      : props.reporters[index].iprs_person.passport_no ? `_ ${props.reporters[index].iprs_person.passport_no} ` : ' '
+
+      reporters.push(full_name + id_no)
+    }
+
+    return reporters 
+  }
+
   return (
     <div className="row" style={{ display: 'block' }}>
       <div className="col-md-12 col-sm-12  ">
@@ -121,11 +136,10 @@ export default function Collection() {
             <div className="clearfix"></div>
             </div> */}
             <div className="x_content">
-            <table className="table table-hover">
+            {/* <table className="table table-hover">
                 <thead>
                 <tr>
                     <th>#</th>
-                    {/* <th>ID / Passport</th> */}
                     <th>type</th>
                     <th>location</th>
                     <th>Station</th>
@@ -138,15 +152,44 @@ export default function Collection() {
                 {resources.map(item => (
                     <tr key={item.id} onClick={(e) => getResource(item.id, item.module, e)}>
                       <th scope="row">{item.id}</th>
-                      {/* <td>{item.iprs_person.reporter.id_no
-                          ? item.reporter.iprs_person.id_no ? item.reporter.iprs_person.id_no : '-'
-                          : item.reporter.iprs_person.passport_no ? item.reporter.iprs_person.passport_no : '-'}</td> */}
                       <td>{item.module}</td>
                       <td>{item.location}</td>
                       <td>{item.police_station.name}</td>
                       <td>{item.police_officer.service_number}</td>
                       <td><span className={`badge badge-${item.is_closed ? 'primary' : 'danger'}`}>{item.is_closed ? 'closed' : 'pending'}</span></td>
                       <td>{item.posted_date}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table> */}
+            <table className="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Reporter Name/ID No</th>
+                    <th>OB Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                {resources.map(item => (
+                    <tr key={item.id} onClick={(e) => getResource(item.id, item.module, e)}>
+                      <th scope="row">{item.id}</th>
+                      <td>
+                        {item.details.length
+                        ? item.details.map(item => (
+                            `${item.category.name} `
+                        ))
+                        : '-'
+                        }
+                      </td>
+                      <td>
+                        {item.reporters.length 
+                          ? <Reporters reporters={item.reporters} />
+                          : '-'
+                        }
+                      </td>
+                      <td>{item.ob_no ? item.ob_no : "-"}</td>
                     </tr>
                 ))}
                 </tbody>
