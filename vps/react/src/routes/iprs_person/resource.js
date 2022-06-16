@@ -259,8 +259,8 @@ export default function Resource(props) {
         middleNameInput.current.value = result["middle_name"];
         LastNameInput.current.value = result["last_name"];
 
-        genderInput.current.value = result["gender"];
-        nationalityInput.current.value = result["nationality"];
+        genderInput.current.value = result["gender"]["id"];
+        nationalityInput.current.value = result["nationality"]["id"];
         dateOfBirthInput.current.value = moment(result["date_of_birth"]).format("MM/DD/YYYY");
 
         countyOfBirthInput.current.value = result["county_of_birth"];
