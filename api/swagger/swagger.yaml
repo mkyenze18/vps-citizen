@@ -2,7 +2,8 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: "VPS"
-host: 127.0.0.1:8000
+# host: 127.0.0.1:8000
+host: client.ingenious.or.ke:5059
 basePath: /vps/api/v0
 schemes:
   - http
@@ -204,6 +205,7 @@ paths:
       summary: Retrieves the collection of IPRS Person resources
       parameters:
         - $ref: '#/definitions/parameters/page'
+        - $ref: '#/definitions/parameters/id_no_QUERY'
       responses:
         "200":
           description: IPRS Person collection
@@ -1479,7 +1481,6 @@ definitions:
           type: string
           description: The serial_no of this item
           example: tecno
-        
   parameters:
     page:
       name: page
@@ -1507,6 +1508,13 @@ definitions:
       in: formData
       description: National identification number
       type: string
+    id_no_QUERY:
+      name: id_no
+      in: query
+      description: National identification number
+      type: string
+      allowEmptyValue: true
+      default: '123456789'
     passport_no:
       name: passport_no
       in: formData
