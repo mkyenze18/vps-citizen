@@ -1391,8 +1391,8 @@ class WarrantofarrestDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
-def save_iprs_person_from_smile_identity(request, id_no, id_type):
-    iprs_person = enhanced_kyc(id_no, id_type) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
+def save_iprs_person_from_smile_identity(request, id_number, id_type):
+    iprs_person = enhanced_kyc(id_number, id_type) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
     iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
     # print(iprs_person)
     if iprs_person['ResultCode'] != "1012":
@@ -1406,6 +1406,14 @@ def save_iprs_person_from_smile_identity(request, id_no, id_type):
     }
     gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['Gender']])
 
+    id_no = None
+    passport_no = None
+    if id_type == 'NATIONAL_ID':
+        id_no = id_number
+    
+    if id_type == 'PASSPORT':
+        passport_no = id_number
+        
     county_of_birth = None
     district_of_birth = None
     division_of_birth = None
@@ -1417,24 +1425,30 @@ def save_iprs_person_from_smile_identity(request, id_no, id_type):
         place = place_entry.split('-')
         print(place)
         if len(place) > 1:
+            # ['DISTRICT ', ' NOT INDICATED']
+            if place[1].strip().lower() == 'not indicated':
+                continue
+
             if place[0].strip().lower() == 'county':
-                county_of_birth = place[1].title()
+                county_of_birth = place[1].strip().title()
             elif place[0].strip().lower() == 'district':
-                district_of_birth = place[1].title()
+                district_of_birth = place[1].strip().title()
             elif place[0].strip().lower() == 'division':
-                division_of_birth = place[1].title()
+                division_of_birth = place[1].strip().title()
             elif place[0].strip().lower() == 'location':
-                location_of_birth = place[1].title()
+                location_of_birth = place[1].strip().title()
 
     # TODO https://www.programiz.com/python-programming/examples/string-to-datetime
     my_date_string = iprs_person['FullData']['Date_of_Birth'] # 6/1/1998 12:00:00 AM
-    datetime_object = datetime.strptime(my_date_string, '%d/%m/%Y %I:%M:%S %p')
+    datetime_object = datetime.strptime(my_date_string, '%m/%d/%Y %I:%M:%S %p')
 
 
     # + https://requests.readthedocs.io/en/latest/user/quickstart/#more-complicated-post-requests
     payload = {
-        'id_no': iprs_person['FullData']['ID_Number'],
+        # 'id_no': iprs_person['FullData']['ID_Number'],
         # 'passport_no': iprs_person['FullData']['value2'],
+        'id_no': id_no,
+        'passport_no': passport_no,
         'first_name': iprs_person['FullData']['First_Name'].capitalize(),
         'middle_name': iprs_person['FullData']['Other_Name'].title(),
         'last_name': iprs_person['FullData']['Surname'].capitalize(),
