@@ -115,24 +115,22 @@ from django.conf import settings
 
 
 from vps.models import (
-    Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile,
-    Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots,
-    Reporter, Next_of_keen, Occurrence, OccurrenceCategory, OccurrenceCategoryInput, OccurrenceDetail, 
-    Offense, PoliceCell, Rank,
-    PoliceStation, PoliceOfficer, ItemCategory, Item, Warrant_of_arrest
+    Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
+    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
+    PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItem, EvidenceItemImage
 )
 from helpers.file_system_manipulation import delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
 from .serializers import ( UserSerializer,
-    ArresteeSerializer, ChargeSheetPersonSerializer, ChargeSheetSerializer,
-    CountrySerializer, CourtFileSerializer, EvidenceCategorySerializer, EvidenceImageSerializer,
-    EvidenceSerializer, FingerPrintsSerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite,
-    ItemCategorySerializer, ItemSerializer, MugShotsSerializer, ReporterSerializer, 
-    NextofkeenSerializer,
-    OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceWriteSerializer, OccurrenceReadSerializer,
-    OccurrenceDetailSerializer, OffenseSerializer, PoliceCellSerializer, 
-    RankSerializer, PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
-    WarrantofarrestSerializer
+    CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
+    PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
+    OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
+    OccurrenceDetailSerializer, ReporterSerializer,
+    PoliceCellSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
+    OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
+    EvidenceCategorySerializer, EvidenceSerializer, EvidenceItemCategorySerializer, EvidenceItemSerializer, EvidenceItemImageSerializer
 )
 
 import yaml
@@ -147,6 +145,8 @@ from rest_framework import filters
 from .smile_identity import enhanced_kyc
 import requests
 from smile_id_core import ServerError
+
+from .pagination import VariableResultsSetPagination
 
 # SWAGGER
 def swagger(request):
@@ -552,14 +552,58 @@ def policeOfficer_restMug(request, pk, format=None):
         resource.mug_shot.delete()
         return Response(serializer.data)
 
-class ReporterListView(BaseListView):
+# ! Focus on OB (report) module
+class OccurrenceCategoryListView(BaseListView):
     """
-    List all items, or create a new item.
+    List all Occurrencecategory, or create a new Occurrencecategory.
     """
-    model = Reporter
-    serializer_class = ReporterSerializer
-    read_serializer_class = ReporterSerializer
+    model = OccurrenceCategory
+    serializer_class = OccurrenceCategorySerializer
+    read_serializer_class = OccurrenceCategorySerializer
     permission_classes = ()
+
+    pagination_class = VariableResultsSetPagination # TODO https://www.django-rest-framework.org/api-guide/pagination/#configuration
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class OccurrenceCategoryDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an Occurrencecategory.
+    """
+    model = OccurrenceCategory
+    serializer_class = OccurrenceCategorySerializer
+    read_serializer_class = OccurrenceCategorySerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class OccurrenceCategoryInputListView(BaseListView):
+    """
+    List all occurrence category inputs, or create a new occurrence category input.
+    """
+    model = OccurrenceCategoryInput
+    serializer_class = OccurrenceCategoryInputSerializer
+    read_serializer_class = OccurrenceCategoryInputSerializer
+    permission_classes = ()
+    # SUSPENDED
+    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#searchfilter
+    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#specifying-which-fields-may-be-ordered-against
+    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # search_fields = ['occurrence_category']
+    # ordering_fields = ['order']
+    # ordering = ['order'] # https://www.django-rest-framework.org/api-guide/filtering/#specifying-a-default-ordering
 
     # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
     def get_queryset(self):
@@ -567,11 +611,12 @@ class ReporterListView(BaseListView):
         Optionally restricts the returned purchases to a given user,
         by filtering against a `username` query parameter in the URL.
         """
-        queryset = Reporter.objects.all()
-        occurrence = self.request.query_params.get('occurrence')
-        if occurrence is not None:
-            queryset = queryset.filter(occurrence=occurrence)
+        queryset = OccurrenceCategoryInput.objects.all()
+        occurrence_category = self.request.query_params.get('occurrence_category')
+        if occurrence_category is not None:
+            queryset = queryset.filter(occurrence_category=occurrence_category)
 
+        queryset = queryset.order_by('order')
         return queryset
 
     def get(self, request):
@@ -580,13 +625,14 @@ class ReporterListView(BaseListView):
     def post(self, request):
         return super().post(request)
 
-class ReporterDetailView(BaseDetailView):
+class OccurrenceCategoryInputDetailView(BaseDetailView):
+
     """
-    Retrieve , updates and delete an item
+    Retrieve , updates and delete an occurrence category input.
     """
-    model = Reporter
-    serializer_class = ReporterSerializer
-    read_serializer_class = ReporterSerializer
+    model = OccurrenceCategoryInput
+    serializer_class = OccurrenceCategoryInputSerializer
+    read_serializer_class = OccurrenceCategoryInputSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -597,172 +643,7 @@ class ReporterDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
-
-class ItemListView(BaseListView):
-    """
-    List all items, or create a new item.
-    """
-    model = Item
-    serializer_class = ItemSerializer
-    read_serializer_class = ItemSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class ItemDetailView(BaseDetailView):
-    """
-    Retrieve , updates and delete an item
-    """
-    model = Item
-    serializer_class = ItemSerializer
-    read_serializer_class = ItemSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class ItemCategoryListView(BaseListView):
-    """
-    List all Itemcategory, or create a new Itemcategory.
-    """
-    model = ItemCategory
-    serializer_class = ItemCategorySerializer
-    read_serializer_class = ItemCategorySerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class ItemCategoryDetailView(BaseDetailView):
-    """
-    Retrieve , updates and delete an Itemcategory.
-    """
-    model = ItemCategory
-    serializer_class = ItemCategorySerializer
-    read_serializer_class = ItemCategorySerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class EvidenceListView(BaseListView):
-    """
-    List all evidence, or create a new evidence.
-    """
-    model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class EvidenceDetailView(BaseDetailView):
-    """
-    Retrieve , updates and delete an evidence.
-    """
-    model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class EvidenceCategoryListView(BaseListView):
-    """
-    List all evidencecategory, or create a new evidencecategory.
-    """
-    model = EvidenceCategory
-    serializer_class = EvidenceCategorySerializer
-    read_serializer_class = EvidenceCategorySerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class EvidenceCategoryDetailView(BaseDetailView):
-    """
-    Retrieve , updates and delete an evidencecategory.
-    """
-    model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class EvidenceImageListView(ImageBaseListView):
-    """
-    List all evidenceimage, or create a new evidenceimage.
-    """
-    model = EvidenceImage
-    serializer_class = EvidenceImageSerializer
-    read_serializer_class = EvidenceImageSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request) 
-
-class EvidenceImageDetailView(ImageBaseDetailView):
-    """
-    Retrieve , updates and delete an evidenceimage.
-    """
-    model = EvidenceImage
-    serializer_class = EvidenceImageSerializer
-    read_serializer_class = EvidenceImageSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk) 
-
+# ================================================
 class OccurrenceListView(BaseListView):
     """
     List all Occurrence, or create a new Occurrence.
@@ -822,96 +703,7 @@ class OccurrenceDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
-
-class OccurrenceCategoryListView(BaseListView):
-    """
-    List all Occurrencecategory, or create a new Occurrencecategory.
-    """
-    model = OccurrenceCategory
-    serializer_class = OccurrenceCategorySerializer
-    read_serializer_class = OccurrenceCategorySerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class OccurrenceCategoryDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an Occurrencecategory.
-    """
-    model = OccurrenceCategory
-    serializer_class = OccurrenceCategorySerializer
-    read_serializer_class = OccurrenceCategorySerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class OccurrenceCategoryInputListView(BaseListView):
-    """
-    List all occurrence category inputs, or create a new occurrence category input.
-    """
-    model = OccurrenceCategoryInput
-    serializer_class = OccurrenceCategoryInputSerializer
-    read_serializer_class = OccurrenceCategoryInputSerializer
-    permission_classes = ()
-    # SUSPENDED
-    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#searchfilter
-    # # TODO https://www.django-rest-framework.org/api-guide/filtering/#specifying-which-fields-may-be-ordered-against
-    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    # search_fields = ['occurrence_category']
-    # ordering_fields = ['order']
-    # ordering = ['order'] # https://www.django-rest-framework.org/api-guide/filtering/#specifying-a-default-ordering
-
-    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
-    def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
-        queryset = OccurrenceCategoryInput.objects.all()
-        occurrence_category = self.request.query_params.get('occurrence_category')
-        if occurrence_category is not None:
-            queryset = queryset.filter(occurrence_category=occurrence_category)
-
-        queryset = queryset.order_by('order')
-        return queryset
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class OccurrenceCategoryInputDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an occurrence category input.
-    """
-    model = OccurrenceCategoryInput
-    serializer_class = OccurrenceCategoryInputSerializer
-    read_serializer_class = OccurrenceCategoryInputSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
+# ================================================
 class OccurrenceDetailListView(BaseListView):
     """
     List all occurrence category inputs, or create a new occurrence category input.
@@ -952,6 +744,52 @@ class OccurrenceDetailDetailView(BaseDetailView):
     model = OccurrenceDetail
     serializer_class = OccurrenceDetailSerializer
     read_serializer_class = OccurrenceDetailSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class ReporterListView(BaseListView):
+    """
+    List all items, or create a new item.
+    """
+    model = Reporter
+    serializer_class = ReporterSerializer
+    read_serializer_class = ReporterSerializer
+    permission_classes = ()
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Reporter.objects.all()
+        occurrence = self.request.query_params.get('occurrence')
+        if occurrence is not None:
+            queryset = queryset.filter(occurrence=occurrence)
+
+        return queryset
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ReporterDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an item
+    """
+    model = Reporter
+    serializer_class = ReporterSerializer
+    read_serializer_class = ReporterSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1051,6 +889,75 @@ see attachment for the abstract
 
         return Response({'status': 'successful'})
         
+# ! Focus on arrest module
+class PoliceCellListView(BaseListView):
+    """
+    List all PoliceCell, or create a new PoliceCell.
+    """
+    model = PoliceCell
+    serializer_class = PoliceCellSerializer
+    read_serializer_class = PoliceCellSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class PoliceCellDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an PoliceCell.
+    """
+    model = PoliceCell
+    serializer_class = PoliceCellSerializer
+    read_serializer_class = PoliceCellSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class WarrantofarrestListView(BaseListView):
+    """
+    List all Warrantofarrest, or create a new Warrantofarrest.
+    """
+    model = Warrant_of_arrest
+    serializer_class = WarrantofarrestSerializer
+    read_serializer_class = WarrantofarrestSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class WarrantofarrestDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an Warrantofarrest.
+    """
+    model = Warrant_of_arrest
+    serializer_class = WarrantofarrestSerializer
+    read_serializer_class = WarrantofarrestSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
 class ArresteeListView(BaseListView):
     """
     List all arrestee, or create a new arrestee.
@@ -1084,7 +991,7 @@ class ArresteeDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
-
+# ================================================
 class NextofkeenListView(BaseListView):
     """
     List all Nextofkeen, or create a new Nextofkeen.
@@ -1118,7 +1025,7 @@ class NextofkeenDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
-
+# ================================================
 class MugShotsListView(ImageBaseListView):
     """
     List all mugshots, or create a new mugshots.
@@ -1152,143 +1059,7 @@ class MugShotsDetailView(ImageBaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
-
-class OffenseListView(BaseListView):
-    """
-    List all Offense, or create a new Offense.
-    """
-    model = Offense
-    serializer_class = OffenseSerializer
-    read_serializer_class = OffenseSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class OffenseDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an Offense.
-    """
-    model = Offense
-    serializer_class = OffenseSerializer
-    read_serializer_class = OffenseSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class ChargeSheetListView(BaseListView):
-    """
-    List all ChargeSheet, or create a new ChargeSheet
-    """
-    model = ChargeSheet
-    serializer_class = ChargeSheetSerializer
-    read_serializer_class = ChargeSheetSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class ChargeSheetDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an ChargeSheet.
-    """
-    model = ChargeSheet
-    serializer_class = ChargeSheetSerializer
-    read_serializer_class = ChargeSheetSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class ChargeSheetPersonListView(BaseListView):
-    """
-    List all ChargeSheetPerson, or create a new ChargeSheetPerson
-    """
-    model = ChargeSheet_Person
-    serializer_class = ChargeSheetPersonSerializer
-    read_serializer_class = ChargeSheetPersonSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class ChargeSheetPersonDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an ChargeSheetPerson
-    """
-    model = ChargeSheet_Person
-    serializer_class = ChargeSheetPersonSerializer
-    read_serializer_class = ChargeSheetPersonSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
-class CourtFileListView(BaseListView):
-    """
-    List all CourtFile, or create a new CourtFile.
-    """
-    model = CourtFile
-    serializer_class = CourtFileSerializer
-    read_serializer_class = CourtFileSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class CourtFileDetailView(BaseDetailView):
-
-    """
-    Retrieve , updates and delete an CourtFile.
-    """
-    model = CourtFile
-    serializer_class = CourtFileSerializer
-    read_serializer_class = CourtFileSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-
+# ================================================
 class FingerPrintsListView(ImageBaseListView):
     """
     List all FingerPrints, or create a new FingerPrints.
@@ -1323,13 +1094,15 @@ class FingerPrintsDetailView(ImageBaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
-class PoliceCellListView(BaseListView):
+
+# ! Focus on charge sheet module
+class OffenseListView(BaseListView):
     """
-    List all PoliceCell, or create a new PoliceCell.
+    List all Offense, or create a new Offense.
     """
-    model = PoliceCell
-    serializer_class = PoliceCellSerializer
-    read_serializer_class = PoliceCellSerializer
+    model = Offense
+    serializer_class = OffenseSerializer
+    read_serializer_class = OffenseSerializer
     permission_classes = ()
 
     def get(self, request):
@@ -1338,14 +1111,116 @@ class PoliceCellListView(BaseListView):
     def post(self, request):
         return super().post(request)
 
-class PoliceCellDetailView(BaseDetailView):
+class OffenseDetailView(BaseDetailView):
 
     """
-    Retrieve , updates and delete an PoliceCell.
+    Retrieve , updates and delete an Offense.
     """
-    model = PoliceCell
-    serializer_class = PoliceCellSerializer
-    read_serializer_class = PoliceCellSerializer
+    model = Offense
+    serializer_class = OffenseSerializer
+    read_serializer_class = OffenseSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class ChargeSheetPersonListView(BaseListView):
+    """
+    List all ChargeSheetPerson, or create a new ChargeSheetPerson
+    """
+    model = ChargeSheet_Person
+    serializer_class = ChargeSheetPersonSerializer
+    read_serializer_class = ChargeSheetPersonSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ChargeSheetPersonDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an ChargeSheetPerson
+    """
+    model = ChargeSheet_Person
+    serializer_class = ChargeSheetPersonSerializer
+    read_serializer_class = ChargeSheetPersonSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class ChargeSheetListView(BaseListView):
+    """
+    List all ChargeSheet, or create a new ChargeSheet
+    """
+    model = ChargeSheet
+    serializer_class = ChargeSheetSerializer
+    read_serializer_class = ChargeSheetSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class ChargeSheetDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an ChargeSheet.
+    """
+    model = ChargeSheet
+    serializer_class = ChargeSheetSerializer
+    read_serializer_class = ChargeSheetSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class CourtFileListView(BaseListView):
+    """
+    List all CourtFile, or create a new CourtFile.
+    """
+    model = CourtFile
+    serializer_class = CourtFileSerializer
+    read_serializer_class = CourtFileSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class CourtFileDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an CourtFile.
+    """
+    model = CourtFile
+    serializer_class = CourtFileSerializer
+    read_serializer_class = CourtFileSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1357,13 +1232,14 @@ class PoliceCellDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
-class WarrantofarrestListView(BaseListView):
+# ! Focus on evidence module
+class EvidenceCategoryListView(BaseListView):
     """
-    List all Warrantofarrest, or create a new Warrantofarrest.
+    List all evidencecategory, or create a new evidencecategory.
     """
-    model = Warrant_of_arrest
-    serializer_class = WarrantofarrestSerializer
-    read_serializer_class = WarrantofarrestSerializer
+    model = EvidenceCategory
+    serializer_class = EvidenceCategorySerializer
+    read_serializer_class = EvidenceCategorySerializer
     permission_classes = ()
 
     def get(self, request):
@@ -1372,14 +1248,13 @@ class WarrantofarrestListView(BaseListView):
     def post(self, request):
         return super().post(request)
 
-class WarrantofarrestDetailView(BaseDetailView):
-
+class EvidenceCategoryDetailView(BaseDetailView):
     """
-    Retrieve , updates and delete an Warrantofarrest.
+    Retrieve , updates and delete an evidencecategory.
     """
-    model = Warrant_of_arrest
-    serializer_class = WarrantofarrestSerializer
-    read_serializer_class = WarrantofarrestSerializer
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1390,6 +1265,139 @@ class WarrantofarrestDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
+# ================================================
+class EvidenceListView(BaseListView):
+    """
+    List all evidence, or create a new evidence.
+    """
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class EvidenceDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an evidence.
+    """
+    model = Evidence
+    serializer_class = EvidenceSerializer
+    read_serializer_class = EvidenceSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class EvidenceItemCategoryListView(BaseListView):
+    """
+    List all evidencecategory, or create a new evidence item category.
+    """
+    model = EvidenceItemCategory
+    serializer_class = EvidenceItemCategorySerializer
+    read_serializer_class = EvidenceItemCategorySerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class EvidenceItemCategoryDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an evidence item category.
+    """
+    model = EvidenceItemCategory
+    serializer_class = EvidenceItemCategorySerializer
+    read_serializer_class = EvidenceItemCategorySerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class EvidenceItemListView(BaseListView):
+    """
+    List all evidencecategory, or create a new evidence item.
+    """
+    model = EvidenceItem
+    serializer_class = EvidenceItemSerializer
+    read_serializer_class = EvidenceItemSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class EvidenceItemDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an item
+    """
+    model = EvidenceItem
+    serializer_class = EvidenceItemSerializer
+    read_serializer_class = EvidenceItemSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class EvidenceImageListView(ImageBaseListView):
+    """
+    List all evidenceimage, or create a new evidenceimage.
+    """
+    model = EvidenceItemImage
+    serializer_class = EvidenceItemImageSerializer
+    read_serializer_class = EvidenceItemImageSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request) 
+
+class EvidenceImageDetailView(ImageBaseDetailView):
+    """
+    Retrieve , updates and delete an evidenceimage.
+    """
+    model = EvidenceItemImage
+    serializer_class = EvidenceItemImageSerializer
+    read_serializer_class = EvidenceItemImageSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk) 
+
 
 def save_iprs_person_from_smile_identity(request, id_no, id_type):
     iprs_person = enhanced_kyc(id_no, id_type) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
@@ -1471,33 +1479,39 @@ def api_root(request, format=None):
         'genders': reverse(f'{app_name}:{pre}-gender-list', request=request, format=format),
         'countries': reverse(f'{app_name}:{pre}-country-list', request=request, format=format),
         'IPRS persons': reverse(f'{app_name}:{pre}-iprs-person-list', request=request, format=format),
-        'mugshots': reverse(f'{app_name}:{pre}-mugshots', request=request, format=format),
-
-        'ranks': reverse(f'{app_name}:{pre}-rank-list', request=request, format=format),
         'police stations': reverse(f'{app_name}:{pre}-police-station-list', request=request, format=format),
+        'ranks': reverse(f'{app_name}:{pre}-rank-list', request=request, format=format),
         'police offices': reverse(f'{app_name}:{pre}-police-officer-list', request=request, format=format),
 
+        # ! Focus on OB (report) module
+        'OB' : '================',
+        'occurrence categories': reverse(f'{app_name}:{pre}-occurrence-category-list', request=request, format=format),
+        'occurrence categories inputs': reverse(f'{app_name}:{pre}-occurrence-category-input-list', request=request, format=format),
+        'occurrences': reverse(f'{app_name}:{pre}-occurrence-list', request=request, format=format),
+        'occurrences details': reverse(f'{app_name}:{pre}-occurrence-detail-list', request=request, format=format),
         'reporters': reverse(f'{app_name}:{pre}-reporter-list', request=request, format=format),
-        'occurrence categories': reverse(f'{app_name}:{pre}-occurrence-categories', request=request, format=format),
-        'occurrence categories inputs': reverse(f'{app_name}:{pre}-occurrence-category-inputs', request=request, format=format),
-        'occurrences': reverse(f'{app_name}:{pre}-occurrences', request=request, format=format),
-        'occurrences details': reverse(f'{app_name}:{pre}-occurrence-details', request=request, format=format),
 
-        'arrestees': reverse(f'{app_name}:{pre}-arrestees', request=request, format=format),
-        'next of keen': reverse(f'{app_name}:{pre}-Next_of_keen_list', request=request, format=format),
-        'fingerprints': reverse(f'{app_name}:{pre}-fingerprints', request=request, format=format),
-        'police cells': reverse(f'{app_name}:{pre}-policecells', request=request, format=format),
-        'warrant of arrests': reverse(f'{app_name}:{pre}-warrantofarrests', request=request, format=format),
-        
-        'items': reverse(f'{app_name}:{pre}-item-list', request=request, format=format),
-        'item categories': reverse(f'{app_name}:{pre}-item-categories', request=request, format=format),
+        # ! Focus on arrest module
+        'ARREST' : '================',
+        'police cells': reverse(f'{app_name}:{pre}-police-cell-list', request=request, format=format),
+        'warrants of arrest': reverse(f'{app_name}:{pre}-warrant-of-arrest-list', request=request, format=format),
+        'arrestees': reverse(f'{app_name}:{pre}-arrestee-list', request=request, format=format),
+        'next of keen': reverse(f'{app_name}:{pre}-next-of-keen-list', request=request, format=format),
+        'mugshots': reverse(f'{app_name}:{pre}-mugshot-list', request=request, format=format),
+        'fingerprints': reverse(f'{app_name}:{pre}-fingerprint-list', request=request, format=format),
 
-        'evidences': reverse(f'{app_name}:{pre}-evidence', request=request, format=format),
-        'evidence images': reverse(f'{app_name}:{pre}-evidenceimage', request=request, format=format),
+        # ! Focus on charge sheet module
+        'CHARGE SHEET' : '================',
+        'offenses': reverse(f'{app_name}:{pre}-offence-list', request=request, format=format),
+        'chargesheet persons': reverse(f'{app_name}:{pre}-charge-sheet-person-list', request=request, format=format),
+        'chargesheets': reverse(f'{app_name}:{pre}-charge-sheet-list', request=request, format=format),
+        'court files': reverse(f'{app_name}:{pre}-court-file-list', request=request, format=format),
 
-        'offenses': reverse(f'{app_name}:{pre}-offences', request=request, format=format),
-
-        'chargesheets': reverse(f'{app_name}:{pre}-chargesheets', request=request, format=format),
-        'chargesheet persons': reverse(f'{app_name}:{pre}-chargesheetpersons', request=request, format=format),
-        'courtfiles': reverse(f'{app_name}:{pre}-courtfiles', request=request, format=format),
+        # ! Focus on evidence module
+        'EVIDENCE' : '================',
+        'evidence categories': reverse(f'{app_name}:{pre}-evidence-category-list', request=request, format=format),
+        'evidences': reverse(f'{app_name}:{pre}-evidence-list', request=request, format=format),
+        'evidence item categories': reverse(f'{app_name}:{pre}-evidence-item-category-list', request=request, format=format),
+        'evidence items': reverse(f'{app_name}:{pre}-evidence-item-list', request=request, format=format),
+        'evidence images': reverse(f'{app_name}:{pre}-evidence-item-image-list', request=request, format=format),
     })

@@ -3,7 +3,7 @@
 python manage.py graph_models -a > vps.dot
 
 # Create a PNG image file called my_project_visualized.png with application grouping
-python manage.py graph_models -a -g -o vps_visualized.png
+# python manage.py graph_models -a -g -o vps_visualized.png
 # infer applications from settings.py
 
 
@@ -29,3 +29,5 @@ python manage.py graph_models -a -g -o vps_visualized.png
 
 # Create a graph with 'normal' arrow shape for relations
 # python manage.py graph_models -a --arrow-shape normal -o my_project_sans_foo_bar.png
+
+python manage.py graph_models vps -g -o vps_visualized.png

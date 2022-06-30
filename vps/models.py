@@ -8,13 +8,13 @@ arrestee_fingerprint_directory_path, evidence_image_directory_path)
 
 # Create your models here.
 
-class Country(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-    nationality = models.CharField(max_length=30)
-
 class Gender(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
+class Country(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    nationality = models.CharField(max_length=30)
+    
 class IPRS_Person(models.Model):
     id_no = models.CharField(max_length=100, null=True, blank=True) # ! should be unique?
     passport_no = models.CharField(max_length=100, null=True, blank=True)
@@ -33,14 +33,14 @@ class IPRS_Person(models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.middle_name} {self.last_name}"
 
-class Rank(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-
 class PoliceStation(models.Model):
     name = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
 
+class Rank(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    
 class PoliceOfficer(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True) # The assumption here is that not all police office profiles are login accounts?
     iprs_person = models.OneToOneField(IPRS_Person, on_delete=models.PROTECT)
@@ -52,16 +52,6 @@ class PoliceOfficer(models.Model):
     # date_of_death = models.DateTimeField()
     police_station = models.OneToOneField(PoliceStation, on_delete=models.PROTECT, null=True, blank=True)
     mug_shot = models.ImageField(upload_to=policeOfficer_mugshot_directory_path, null=True, blank=True)
-
-class ItemCategory(models.Model):
-    name = models.CharField(max_length=100)
-
-class Item(models.Model):
-    category = models.ForeignKey(ItemCategory, on_delete=models.PROTECT)
-    units = models.CharField(max_length=30)
-    make = models.CharField(max_length=30)
-    model = models.CharField(max_length=100)
-    serial_no = models.CharField(max_length=100)
 
 # ! Focus on OB (report) module
 class OccurrenceCategory(models.Model):
@@ -202,12 +192,24 @@ class EvidenceCategory(models.Model):
     
 class Evidence(models.Model):
     category = models.ForeignKey(EvidenceCategory, on_delete=models.PROTECT)
-    item = models.ManyToManyField(Item)
-    count = models.FloatField() # Quantity
-    description = models.TextField()
-    officers_in_charge = models.ManyToManyField(PoliceOfficer)
+    # count = models.FloatField() # Quantity
+    officer_incharge = models.ForeignKey(PoliceOfficer, related_name='officer_incharge', on_delete=models.PROTECT)
+    officers_involved = models.ManyToManyField(PoliceOfficer, related_name='officers_involved',)
     posted_date = models.DateTimeField()
 
-class EvidenceImage(models.Model):
+class EvidenceItemCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+class EvidenceItem(models.Model):
     evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT)
+    category = models.ForeignKey(EvidenceItemCategory, on_delete=models.PROTECT)
+    make = models.CharField(max_length=30)
+    model = models.CharField(max_length=100) # Item type
+    units = models.CharField(max_length=30)
+    quantity = models.FloatField()
+    description = models.TextField()
+    serial_no = models.CharField(max_length=100)
+
+class EvidenceItemImage(models.Model):
+    evidence_item = models.ForeignKey(EvidenceItem, on_delete=models.PROTECT)
     image = models.ImageField(upload_to=evidence_image_directory_path)

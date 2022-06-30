@@ -2,8 +2,8 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: "VPS"
-# host: 127.0.0.1:8000
-host: client.ingenious.or.ke:5059
+host: 127.0.0.1:8000
+# host: client.ingenious.or.ke:5059
 basePath: /vps/api/v0
 schemes:
   - http
@@ -13,6 +13,96 @@ produces:
   - application/json
   - text/html
 paths:
+  /genders:
+    get:
+      tags:
+        - Gender
+      description: Retrieves the collection of Gender resources
+      summary: Retrieves the collection of Gender resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Gender collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/gender'
+    post:
+      tags:
+          - Gender
+      description: Creates a Gender resource
+      summary: Creates a Gender resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Gender resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/gender'
+      responses:
+        "201":
+          description: Gender resource created
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /genders/{id}:
+    get:
+      tags:
+          - Gender
+      description: Retrieves a Gender resource
+      summary: Retrieves a Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Gender resource
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Gender
+      description: Replaces the Gender resource
+      summary: Replaces the Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Gender resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/gender'
+      responses:
+        "200":
+          description: Gender resource updated
+          schema:
+            $ref: '#/definitions/schemas/gender'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Gender
+      description: Removes the Gender resource
+      summary: Removes the Gender resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Gender resource deleted
+        "404":
+          description: Resource not found
+
   /countries:
     get:
       tags:
@@ -104,96 +194,6 @@ paths:
       responses:
         "204":
           description: Country resource deleted
-        "404":
-          description: Resource not found
-
-  /genders:
-    get:
-      tags:
-        - Gender
-      description: Retrieves the collection of Gender resources
-      summary: Retrieves the collection of Gender resources
-      parameters:
-        - $ref: '#/definitions/parameters/page'
-      responses:
-        "200":
-          description: Gender collection
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/gender'
-    post:
-      tags:
-          - Gender
-      description: Creates a Gender resource
-      summary: Creates a Gender resource
-      parameters:
-        - name: body
-          in: body
-          description: The new Gender resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/gender'
-      responses:
-        "201":
-          description: Gender resource created
-          schema:
-            $ref: '#/definitions/schemas/gender'
-        "400":
-          description: Invalid input
-        "422":
-          description: Unprocessable entity
-  /genders/{id}:
-    get:
-      tags:
-          - Gender
-      description: Retrieves a Gender resource
-      summary: Retrieves a Gender resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "200":
-          description: Gender resource
-          schema:
-            $ref: '#/definitions/schemas/gender'
-        "404":
-          description: Resource not found         
-    put:
-      tags:
-        - Gender
-      description: Replaces the Gender resource
-      summary: Replaces the Gender resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-        - name: body
-          in: body
-          description: The new Gender resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/gender'
-      responses:
-        "200":
-          description: Gender resource updated
-          schema:
-            $ref: '#/definitions/schemas/gender'
-        "400":
-          description: Invalid input
-        "404":
-          description: Resource not found
-        "422":
-          description: Unprocessable entity
-    delete:
-      tags:
-        - Gender
-      description: Removes the Gender resource
-      summary: Removes the Gender resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "204":
-          description: Gender resource deleted
         "404":
           description: Resource not found
 
@@ -303,100 +303,6 @@ paths:
         "404":
           description: Resource not found
 
-  /ranks:
-    get:
-      tags:
-        - Rank
-      description: Retrieves the collection of Rank resources
-      summary: Retrieves the collection of Rank resources
-      parameters:
-        - $ref: '#/definitions/parameters/page'
-      responses:
-        "200":
-          description: Rank collection
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/rank'
-    post:
-      tags:
-          - Rank
-      description: Creates a Rank resource
-      summary: Creates a Rank resource
-      parameters:
-        - name: body
-          in: body
-          description: The new Rank resource
-          required: true
-          # type: string
-          schema:
-            # type: string
-            # example:
-            #   name: Kenya
-            #   nationality: Kenyan
-            $ref: '#/definitions/schemas/rank'
-      responses:
-        "201":
-          description: Rank resource created
-          schema:
-            $ref: '#/definitions/schemas/rank'
-        "400":
-          description: Invalid input
-        "422":
-          description: Unprocessable entity
-  /ranks/{id}:
-    get:
-      tags:
-          - Rank
-      description: Retrieves a Rank resource
-      summary: Retrieves a Rank resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "200":
-          description: Rank resource
-          schema:
-            $ref: '#/definitions/schemas/rank'
-        "404":
-          description: Resource not found         
-    put:
-      tags:
-        - Rank
-      description: Replaces the Rank resource
-      summary: Replaces the Rank resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-        - name: body
-          in: body
-          description: The new Rank resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/rank'
-      responses:
-        "200":
-          description: Rank resource updated
-          schema:
-            $ref: '#/definitions/schemas/rank'
-        "400":
-          description: Invalid input
-        "404":
-          description: Resource not found
-        "422":
-          description: Unprocessable entity
-    delete:
-      tags:
-        - Rank
-      description: Removes the Rank resource
-      summary: Removes the Rank resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "204":
-          description: Rank resource deleted
-        "404":
-          description: Resource not found
-  
   /police-stations:
     get:
       tags:
@@ -491,6 +397,100 @@ paths:
         "404":
           description: Resource not found
 
+  /ranks:
+    get:
+      tags:
+        - Rank
+      description: Retrieves the collection of Rank resources
+      summary: Retrieves the collection of Rank resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: Rank collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/rank'
+    post:
+      tags:
+          - Rank
+      description: Creates a Rank resource
+      summary: Creates a Rank resource
+      parameters:
+        - name: body
+          in: body
+          description: The new Rank resource
+          required: true
+          # type: string
+          schema:
+            # type: string
+            # example:
+            #   name: Kenya
+            #   nationality: Kenyan
+            $ref: '#/definitions/schemas/rank'
+      responses:
+        "201":
+          description: Rank resource created
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /ranks/{id}:
+    get:
+      tags:
+          - Rank
+      description: Retrieves a Rank resource
+      summary: Retrieves a Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Rank resource
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Rank
+      description: Replaces the Rank resource
+      summary: Replaces the Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Rank resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/rank'
+      responses:
+        "200":
+          description: Rank resource updated
+          schema:
+            $ref: '#/definitions/schemas/rank'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Rank
+      description: Removes the Rank resource
+      summary: Removes the Rank resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Rank resource deleted
+        "404":
+          description: Resource not found
+  
   /police-officers:
     get:
       tags:
@@ -584,77 +584,79 @@ paths:
         "404":
           description: Resource not found
   
-  /items/:
+  # ! Focus on OB (report) module
+  /occurrence-categories:
     get:
       tags:
-        - Item
-      description: Retrieves the collection of item resources
-      summary: Retrieves the collection of item resources
+        - Occurrence Category
+      description: Retrieves the collection of Occurrence Category resources
+      summary: Retrieves the collection of Occurrence Category
       parameters:
         - $ref: '#/definitions/parameters/page'
+        - $ref: '#/definitions/parameters/limit'
       responses:
         "200":
-          description: item collection
+          description: Occurrence Category collection
           schema:
             type: array
             items:
-              $ref: '#/definitions/schemas/item'
+              $ref: '#/definitions/schemas/occurrencecategory'
     post:
       tags:
-          - Item
-      description: Creates an item resource
-      summary: Creates an item resource
+          - Occurrence Category 
+      description: Creates an Occurrence Category resource
+      summary: Creates an Occurrence Category resource
       parameters:
         - name: body
           in: body
-          description: The new item resource
+          description: The new Occurrence Category resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/item'
+            $ref: '#/definitions/schemas/occurrencecategory'
       responses:
         "201":
           description: Item resource created
           schema:
-            $ref: '#/definitions/schemas/item'
+            $ref: '#/definitions/schemas/occurrencecategory'
         "400":
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /items/{id}:
+  /occurrence-categories/{id}:
     get:
       tags:
-          - Item
-      description: Retrieves an item resource
-      summary: Retrieves an item resource
+          - Occurrence Category
+      description: Retrieves an Occurrence Category resource
+      summary: Retrieves an Occurrence Category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "200":
-          description: item resource
+          description: Occurrence Category resource
           schema:
-            $ref: '#/definitions/schemas/item'
+            $ref: '#/definitions/schemas/itemcategory'
         "404":
           description: Resource not found         
     put:
       tags:
-        - Item
-      description: Replaces the item resource
-      summary: Replaces the item resource
+        - Occurrence Category
+      description: Replaces the Occurrence Category resource
+      summary: Replaces the Occurrence Category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
         - name: body
           in: body
-          description: The new item resource
+          description: The new Occurrence Category resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/item'
+            $ref: '#/definitions/schemas/occurrencecategory'
       responses:
         "200":
-          description: item resource updated
+          description: Occurrence Category resource updated
           schema:
-            $ref: '#/definitions/schemas/item'
+            $ref: '#/definitions/schemas/occurrencecategory'
         "400":
           description: Invalid input
         "404":
@@ -663,40 +665,132 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - Item
-      description: Removes the item resource
-      summary: Removes the item resource
+        - Occurrence Category
+      description: Removes the Occurrence Category resource
+      summary: Removes the Occurrence Category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "204":
-          description: Item resource deleted
+          description: Occurrence Category resource deleted
         "404":
           description: Resource not found
-  /item/categories/:
+
+  /occurrences:
     get:
       tags:
-        - Category
-      description: Retrieves the collection of item category resources
-      summary: Retrieves the collection of item category
+        - Occurrence
+      description: Retrieves the collection of Occurrence resources
+      summary: Retrieves the collection of Occurrence resources
       parameters:
         - $ref: '#/definitions/parameters/page'
       responses:
         "200":
-          description: item category collection
+          description: Occurrence collection
           schema:
             type: array
             items:
-              $ref: '#/definitions/schemas/itemcategory'
+              $ref: '#/definitions/schemas/occurrence'
     post:
       tags:
-          - Category
-      description: Creates an item category resource
-      summary: Creates an item category resource
+          - Occurrence
+      description: Creates an Occurrence resource
+      summary: Creates an Occurrence resource
       parameters:
         - name: body
           in: body
-          description: The new item category resource
+          description: The new Occurrence resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/occurrence'
+      responses:
+        "201":
+          description: Occurrence resource created
+          schema:
+            $ref: '#/definitions/schemas/occurrence'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /occurrences/{id}:
+    get:
+      tags:
+          - Occurrence
+      description: Retrieves an Occurrence resource
+      summary: Retrieves an Occurrence resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Occurrence resource
+          schema:
+            $ref: '#/definitions/schemas/occurrence'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Occurrence
+      description: Replaces the Occurrence resource
+      summary: Replaces the Occurrence resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new Occurrence resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/occurrence'
+      responses:
+        "200":
+          description: Occurrence resource updated
+          schema:
+            $ref: '#/definitions/schemas/occurrence'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Occurrence
+      description: Removes the Occurrence resource
+      summary: Removes the Occurrence resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Occurrence resource deleted
+        "404":
+          description: Resource not found
+  
+  # ! Focus on evidence module
+  /evidence-categories:
+    get:
+      tags:
+        - Evidence Category
+      description: Retrieves the collection of evidence category resources
+      summary: Retrieves the collection of evidence category
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: evidence category collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/evidencecategory'
+    post:
+      tags:
+          - Evidence Category
+      description: Creates an evidence category resource
+      summary: Creates an evidence category resource
+      parameters:
+        - name: body
+          in: body
+          description: The new evidence category resource
           required: true
           # type: string
           schema:
@@ -704,50 +798,50 @@ paths:
             # example:
             #   name: Kenya
             #   nationality: Kenyan
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/evidencecategory'
       responses:
         "201":
           description: Item resource created
           schema:
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/evidencecategory'
         "400":
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /item/categories/{id}:
+  /evidence-categories/{id}:
     get:
       tags:
-          - ItemCategory
-      description: Retrieves an ItemCategory resource
-      summary: Retrieves an ItemCategory resource
+          - Evidence Category
+      description: Retrieves an evidence category resource
+      summary: Retrieves an evidence category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "200":
-          description: ItemCategory resource
+          description: Evidence Category resource
           schema:
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/evidencecategory'
         "404":
           description: Resource not found         
     put:
       tags:
-        - ItemCategory
-      description: Replaces the ItemCategory resource
-      summary: Replaces the ItemCategory resource
+        - Evidence Category
+      description: Replaces the Evidence Category resource
+      summary: Replaces the Evidence Category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
         - name: body
           in: body
-          description: The new ItemCategory resource
+          description: The new Evidence Category resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/evidencecategory'
       responses:
         "200":
-          description: ItemCategory resource updated
+          description: Evidence Category resource updated
           schema:
-            $ref: '#/definitions/schemas/itemcategory'
+            $ref: '#/definitions/schemas/evidencecategory'
         "400":
           description: Invalid input
         "404":
@@ -756,106 +850,18 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - ItemCategory
-      description: Removes the ItemCategory resource
-      summary: Removes the ItemCategory resource
+        - Evidence Category
+      description: Removes the evidence category resource
+      summary: Removes the evidence category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "204":
-          description: ItemCategory resource deleted
+          description: Evidence Category resource deleted
         "404":
           description: Resource not found
-  /evidenceimages/:
-    get:
-      tags:
-        - EvidenceImage
-      description: Retrieves the collection of evidenceimages resources
-      summary: Retrieves the collection of evidenceimages resources
-      parameters:
-        - $ref: '#/definitions/parameters/page'
-      responses:
-        "200":
-          description: evidenceimage collection
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/evidenceimage'
-    post:
-      tags:
-          - EvidenceImage
-      description: Creates an evidenceimage resource
-      summary: Creates an evidence resource
-      parameters:
-        - name: body
-          in: body
-          description: The new evidenceimage resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/evidenceimage'
-      responses:
-        "201":
-          description: evidenceimage resource created
-          schema:
-            $ref: '#/definitions/schemas/evidenceimage'
-        "400":
-          description: Invalid input
-        "422":
-          description: Unprocessable entity
-  /evidenceimages/{id}:
-    get:
-      tags:
-          - EvidenceImage
-      description: Retrieves an evidenceimage resource
-      summary: Retrieves an evidenceimage resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "200":
-          description: evidenceimage resource
-          schema:
-            $ref: '#/definitions/schemas/evidenceimage'
-        "404":
-          description: Resource not found         
-    put:
-      tags:
-        - EvidenceImage
-      description: Replaces the evidenceimage resource
-      summary: Replaces the evidenceimage resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-        - name: body
-          in: body
-          description: The new evidenceimage resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/evidenceimage'
-      responses:
-        "200":
-          description: evidenceimage resource updated
-          schema:
-            $ref: '#/definitions/schemas/evidenceimage'
-        "400":
-          description: Invalid input
-        "404":
-          description: Resource not found
-        "422":
-          description: Unprocessable entity
-    delete:
-      tags:
-        - EvidenceImage
-      description: Removes the evidenceimage resource
-      summary: Removes the evidenceimage resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "204":
-          description: evidenceimage resource deleted
-        "404":
-          description: Resource not found
-  /evidences/:
+  
+  /evidences:
     get:
       tags:
         - Evidence
@@ -942,136 +948,52 @@ paths:
           description: evidence resource deleted
         "404":
           description: Resource not found
-  /occurrences/:
+  
+  /evidence-item-categories:
     get:
       tags:
-        - Occurrence
-      description: Retrieves the collection of occurrence resources
-      summary: Retrieves the collection of occurrence resources
+        - Category
+      description: Retrieves the collection of item category resources
+      summary: Retrieves the collection of item category
       parameters:
         - $ref: '#/definitions/parameters/page'
       responses:
         "200":
-          description: occurrence collection
+          description: item category collection
           schema:
             type: array
             items:
-              $ref: '#/definitions/schemas/occurrence'
+              $ref: '#/definitions/schemas/itemcategory'
     post:
       tags:
-          - Occurrence
-      description: Creates an occurrence resource
-      summary: Creates an occurrence resource
+          - Category
+      description: Creates an item category resource
+      summary: Creates an item category resource
       parameters:
         - name: body
           in: body
-          description: The new occurrence resource
+          description: The new item category resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/occurrence'
-      responses:
-        "201":
-          description: Occurrence resource created
-          schema:
-            $ref: '#/definitions/schemas/occurrence'
-        "400":
-          description: Invalid input
-        "422":
-          description: Unprocessable entity
-  /occurrences/{id}:
-    get:
-      tags:
-          - Occurrence
-      description: Retrieves an occurrence resource
-      summary: Retrieves an occurrence resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "200":
-          description: occurrence resource
-          schema:
-            $ref: '#/definitions/schemas/occurrence'
-        "404":
-          description: Resource not found         
-    put:
-      tags:
-        - Occurrence
-      description: Replaces the occurrence resource
-      summary: Replaces the occurrence resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-        - name: body
-          in: body
-          description: The new occurrence resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/occurrence'
-      responses:
-        "200":
-          description: occurrence resource updated
-          schema:
-            $ref: '#/definitions/schemas/occurrence'
-        "400":
-          description: Invalid input
-        "404":
-          description: Resource not found
-        "422":
-          description: Unprocessable entity
-    delete:
-      tags:
-        - Occurrence
-      description: Removes the occurrence resource
-      summary: Removes the occurrence resource
-      parameters:
-        - $ref: '#/definitions/parameters/id'
-      responses:
-        "204":
-          description: occurrence resource deleted
-        "404":
-          description: Resource not found     
-  /occurrence/categories/:
-    get:
-      tags:
-        - OccurrenceCategory
-      description: Retrieves the collection of occurrencecategory resources
-      summary: Retrieves the collection of occurrencecategory
-      parameters:
-        - $ref: '#/definitions/parameters/page'
-      responses:
-        "200":
-          description: occurrencecategory collection
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/occurrencecategory'
-    post:
-      tags:
-          - OccurrenceCategory 
-      description: Creates an occurrencecategory resource
-      summary: Creates an occurrencecategory resource
-      parameters:
-        - name: body
-          in: body
-          description: The new occurrencecategory resource
-          required: true
-          # type: string
-          schema:
-            $ref: '#/definitions/schemas/occurrencecategory'
+            # type: string
+            # example:
+            #   name: Kenya
+            #   nationality: Kenyan
+            $ref: '#/definitions/schemas/itemcategory'
       responses:
         "201":
           description: Item resource created
           schema:
-            $ref: '#/definitions/schemas/occurrencecategory'
+            $ref: '#/definitions/schemas/itemcategory'
         "400":
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /occurrence/categories/{id}:
+  /evidence-item-categories/{id}:
     get:
       tags:
-          - OccurrenceCategory
+          - ItemCategory
       description: Retrieves an ItemCategory resource
       summary: Retrieves an ItemCategory resource
       parameters:
@@ -1085,23 +1007,23 @@ paths:
           description: Resource not found         
     put:
       tags:
-        - OccurrenceCategory
-      description: Replaces the occurrencecategory resource
-      summary: Replaces the occurrencecategory resource
+        - ItemCategory
+      description: Replaces the ItemCategory resource
+      summary: Replaces the ItemCategory resource
       parameters:
         - $ref: '#/definitions/parameters/id'
         - name: body
           in: body
-          description: The new occurrencecategory resource
+          description: The new ItemCategory resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/occurrencecategory'
+            $ref: '#/definitions/schemas/itemcategory'
       responses:
         "200":
-          description: occurrencecategory resource updated
+          description: ItemCategory resource updated
           schema:
-            $ref: '#/definitions/schemas/occurrencecategory'
+            $ref: '#/definitions/schemas/itemcategory'
         "400":
           description: Invalid input
         "404":
@@ -1110,19 +1032,214 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - OccurrenceCategory
-      description: Removes the occurrencecategory resource
-      summary: Removes the occurrencecategory resource
+        - ItemCategory
+      description: Removes the ItemCategory resource
+      summary: Removes the ItemCategory resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "204":
-          description: occurrencecategory resource deleted
+          description: ItemCategory resource deleted
         "404":
           description: Resource not found
+  
+  /evidence-items:
+    get:
+      tags:
+        - Item
+      description: Retrieves the collection of item resources
+      summary: Retrieves the collection of item resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: item collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/item'
+    post:
+      tags:
+          - Item
+      description: Creates an item resource
+      summary: Creates an item resource
+      parameters:
+        - name: body
+          in: body
+          description: The new item resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/item'
+      responses:
+        "201":
+          description: Item resource created
+          schema:
+            $ref: '#/definitions/schemas/item'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /evidence-items/{id}:
+    get:
+      tags:
+          - Item
+      description: Retrieves an item resource
+      summary: Retrieves an item resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: item resource
+          schema:
+            $ref: '#/definitions/schemas/item'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - Item
+      description: Replaces the item resource
+      summary: Replaces the item resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new item resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/item'
+      responses:
+        "200":
+          description: item resource updated
+          schema:
+            $ref: '#/definitions/schemas/item'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - Item
+      description: Removes the item resource
+      summary: Removes the item resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: Item resource deleted
+        "404":
+          description: Resource not found
+  
+  /evidence-images/:
+    get:
+      tags:
+        - EvidenceImage
+      description: Retrieves the collection of evidenceimages resources
+      summary: Retrieves the collection of evidenceimages resources
+      parameters:
+        - $ref: '#/definitions/parameters/page'
+      responses:
+        "200":
+          description: evidenceimage collection
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/schemas/evidenceimage'
+    post:
+      tags:
+          - EvidenceImage
+      description: Creates an evidenceimage resource
+      summary: Creates an evidence resource
+      parameters:
+        - name: body
+          in: body
+          description: The new evidenceimage resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/evidenceimage'
+      responses:
+        "201":
+          description: evidenceimage resource created
+          schema:
+            $ref: '#/definitions/schemas/evidenceimage'
+        "400":
+          description: Invalid input
+        "422":
+          description: Unprocessable entity
+  /evidence-images/{id}:
+    get:
+      tags:
+          - EvidenceImage
+      description: Retrieves an evidenceimage resource
+      summary: Retrieves an evidenceimage resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: evidenceimage resource
+          schema:
+            $ref: '#/definitions/schemas/evidenceimage'
+        "404":
+          description: Resource not found         
+    put:
+      tags:
+        - EvidenceImage
+      description: Replaces the evidenceimage resource
+      summary: Replaces the evidenceimage resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+        - name: body
+          in: body
+          description: The new evidenceimage resource
+          required: true
+          # type: string
+          schema:
+            $ref: '#/definitions/schemas/evidenceimage'
+      responses:
+        "200":
+          description: evidenceimage resource updated
+          schema:
+            $ref: '#/definitions/schemas/evidenceimage'
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+    delete:
+      tags:
+        - EvidenceImage
+      description: Removes the evidenceimage resource
+      summary: Removes the evidenceimage resource
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "204":
+          description: evidenceimage resource deleted
+        "404":
+          description: Resource not found
+  
 # TODO https://idratherbewriting.com/learnapidoc/pubapis_openapi_step5_components_object.html
 definitions:
   schemas:
+    gender:
+      title: Gender
+      description: A Gender
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this gender
+          example: 1
+        name:
+          type: string
+          description: The name of this gender
+          example: Male
     country:
       title: Country
       description: A country
@@ -1141,20 +1258,6 @@ definitions:
           type: string
           description: The nationality of this country
           example: Kenyan
-    gender:
-      title: Gender
-      description: A Gender
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: The id of this gender
-          example: 1
-        name:
-          type: string
-          description: The name of this gender
-          example: Male
     iprs_Person:
       title: IPRS Person
       description: An IPRS person
@@ -1218,6 +1321,28 @@ definitions:
           readOnly: true
           description: The mug shot of this IPRS person
           example: /media/iprs_person_None/IMG_20211002_081708_568_OeWUrs7.jpg
+    police_station:
+      title: Police Station
+      description: A police station
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this police station
+          example: 1
+        name:
+          type: string
+          description: The location of this police station
+          example: Spring Valley Police Station
+        country:
+          type: integer
+          description: The country of this police station
+          example: 1
+        location:
+          type: string
+          description: The location of this police station
+          example: 100 Lower Kabete Road
     rank:
       title: Rank
       description: A rank
@@ -1232,6 +1357,46 @@ definitions:
           type: string
           description: The name of this rank
           example: Constable
+    police_officer:
+      title: Police Office
+      description: A police officer
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this police officer
+          example: 1
+        user:
+          type: integer
+          description: The user for this police officer
+          example: 1
+        iprs_person:
+          type: integer
+          description: The IPRS Person for this police officer
+          example: 1
+        service_number:
+          type: string
+          description: The service number of this police officer
+          example: 123456789
+        email_address:
+          type: string
+          description: The email of this police officer
+          example: officer@police.com
+        mobile_phone:
+          type: string
+          description: The mobile number of this police officer
+          example: +1234567890987
+        rank:
+          type: integer
+          description: The rank of this police officer
+          example: 1
+        mug_shot:
+          type: string
+          readOnly: true
+          description: The mug shot of this police officer
+          example: /media/police_officer_None/IMG_20211002_081708_568_OeWUrs7.jpg
+    
     evidenceimage:
       title: EvidenceImage
       description: An EvidenceImage
@@ -1249,43 +1414,43 @@ definitions:
         image:
           type: string
           description: The name of this evidenceimage
-          example: image.jpg
-          
+          example: image.jpg  
     occurrence:
       title: Occurrence
       description: An occurrence
       type: object
       properties:
-        reporter_OBJECT:
+        reporters:
           title: reporter
           description: A reporter
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-              description: The id of this reporter
-              example: 1
-            iprs_person:
-              type: integer
-              description: The IPRS Person for this occurrence
-              example: 1
-            phone_number:
-              type: string
-              description: The phone_number for this reporter
-              example: 1
-            email_address:
-              type: string
-              description: The email_address for this reporter
-              example: mwangi@gmail.com
-            county_of_residence:
-              type: string
-              description: The county_of_residence for this reporter
-              example: nairobi
-            sub_county_of_residence:
-              type: string
-              description: The sub_county_of_residence for this reporter
-              example: westlands
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+                readOnly: true
+                description: The id of this reporter
+                example: 1
+              iprs_person:
+                type: integer
+                description: The IPRS Person for this occurrence
+                example: 1
+              phone_number:
+                type: string
+                description: The phone_number for this reporter
+                example: 1
+              email_address:
+                type: string
+                description: The email_address for this reporter
+                example: mwangi@gmail.com
+              county_of_residence:
+                type: string
+                description: The county_of_residence for this reporter
+                example: nairobi
+              sub_county_of_residence:
+                type: string
+                description: The sub_county_of_residence for this reporter
+                example: westlands
         location:
               type: string
               description: The location for this occurrence
@@ -1390,67 +1555,6 @@ definitions:
           type: datetime
           description: The posted_date of this evidence
           example: 4/10/2022
-    police_station:
-      title: Police Station
-      description: A police station
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: The id of this police station
-          example: 1
-        name:
-          type: string
-          description: The location of this police station
-          example: Spring Valley Police Station
-        country:
-          type: integer
-          description: The country of this police station
-          example: 1
-        location:
-          type: string
-          description: The location of this police station
-          example: 100 Lower Kabete Road
-    police_officer:
-      title: Police Office
-      description: A police officer
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: The id of this police officer
-          example: 1
-        user:
-          type: integer
-          description: The user for this police officer
-          example: 1
-        iprs_person:
-          type: integer
-          description: The IPRS Person for this police officer
-          example: 1
-        service_number:
-          type: string
-          description: The service number of this police officer
-          example: 123456789
-        email_address:
-          type: string
-          description: The email of this police officer
-          example: officer@police.com
-        mobile_phone:
-          type: string
-          description: The mobile number of this police officer
-          example: +1234567890987
-        rank:
-          type: integer
-          description: The rank of this police officer
-          example: 1
-        mug_shot:
-          type: string
-          readOnly: true
-          description: The mug shot of this police officer
-          example: /media/police_officer_None/IMG_20211002_081708_568_OeWUrs7.jpg
     item:
       title: Item
       description: An Item
@@ -1481,6 +1585,21 @@ definitions:
           type: string
           description: The serial_no of this item
           example: tecno
+    
+    evidencecategory:
+      title: Evidence Category
+      description: An evidence category
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this evidence category
+          example: 1
+        name:
+          type: string
+          description: The name of this evidence category
+          example: PKI
   parameters:
     page:
       name: page
@@ -1489,6 +1608,13 @@ definitions:
       type: number
       allowEmptyValue: true
       default: 1
+    limit:
+      name: limit
+      in: query
+      description: The collection size
+      type: number
+      allowEmptyValue: true
+      default: 20
     id:
       name: id
       in: path

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import (Country, Gender, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
-ItemCategory, Item
+from .models import (Gender, Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
+EvidenceCategory, Evidence, EvidenceItem, EvidenceItemImage
 )
 # Register your models here.
 
@@ -11,9 +11,14 @@ ItemCategory, Item
 #     list_display = ('label', 'is_live')
 
 # admin.site.register(Questionnaire, QuestionnairesAdmin)
-admin.site.register(Country)
 admin.site.register(Gender)
+admin.site.register(Country)
 admin.site.register(IPRS_Person)
-admin.site.register(Rank)
 admin.site.register(PoliceStation)
+admin.site.register(Rank)
 admin.site.register(PoliceOfficer)
+
+admin.site.register(EvidenceCategory)
+admin.site.register(Evidence)
+admin.site.register(EvidenceItem)
+admin.site.register(EvidenceItemImage)

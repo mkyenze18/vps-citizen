@@ -39,11 +39,12 @@ from rest_framework import serializers
 #         fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
 from django.contrib.auth.models import User
-from vps.models import (Arrestee, ChargeSheet, ChargeSheet_Person, Country, CourtFile,
- Evidence, EvidenceCategory, EvidenceImage, FingerPrints, Gender, IPRS_Person, MugShots, Reporter,
- Next_of_keen, Occurrence, OccurrenceCategory, OccurrenceCategoryInput, OccurrenceDetail,
- Offense, PoliceCell, Rank, PoliceStation, 
- PoliceOfficer,ItemCategory, Item, Warrant_of_arrest
+from vps.models import (
+    Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
+    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
+    PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItem, EvidenceItemImage
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
@@ -56,6 +57,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username']
         read_only_fields = ['username']
 
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'nationality']
+
 class GenderSerializer(serializers.ModelSerializer):
     # TODO https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
     # questions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -63,12 +69,7 @@ class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
         fields = ['id', 'name']
-
-class CountrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Country
-        fields = ['id', 'name', 'nationality']
-
+        
 class IPRS_PersonSerializerRead(serializers.ModelSerializer):
     class Meta:
         model = IPRS_Person
@@ -85,8 +86,6 @@ class IPRS_PersonSerializerWrite(serializers.ModelSerializer):
                 'first_name', 'middle_name', 'last_name', 'nationality', 'gender',
                 'county_of_birth', 'district_of_birth', 'division_of_birth',
                 'location_of_birth', 'date_of_birth', 'mug_shot']
-
-
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:
@@ -114,49 +113,18 @@ class PoliceOfficerWriteSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'iprs_person', 'service_number', 'email_address',
         'mobile_phone', 'rank', 'police_station', 'mug_shot']
 
-class ReporterSerializer(BaseModelSerializer):
+# ! Focus on OB (report) module
+class OccurrenceCategorySerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
-        model = Reporter
-        fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email_address',
-        'county_of_residence', 'sub_county_of_residence']
+        model = OccurrenceCategory
 
-class ItemCategorySerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = ItemCategory
-
-class ItemSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = Item
-
-class EvidenceSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = Evidence
-
-class EvidenceCategorySerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = EvidenceCategory
-
-class EvidenceImageSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = EvidenceImage
+class OccurrenceCategoryInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccurrenceCategoryInput
+        fields = ['id', 'occurrence_category', 'label', 'type', 'name', 'order', 'choices' ]
 
 class OccurrenceReadSerializer(BaseModelSerializer):
     """
@@ -176,24 +144,36 @@ class OccurrenceWriteSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Occurrence
 
-class OccurrenceCategorySerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = OccurrenceCategory
-
-class OccurrenceCategoryInputSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OccurrenceCategoryInput
-        fields = ['id', 'occurrence_category', 'label', 'type', 'name', 'order', 'choices' ]
-
 class OccurrenceDetailSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
         model = OccurrenceDetail
+
+class ReporterSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Reporter
+        fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email_address',
+        'county_of_residence', 'sub_county_of_residence']
+
+# ! Focus on arrest module
+class PoliceCellSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = PoliceCell
+
+class WarrantofarrestSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Warrant_of_arrest
 
 class ArresteeSerializer(BaseModelSerializer):
     """
@@ -216,6 +196,14 @@ class MugShotsSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = MugShots
 
+class FingerPrintsSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = FingerPrints
+
+# ! Focus on charge sheet module
 class OffenseSerializer(BaseModelSerializer):
     """
     """
@@ -244,24 +232,38 @@ class CourtFileSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = CourtFile
 
-class FingerPrintsSerializer(BaseModelSerializer):
+# ! Focus on evidence module
+class EvidenceCategorySerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
-        model = FingerPrints
+        model = EvidenceCategory
 
-class PoliceCellSerializer(BaseModelSerializer):
+class EvidenceSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
-        model = PoliceCell
+        model = Evidence
 
-class WarrantofarrestSerializer(BaseModelSerializer):
+class EvidenceItemCategorySerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
-        model = Warrant_of_arrest
+        model = EvidenceItemCategory
 
+class EvidenceItemSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = EvidenceItem
+
+class EvidenceItemImageSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = EvidenceItemImage

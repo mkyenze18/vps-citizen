@@ -12,9 +12,7 @@ from django.http import Http404
 
 from django.shortcuts import get_object_or_404
 
-from .models import (Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
-ItemCategory, Item
-)
+from .models import (Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer)
 
 from .forms import Country_Form
 
