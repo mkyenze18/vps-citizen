@@ -172,6 +172,16 @@ import OccurrenceCategories from "./routes/occurrence_category";
 import OccurrenceCategoryCollection from "./routes/occurrence_category/collection";
 import OccurrenceCategoryResource from "./routes/occurrence_category/resource";
 
+import Evidence_Categories from "./routes/evidence_category/evidence_categories";
+import Evidence_Category from "./routes/evidence_category/evidence_category";
+
+import Evidences from "./routes/evidence";
+import EvidenceCollection from "./routes/evidence/collection";
+import EvidenceResource from "./routes/evidence/resource";
+
+import Evidence_Item_Categories from "./routes/evidence_item_category/evidence_item_categories";
+import Evidence_Item_Category from "./routes/evidence_item_category/evidence_item_category";
+
 import Ranks from "./routes/rank/ranks";
 import Rank from "./routes/rank/rank";
 
@@ -222,21 +232,6 @@ render(
               <Route path="add" element={<IPRS_PersonResource />} />
               <Route path=":resourceId" element={<IPRS_PersonResource />} />
             </Route>
-            <Route path="ranks" element={<Ranks />}>
-              {/* <Route
-                index
-                element={
-                  <main style={{ padding: "1rem" }}>
-                    <p>Select an invoice</p>
-                  </main>
-                }
-              /> */}
-              <Route
-                index
-                element={<Rank />}
-              />
-              <Route path=":resourceId" element={<Rank />} />
-            </Route>
             <Route path="police-stations" element={<Police_Stations />}>
               {/* <Route
                 index
@@ -251,6 +246,21 @@ render(
                 element={<Police_Station />}
               />
               <Route path=":resourceId" element={<Police_Station />} />
+            </Route>
+            <Route path="ranks" element={<Ranks />}>
+              {/* <Route
+                index
+                element={
+                  <main style={{ padding: "1rem" }}>
+                    <p>Select an invoice</p>
+                  </main>
+                }
+              /> */}
+              <Route
+                index
+                element={<Rank />}
+              />
+              <Route path=":resourceId" element={<Rank />} />
             </Route>
             <Route path="police-officers" element={<Police_Officers />}>
               <Route
@@ -284,6 +294,45 @@ render(
               />
               <Route path="add" element={<OccurrenceCategoryResource />} />
               <Route path=":resourceId" element={<OccurrenceCategoryResource />} />
+            </Route>
+            {/* Evidence Module */}
+            <Route path="evidence-categories" element={<Evidence_Categories />}>
+              {/* <Route
+                index
+                element={
+                  <main style={{ padding: "1rem" }}>
+                    <p>Select an invoice</p>
+                  </main>
+                }
+              /> */}
+              <Route
+                index
+                element={<Evidence_Category />}
+              />
+              <Route path=":resourceId" element={<Evidence_Category />} />
+            </Route>
+            <Route path="evidences" element={<Evidences />}>
+              <Route
+                index
+                element={<EvidenceCollection />}
+              />
+              <Route path="add" element={<EvidenceResource />} />
+              <Route path=":resourceId" element={<EvidenceResource />} />
+            </Route>
+            <Route path="evidence-item-categories" element={<Evidence_Item_Categories />}>
+              {/* <Route
+                index
+                element={
+                  <main style={{ padding: "1rem" }}>
+                    <p>Select an invoice</p>
+                  </main>
+                }
+              /> */}
+              <Route
+                index
+                element={<Evidence_Item_Category />}
+              />
+              <Route path=":resourceId" element={<Evidence_Item_Category />} />
             </Route>
             {/* <Route path="invoices" element={<Invoices />}>
               <Route

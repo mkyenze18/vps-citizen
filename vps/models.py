@@ -189,27 +189,29 @@ class CourtFile(models.Model):
 # ! Focus on evidence module
 class EvidenceCategory(models.Model):
     name = models.CharField(max_length=100)
-    
-class Evidence(models.Model):
-    category = models.ForeignKey(EvidenceCategory, on_delete=models.PROTECT)
-    # count = models.FloatField() # Quantity
-    officer_incharge = models.ForeignKey(PoliceOfficer, related_name='officer_incharge', on_delete=models.PROTECT)
-    officers_involved = models.ManyToManyField(PoliceOfficer, related_name='officers_involved',)
-    posted_date = models.DateTimeField()
 
 class EvidenceItemCategory(models.Model):
     name = models.CharField(max_length=100)
+    makes = models.TextField(null=True, blank=True)
+    item_models = models.JSONField(null=True, blank=True)
+    units = models.TextField(null=True, blank=True)
 
-class EvidenceItem(models.Model):
-    evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT)
-    category = models.ForeignKey(EvidenceItemCategory, on_delete=models.PROTECT)
-    make = models.CharField(max_length=30)
-    model = models.CharField(max_length=100) # Item type
-    units = models.CharField(max_length=30)
-    quantity = models.FloatField()
-    description = models.TextField()
-    serial_no = models.CharField(max_length=100)
-
+class Evidence(models.Model):
+    evidence_no = models.CharField(max_length=30, null=True, blank=True)
+    evidence_category = models.ForeignKey(EvidenceCategory, on_delete=models.PROTECT)
+    # count = models.FloatField() # Quantity
+    officer_incharge = models.ForeignKey(PoliceOfficer, related_name='officer_incharge', on_delete=models.PROTECT)
+    officers_involved = models.ManyToManyField(PoliceOfficer, related_name='officers_involved')
+    location = models.CharField(max_length=100)
+    item_category = models.ForeignKey(EvidenceItemCategory, on_delete=models.PROTECT)
+    make = models.CharField(max_length=30, null=True, blank=True)
+    model = models.CharField(max_length=100, null=True, blank=True) # Item type
+    unit = models.CharField(max_length=30, null=True, blank=True)
+    quantity = models.FloatField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    serial_no = models.CharField(max_length=100, null=True, blank=True)
+    posted_date = models.DateTimeField(auto_now_add=True)
+    
 class EvidenceItemImage(models.Model):
-    evidence_item = models.ForeignKey(EvidenceItem, on_delete=models.PROTECT)
-    image = models.ImageField(upload_to=evidence_image_directory_path)
+    evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT)
+    image = models.ImageField(upload_to=evidence_image_directory_path, null=True, blank=True)

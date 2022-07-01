@@ -890,8 +890,8 @@ export default function Resource(props) {
     middleNameInput.current.value = result["middle_name"];
     LastNameInput.current.value = result["last_name"];
 
-    genderInput.current.value = result["gender"];
-    nationalityInput.current.value = result["nationality"];
+    genderInput.current.value = result["gender"]["id"];
+    nationalityInput.current.value = result["nationality"]["id"];
     dateOfBirthInput.current.value = moment(result["date_of_birth"]).format("MM/DD/YYYY");
 
     countyOfBirthInput.current.value = result["county_of_birth"];
@@ -1145,11 +1145,11 @@ export default function Resource(props) {
 
                       <div className="field col-md-6 col-sm-12  form-group">
                           <label>Email</label>
-                          <input type="email" placeholder="Email" className="form-control" ref={emailInput} name="email_address" />
+                          <input type="email" placeholder="Email" className="form-control" ref={emailInput} name="email_address" required="required"/>
                       </div>
                       <div className="field col-md-6 col-sm-12  form-group">
                           <label>Mobile phone</label>
-                          <input type="text" placeholder="Mobile phone" className="form-control" ref={mobilePhoneInput} name="mobile_phone" />
+                          <input type="text" placeholder="Mobile phone" className="form-control" ref={mobilePhoneInput} name="mobile_phone" required="required" />
                       </div>
 
                       <div className="field col-md-6 col-sm-12  form-group">

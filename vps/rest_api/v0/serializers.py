@@ -44,7 +44,7 @@ from vps.models import (
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
     PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
-    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItem, EvidenceItemImage
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
@@ -99,7 +99,9 @@ class PoliceStationSerializer(serializers.ModelSerializer):
 
 class PoliceOfficerReadSerializer(serializers.ModelSerializer):
     # exclude user details when reading police officer object
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    
+    user = UserSerializer()
     
     class Meta:
         model = PoliceOfficer
@@ -240,7 +242,15 @@ class EvidenceCategorySerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = EvidenceCategory
 
-class EvidenceSerializer(BaseModelSerializer):
+class EvidenceReadSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Evidence
+        depth=2
+
+class EvidenceWriteSerializer(BaseModelSerializer):
     """
     """
 
@@ -253,13 +263,6 @@ class EvidenceItemCategorySerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = EvidenceItemCategory
-
-class EvidenceItemSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = EvidenceItem
 
 class EvidenceItemImageSerializer(BaseModelSerializer):
     """

@@ -771,13 +771,13 @@ paths:
     get:
       tags:
         - Evidence Category
-      description: Retrieves the collection of evidence category resources
-      summary: Retrieves the collection of evidence category
+      description: Retrieves the collection of Evidence Category resources
+      summary: Retrieves the collection of Evidence Category
       parameters:
         - $ref: '#/definitions/parameters/page'
       responses:
         "200":
-          description: evidence category collection
+          description: Evidence Category collection
           schema:
             type: array
             items:
@@ -785,12 +785,12 @@ paths:
     post:
       tags:
           - Evidence Category
-      description: Creates an evidence category resource
-      summary: Creates an evidence category resource
+      description: Creates an Evidence Category resource
+      summary: Creates an Evidence Category resource
       parameters:
         - name: body
           in: body
-          description: The new evidence category resource
+          description: The new Evidence Category resource
           required: true
           # type: string
           schema:
@@ -801,7 +801,7 @@ paths:
             $ref: '#/definitions/schemas/evidencecategory'
       responses:
         "201":
-          description: Item resource created
+          description: Evidence Category resource created
           schema:
             $ref: '#/definitions/schemas/evidencecategory'
         "400":
@@ -812,8 +812,8 @@ paths:
     get:
       tags:
           - Evidence Category
-      description: Retrieves an evidence category resource
-      summary: Retrieves an evidence category resource
+      description: Retrieves an Evidence Category resource
+      summary: Retrieves an Evidence Category resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
@@ -865,33 +865,33 @@ paths:
     get:
       tags:
         - Evidence
-      description: Retrieves the collection of evidences resources
-      summary: Retrieves the collection of evidences resources
+      description: Retrieves the collection of Evidence resources
+      summary: Retrieves the collection of Evidence resources
       parameters:
         - $ref: '#/definitions/parameters/page'
       responses:
         "200":
           description: evidence collection
           schema:
-              $ref: '#/definitions/schemas/evidence'
+              $ref: '#/definitions/schemas/evidence_READ'
     post:
       tags:
           - Evidence
-      description: Creates an evidences resource
-      summary: Creates an evidence resource
+      description: Creates an Evidence resource
+      summary: Creates an Evidence resource
       parameters:
         - name: body
           in: body
-          description: The new evidence resource
+          description: The new Evidence resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/evidence'
+            $ref: '#/definitions/schemas/evidence_WRITE'
       responses:
         "201":
           description: evidence resource created
           schema:
-            $ref: '#/definitions/schemas/evidence'
+            $ref: '#/definitions/schemas/evidence_READ'
         "400":
           description: Invalid input
         "422":
@@ -900,36 +900,36 @@ paths:
     get:
       tags: 
           - Evidence
-      description: Retrieves an evidence resource
-      summary: Retrieves an evidence resource
+      description: Retrieves an Evidence resource
+      summary: Retrieves an Evidence resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "200":
           description: evidence resource
           schema:
-            $ref: '#/definitions/schemas/evidence'
+            $ref: '#/definitions/schemas/evidence_READ'
         "404":
           description: Resource not found         
     put:
       tags:
         - Evidence
-      description: Replaces the evidence resource
-      summary: Replaces the evidence resource
+      description: Replaces the Evidence resource
+      summary: Replaces the Evidence resource
       parameters:
         - $ref: '#/definitions/parameters/id'
         - name: body
           in: body
-          description: The new evidence resource
+          description: The new Evidence resource
           required: true
           # type: string
           schema:
-            $ref: '#/definitions/schemas/evidence'
+            $ref: '#/definitions/schemas/evidence_WRITE'
       responses:
         "200":
           description: evidence resource updated
           schema:
-            $ref: '#/definitions/schemas/evidence'
+            $ref: '#/definitions/schemas/evidence_READ'
         "400":
           description: Invalid input
         "404":
@@ -939,20 +939,20 @@ paths:
     delete:
       tags:
         - Evidence
-      description: Removes the evidence resource
-      summary: Removes the evidence resource
+      description: Removes the Evidence resource
+      summary: Removes the Evidence resource
       parameters:
         - $ref: '#/definitions/parameters/id'
       responses:
         "204":
-          description: evidence resource deleted
+          description: Evidence resource deleted
         "404":
           description: Resource not found
   
   /evidence-item-categories:
     get:
       tags:
-        - Category
+        - Evidence Item Category
       description: Retrieves the collection of item category resources
       summary: Retrieves the collection of item category
       parameters:
@@ -966,7 +966,7 @@ paths:
               $ref: '#/definitions/schemas/itemcategory'
     post:
       tags:
-          - Category
+          - Evidence Item Category
       description: Creates an item category resource
       summary: Creates an item category resource
       parameters:
@@ -993,7 +993,7 @@ paths:
   /evidence-item-categories/{id}:
     get:
       tags:
-          - ItemCategory
+          - Evidence Item Category
       description: Retrieves an ItemCategory resource
       summary: Retrieves an ItemCategory resource
       parameters:
@@ -1007,7 +1007,7 @@ paths:
           description: Resource not found         
     put:
       tags:
-        - ItemCategory
+        - Evidence Item Category
       description: Replaces the ItemCategory resource
       summary: Replaces the ItemCategory resource
       parameters:
@@ -1032,7 +1032,7 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - ItemCategory
+        - Evidence Item Category
       description: Removes the ItemCategory resource
       summary: Removes the ItemCategory resource
       parameters:
@@ -1046,7 +1046,7 @@ paths:
   /evidence-items:
     get:
       tags:
-        - Item
+        - Evidence Item
       description: Retrieves the collection of item resources
       summary: Retrieves the collection of item resources
       parameters:
@@ -1060,7 +1060,7 @@ paths:
               $ref: '#/definitions/schemas/item'
     post:
       tags:
-          - Item
+          - Evidence Item
       description: Creates an item resource
       summary: Creates an item resource
       parameters:
@@ -1083,7 +1083,7 @@ paths:
   /evidence-items/{id}:
     get:
       tags:
-          - Item
+          - Evidence Item
       description: Retrieves an item resource
       summary: Retrieves an item resource
       parameters:
@@ -1097,7 +1097,7 @@ paths:
           description: Resource not found         
     put:
       tags:
-        - Item
+        - Evidence Item
       description: Replaces the item resource
       summary: Replaces the item resource
       parameters:
@@ -1122,7 +1122,7 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - Item
+        - Evidence Item
       description: Removes the item resource
       summary: Removes the item resource
       parameters:
@@ -1133,10 +1133,10 @@ paths:
         "404":
           description: Resource not found
   
-  /evidence-images/:
+  /evidence-item-images:
     get:
       tags:
-        - EvidenceImage
+        - Evidence Item Image
       description: Retrieves the collection of evidenceimages resources
       summary: Retrieves the collection of evidenceimages resources
       parameters:
@@ -1150,7 +1150,7 @@ paths:
               $ref: '#/definitions/schemas/evidenceimage'
     post:
       tags:
-          - EvidenceImage
+          - Evidence Item Image
       description: Creates an evidenceimage resource
       summary: Creates an evidence resource
       parameters:
@@ -1170,10 +1170,10 @@ paths:
           description: Invalid input
         "422":
           description: Unprocessable entity
-  /evidence-images/{id}:
+  /evidence-item-images/{id}:
     get:
       tags:
-          - EvidenceImage
+          - Evidence Item Image
       description: Retrieves an evidenceimage resource
       summary: Retrieves an evidenceimage resource
       parameters:
@@ -1187,7 +1187,7 @@ paths:
           description: Resource not found         
     put:
       tags:
-        - EvidenceImage
+        - Evidence Item Image
       description: Replaces the evidenceimage resource
       summary: Replaces the evidenceimage resource
       parameters:
@@ -1212,7 +1212,7 @@ paths:
           description: Unprocessable entity
     delete:
       tags:
-        - EvidenceImage
+        - Evidence Item Image
       description: Removes the evidenceimage resource
       summary: Removes the evidenceimage resource
       parameters:
@@ -1222,7 +1222,12 @@ paths:
           description: evidenceimage resource deleted
         "404":
           description: Resource not found
-  
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
 # TODO https://idratherbewriting.com/learnapidoc/pubapis_openapi_step5_components_object.html
 definitions:
   schemas:
@@ -1495,66 +1500,7 @@ definitions:
           type: string
           description: The name of this occurrencecategory
           example: robbery
-    evidence:
-      title: evidence
-      description: An evidence
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: The id of this evidence
-          example: 1
-        category:
-          type: string
-          description: The category of this evidence
-          example: drugs
-        item_OBJECT:
-          title: Item
-          description: An Item
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-              description: The id of this rank
-              example: 1
-            category:
-              type: string
-              description: The category of this item
-              example: Constable
-            units:
-              type: string
-              description: The units of this item
-              example:  pieces
-            make:
-              type: string
-              description: The make of this item
-              example: k7
-            model:
-              type: string
-              description: The model of this item
-              example: tecno
-            serial_no:
-              type: string
-              description: The serial_no of this item
-              example: tecno
-        count:
-          type: float
-          description: The count of this evidence
-          example: 24
-        description:
-          type: string
-          description: The description of this evidence
-          example: pennding
-        officers_in_charge:
-          type: string
-          description: The officers_in_charge of this evidence
-          example: constable mwangi
-        posted_date:
-          type: datetime
-          description: The posted_date of this evidence
-          example: 4/10/2022
+    
     item:
       title: Item
       description: An Item
@@ -1600,6 +1546,105 @@ definitions:
           type: string
           description: The name of this evidence category
           example: PKI
+    evidence_READ:
+      title: evidence
+      description: An evidence
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The id of this evidence
+          example: 1
+        category:
+          type: object
+          description: The category of this evidence
+          properties:
+            name:
+              type: id
+              readOnly: true
+              description: The id of this evidence category
+              example: 1
+            name:
+              type: atring
+              readOnly: true
+              description: The name of this evidence category
+              example: "PKI"
+        officer_incharge:
+          type: object
+          description: The officer incharge of this evidence
+          properties:
+            $ref: '#/definitions/schemas/police_officer'
+        officers_involved:
+          type: array
+          description: The officers invloved of this evidence
+          items:
+            $ref: '#/definitions/schemas/police_officer'
+        posted_date:
+          type: datetime
+          description: The posted_date of this evidence
+          example: 4/10/2022
+    evidence_WRITE:
+      title: evidence
+      description: An evidence
+      type: object
+      properties:
+        category:
+          type: array
+          description: The category of this evidence
+          items:
+            property:
+              id:
+                type: id
+                description: The category of this evidence
+                example: 1
+        officer_incharge:
+          type: integer
+          description: The officer incharge of this evidence
+          example: 1
+        officers_involved:
+          type: array
+          description: The officers involved in this evidence
+          items:
+            property:
+              id:
+                type: id
+                description: The category of this evidence
+                example: 1
+    evidenceitem:
+          title: Evidence item 
+          description: An evidence item
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+              description: The id of this rank
+              example: 1
+            category:
+              type: string
+              description: The category of this item
+              example: Constable
+            units:
+              type: string
+              description: The units of this item
+              example:  pieces
+            make:
+              type: string
+              description: The make of this item
+              example: k7
+            model:
+              type: string
+              description: The model of this item
+              example: tecno
+            serial_no:
+              type: string
+              description: The serial_no of this item
+              example: tecno
+            description:
+              type: string
+              description: The description of this evidence
+              example: pennding
   parameters:
     page:
       name: page

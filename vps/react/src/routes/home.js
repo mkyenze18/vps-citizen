@@ -43,7 +43,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -53,11 +53,11 @@ export default function Home() {
           </Link>
         </div>
         <div className="col-md-4" style={{ marginTop: '27px' }}>
-          <Link to="ob-report" >
+          <Link to="arrests" >
             <div className="card p-3">
                 <div className="d-flex flex-row mb-3 align-items-center">
                   {/* <img src="https://i.imgur.com/ccMhxvC.png" width="70" alt="" /> */}
-                  <i className="fa fa-book" style={{ fontSize: '30px' }}></i>
+                  <i className="fa fa-key" style={{ fontSize: '30px' }}></i>
                   <div className="d-flex flex-column ml-2">
                     <h3>Arrest</h3>
                     {/* <span className="text-black-50">Payment Services</span> */}
@@ -69,7 +69,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new arrest</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -79,11 +79,11 @@ export default function Home() {
           </Link>
         </div>
         <div className="col-md-4" style={{ marginTop: '27px' }}>
-          <Link to="ob-report" >
+          <Link to="evidences" >
             <div className="card p-3">
                 <div className="d-flex flex-row mb-3 align-items-center">
                   {/* <img src="https://i.imgur.com/ccMhxvC.png" width="70" alt="" /> */}
-                  <i className="fa fa-book" style={{ fontSize: '30px' }}></i>
+                  <i className="fa fa-briefcase" style={{ fontSize: '30px' }}></i>
                   <div className="d-flex flex-column ml-2">
                     <h3>Evidence</h3>
                     {/* <span className="text-black-50">Payment Services</span> */}
@@ -95,7 +95,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the evidence</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -124,7 +124,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -150,7 +150,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -176,7 +176,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -205,7 +205,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -231,7 +231,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}
@@ -257,7 +257,7 @@ export default function Home() {
                     </span> */}
                   </div>
                 </div>
-                <h6>Make an new entry into the occurence book</h6>
+                <h6>Make a new entry into the occurence book</h6>
                 <div className="d-flex justify-content-between install mt-3">
                   <span></span>
                   {/* <span style={{fontSize: '12px' }}>Installed 172 times</span> */}

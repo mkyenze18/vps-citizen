@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Gender, Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
-EvidenceCategory, Evidence, EvidenceItem, EvidenceItemImage
+EvidenceCategory, EvidenceItemCategory, Evidence, EvidenceItemImage
 )
 # Register your models here.
 
@@ -19,6 +19,6 @@ admin.site.register(Rank)
 admin.site.register(PoliceOfficer)
 
 admin.site.register(EvidenceCategory)
+admin.site.register(EvidenceItemCategory)
 admin.site.register(Evidence)
-admin.site.register(EvidenceItem)
 admin.site.register(EvidenceItemImage)

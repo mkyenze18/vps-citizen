@@ -220,13 +220,6 @@ urlpatterns = [
         views.EvidenceItemCategoryDetailView.as_view(), 
         name=f'{pre}-item-category-details'),
 
-    path("evidence-items", 
-        views.EvidenceItemListView.as_view(), 
-        name=f'{pre}-evidence-item-list'),
-    path("evidence-items/<int:pk>", 
-        views.EvidenceItemDetailView.as_view(), 
-        name=f'{pre}-evidence-item-detail'),
-
     path("evidence-item-images", 
         views.EvidenceImageListView.as_view(), 
         name=f'{pre}-evidence-item-image-list'), 

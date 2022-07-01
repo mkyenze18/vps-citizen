@@ -200,16 +200,20 @@ export default function App() {
               <div className="menu_section">
                 <h3>General</h3>
                 <ul className="nav side-menu">
-                  <li><Link to="occurrences"><i className="fa fa-book"></i>Occurrences</Link></li>
+                  <li><Link to="occurrences"><i className="fa fa-book"></i>Occurrence</Link></li>
+                  <li><Link to="arrests"><i className="fa fa-key"></i>Arrest</Link></li>
+                  <li><Link to="evidences"><i className="fa fa-briefcase"></i>Evidence</Link></li>
                   <li><Link to="police-officers"><i className="fa fa-user"></i>Police Officer</Link></li>
                   <li><Link to="iprs-persons"><i className="fa fa-users"></i>IPRS Person</Link></li>
                   <li><a><i className="fa fa-cogs"></i> System <span className="fa fa-chevron-down"></span></a>
                     <ul className="nav child_menu">
                       <li><Link to="genders">Genders</Link></li>
                       <li><Link to="countries">Countries</Link></li>
-                      <li><Link to="ranks">Ranks</Link></li>
                       <li><Link to="police-stations">Police Stations</Link></li>
+                      <li><Link to="ranks">Ranks</Link></li>
                       <li><Link to="occurrence-categories">Occurrence Categories</Link></li>
+                      <li><Link to="evidence-categories">Evidence Categories</Link></li>
+                      <li><Link to="evidence-item-categories">Evidence Item Categories</Link></li>
                     </ul>
                   </li>
                 </ul>

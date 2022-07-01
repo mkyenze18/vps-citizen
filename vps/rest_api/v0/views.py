@@ -119,9 +119,9 @@ from vps.models import (
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
     PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
-    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItem, EvidenceItemImage
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
-from helpers.file_system_manipulation import delete_folder_in_media
+from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
 from .serializers import ( UserSerializer,
     CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
@@ -130,7 +130,7 @@ from .serializers import ( UserSerializer,
     OccurrenceDetailSerializer, ReporterSerializer,
     PoliceCellSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
-    EvidenceCategorySerializer, EvidenceSerializer, EvidenceItemCategorySerializer, EvidenceItemSerializer, EvidenceItemImageSerializer
+    EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
 )
 
 import yaml
@@ -1094,7 +1094,6 @@ class FingerPrintsDetailView(ImageBaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
-
 # ! Focus on charge sheet module
 class OffenseListView(BaseListView):
     """
@@ -1252,9 +1251,9 @@ class EvidenceCategoryDetailView(BaseDetailView):
     """
     Retrieve , updates and delete an evidencecategory.
     """
-    model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
+    model = EvidenceCategory
+    serializer_class = EvidenceCategorySerializer
+    read_serializer_class = EvidenceCategorySerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1271,23 +1270,31 @@ class EvidenceListView(BaseListView):
     List all evidence, or create a new evidence.
     """
     model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
+    serializer_class = EvidenceWriteSerializer
+    read_serializer_class = EvidenceReadSerializer
     permission_classes = ()
 
     def get(self, request):
         return super().get(request)
 
     def post(self, request):
-        return super().post(request)
+        # return super().post(request)
+        # Excerpt from "BaseListView.post"
+        serializer = self.get_serializer_class()(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            instance.evidence_no = f'EV/{instance.id}/{instance.posted_date.strftime("%m/%d/%Y")}'
+            instance.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EvidenceDetailView(BaseDetailView):
     """
     Retrieve , updates and delete an evidence.
     """
     model = Evidence
-    serializer_class = EvidenceSerializer
-    read_serializer_class = EvidenceSerializer
+    serializer_class = EvidenceWriteSerializer
+    read_serializer_class = EvidenceReadSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1332,39 +1339,6 @@ class EvidenceItemCategoryDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 # ================================================
-class EvidenceItemListView(BaseListView):
-    """
-    List all evidencecategory, or create a new evidence item.
-    """
-    model = EvidenceItem
-    serializer_class = EvidenceItemSerializer
-    read_serializer_class = EvidenceItemSerializer
-    permission_classes = ()
-
-    def get(self, request):
-        return super().get(request)
-
-    def post(self, request):
-        return super().post(request)
-
-class EvidenceItemDetailView(BaseDetailView):
-    """
-    Retrieve , updates and delete an item
-    """
-    model = EvidenceItem
-    serializer_class = EvidenceItemSerializer
-    read_serializer_class = EvidenceItemSerializer
-    permission_classes = ()
-
-    def get(self, request, pk=None):
-        return super().get(request, pk)
-
-    def put(self, request, pk=None):
-        return super().put(request, pk)
-
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
-# ================================================
 class EvidenceImageListView(ImageBaseListView):
     """
     List all evidenceimage, or create a new evidenceimage.
@@ -1378,7 +1352,15 @@ class EvidenceImageListView(ImageBaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super().post(request) 
+        # return super().post(request)
+        # Excerpt from "BaseListView.post"
+        serializer = self.get_serializer_class()(data={"evidence": request.data['evidence']})
+        if serializer.is_valid():
+            evidence_item_image = serializer.save()
+            evidence_item_image.image = request.data['image']
+            evidence_item_image.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EvidenceImageDetailView(ImageBaseDetailView):
     """
@@ -1396,7 +1378,24 @@ class EvidenceImageDetailView(ImageBaseDetailView):
         return super().put(request, pk)
 
     def delete(self, request, pk=None):
-        return super().delete(request, pk) 
+        # return super().delete(request, pk)
+        # Excerpt from "BaseDetailView.delete"
+        item = self.get_object(request, pk)
+        if hasattr(item, "is_deleted"):
+            item.is_deleted = True
+            item.deleted_at = datetime.datetime.now(tz=timezone.utc)
+            item.modified_by = request.user
+            item.save()
+        else:
+            try:
+                # delete_file_in_media(item.image.name)
+                item.image.delete() # TODO https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.fields.files.FieldFile.delete
+            except OSError:
+                return Response({"message": "Evidence files not found"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                pass
+            
+            item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def save_iprs_person_from_smile_identity(request, id_number, id_type):
@@ -1495,7 +1494,7 @@ def api_root(request, format=None):
         'IPRS persons': reverse(f'{app_name}:{pre}-iprs-person-list', request=request, format=format),
         'police stations': reverse(f'{app_name}:{pre}-police-station-list', request=request, format=format),
         'ranks': reverse(f'{app_name}:{pre}-rank-list', request=request, format=format),
-        'police offices': reverse(f'{app_name}:{pre}-police-officer-list', request=request, format=format),
+        'police officers': reverse(f'{app_name}:{pre}-police-officer-list', request=request, format=format),
 
         # ! Focus on OB (report) module
         'OB' : '================',
@@ -1526,6 +1525,5 @@ def api_root(request, format=None):
         'evidence categories': reverse(f'{app_name}:{pre}-evidence-category-list', request=request, format=format),
         'evidences': reverse(f'{app_name}:{pre}-evidence-list', request=request, format=format),
         'evidence item categories': reverse(f'{app_name}:{pre}-evidence-item-category-list', request=request, format=format),
-        'evidence items': reverse(f'{app_name}:{pre}-evidence-item-list', request=request, format=format),
         'evidence images': reverse(f'{app_name}:{pre}-evidence-item-image-list', request=request, format=format),
     })
