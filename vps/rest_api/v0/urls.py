@@ -226,6 +226,14 @@ urlpatterns = [
     path("evidence-item-images/<int:pk>", 
         views.EvidenceImageDetailView.as_view(), 
         name=f'{pre}-evidence-item-image-details'),
+
+    path("traffic-offenders",
+        views.TrafficOffenderListView.as_view(),
+        name=f'{pre}-trafficoffenders'),
+    path("trafficoffenders/<int:pk>",
+        views.TrafficOffenderDetailsView.as_view(),
+        name=f'{pre}-trafficoffenderdetails-details'),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

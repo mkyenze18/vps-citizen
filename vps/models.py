@@ -215,3 +215,26 @@ class Evidence(models.Model):
 class EvidenceItemImage(models.Model):
     evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT)
     image = models.ImageField(upload_to=evidence_image_directory_path, null=True, blank=True)
+
+
+
+
+class TrafficOffender(models.Model):
+    id_no = models.CharField(max_length=8)
+    dl_number = models.CharField(max_length= 20)
+    full_name = models.CharField(max_length= 200)
+    gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
+    phone = models.CharField(max_length= 20)
+    nationality = models.ForeignKey(Country, on_delete=models.PROTECT)
+    county = models.CharField(max_length=30)
+    constituency = models.CharField(max_length= 40)
+    expiry_date = models.DateTimeField()
+    email = models.EmailField()
+    age = models.CharField(max_length=8)
+    image = models.ImageField(upload_to=evidence_image_directory_path)
+    vehicle_reg_no = models.CharField(max_length= 50)
+    vehicle_identification_no = models.CharField(max_length=50)
+    make = models.CharField(max_length= 50)
+    model = models.CharField(max_length=50)
+    color = models.CharField(max_length= 50)
+    organization_attached_to = models.CharField(max_length=50)

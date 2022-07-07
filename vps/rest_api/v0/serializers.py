@@ -42,7 +42,7 @@ from django.contrib.auth.models import User
 from vps.models import (
     Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
-    PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    PoliceCell, TrafficOffender, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
@@ -270,3 +270,10 @@ class EvidenceItemImageSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = EvidenceItemImage
+
+class TrafficOffenderDetailsSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = TrafficOffender

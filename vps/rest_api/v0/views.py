@@ -117,13 +117,13 @@ from django.conf import settings
 from vps.models import (
     Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
-    PoliceCell, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    PoliceCell, TrafficOffender, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
-from .serializers import ( UserSerializer,
+from .serializers import ( TrafficOffenderDetailsSerializer, UserSerializer,
     CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
@@ -1474,6 +1474,41 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type):
     r.raise_for_status()
     return True
 
+
+class TrafficOffenderListView(BaseListView):
+    """
+    List all TrafficOffenderDetails, or create a new trafficOffenderDetails.
+    """
+    model = TrafficOffender
+    serializer_class = TrafficOffenderDetailsSerializer
+    read_serializer_class = TrafficOffenderDetailsSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class TrafficOffenderDetailsView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an TrafficOffenderDetails.
+    """
+    model = TrafficOffender
+    serializer_class = TrafficOffenderDetailsSerializer
+    read_serializer_class = TrafficOffenderDetailsSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -1526,4 +1561,10 @@ def api_root(request, format=None):
         'evidences': reverse(f'{app_name}:{pre}-evidence-list', request=request, format=format),
         'evidence item categories': reverse(f'{app_name}:{pre}-evidence-item-category-list', request=request, format=format),
         'evidence images': reverse(f'{app_name}:{pre}-evidence-item-image-list', request=request, format=format),
+
+
+        # !Focus on traffic module
+        'TRAFFIC' : '================',
+        'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
+        'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
     })
