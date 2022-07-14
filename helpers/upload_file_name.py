@@ -29,3 +29,8 @@ def arrestee_fingerprint_directory_path(instance, filename):
 def evidence_image_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/arrestee_<id>/<view>
     return 'evidence/evidence_{0}-{1}'.format(instance.id, filename)
+
+
+def offender_image_directory_path(instance, filename):
+    #file will be uploaded to MEDIA_ROOT/traffic_offender_<id>/<view>
+    return 'offender/offender_{0}-{1}'.format(instance.id, filename)

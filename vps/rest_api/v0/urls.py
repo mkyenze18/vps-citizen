@@ -234,6 +234,20 @@ urlpatterns = [
         views.TrafficOffenderDetailsView.as_view(),
         name=f'{pre}-trafficoffenderdetails-details'),
 
+    path("driver",
+        views.DriverListView.as_view(),
+        name=f'{pre}-driver'),
+    path("driver/<int:pk>",
+        views.DriverDetailsView.as_view(),
+        name=f'{pre}-driverdetails-details'),
+
+    path("vehicle",
+        views.VehicleListView.as_view(),
+        name=f'{pre}-vehicle'),
+    path("vehivle/<int:pk>",
+        views.VehicleDetailsView.as_view(),
+        name=f'{pre}-vehicledetails-details'),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

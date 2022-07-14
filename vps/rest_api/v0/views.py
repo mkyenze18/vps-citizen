@@ -115,20 +115,20 @@ from django.conf import settings
 
 
 from vps.models import (
-    Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
+    Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
-    PoliceCell, TrafficOffender, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
-from .serializers import ( TrafficOffenderDetailsSerializer, UserSerializer,
+from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, UserSerializer,
     CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
     OccurrenceDetailSerializer, ReporterSerializer,
-    PoliceCellSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
+    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
 )
@@ -1509,6 +1509,76 @@ class TrafficOffenderDetailsView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 
+
+class DriverListView(BaseListView):
+    """
+    List all DriverDetails, or create a new DriverDetails.
+    """
+    model = Driver
+    serializer_class = DriverSerializer
+    read_serializer_class = DriverSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class DriverDetailsView(BaseDetailView):
+
+    """
+    Retrieve DriverDetails.
+    """
+    model = Driver
+    serializer_class = DriverSerializer
+    read_serializer_class = DriverSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
+
+class VehicleListView(BaseListView):
+    """
+    List all VehicleDetails, or create a new VehicleDetails.
+    """
+    model = Vehicle
+    serializer_class = VehicleSerializer
+    read_serializer_class = VehicleSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class VehicleDetailsView(BaseDetailView):
+
+    """
+    Retrieve vehicleDetails.
+    """
+    model = Vehicle
+    serializer_class = VehicleSerializer
+    read_serializer_class = VehicleSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -1566,5 +1636,6 @@ def api_root(request, format=None):
         # !Focus on traffic module
         'TRAFFIC' : '================',
         'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
-        'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
+        'drivers': reverse(f'{app_name}:{pre}-driver', request=request, format=format),
+        'vehicle': reverse(f'{app_name}:{pre}-vehicle', request=request, format=format)
     })

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # TODO https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.FileField.upload_to
 from helpers.upload_file_name import (IPRS_person_mugshot_directory_path,
-arrestee_mugshot_directory_path, policeOfficer_mugshot_directory_path,
+arrestee_mugshot_directory_path, offender_image_directory_path, policeOfficer_mugshot_directory_path,
 arrestee_fingerprint_directory_path, evidence_image_directory_path)
 
 # Create your models here.
@@ -218,23 +218,25 @@ class EvidenceItemImage(models.Model):
 
 
 
+class Driver(models.Model):
+    IPRS_Person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+    dl_number = models.CharField(max_length= 20)
+    expiry_date = models.DateTimeField()
+
+class Vehicle(models.Model):
+    vehicle_reg_no = models.CharField(max_length= 50)
+    vehicle_identification_no = models.CharField(max_length= 50)
+    make = models.CharField(max_length= 50)
+    model = models.CharField(max_length= 50)
+    color = models.CharField(max_length= 50)
+    organization = models.CharField(max_length= 50)
 
 class TrafficOffender(models.Model):
-    id_no = models.CharField(max_length=8)
-    dl_number = models.CharField(max_length= 20)
-    full_name = models.CharField(max_length= 200)
     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
     phone = models.CharField(max_length= 20)
-    nationality = models.ForeignKey(Country, on_delete=models.PROTECT)
-    county = models.CharField(max_length=30)
+    county_of_incident = models.CharField(max_length=30)
     constituency = models.CharField(max_length= 40)
-    expiry_date = models.DateTimeField()
     email = models.EmailField()
     age = models.CharField(max_length=8)
-    image = models.ImageField(upload_to=evidence_image_directory_path)
-    vehicle_reg_no = models.CharField(max_length= 50)
-    vehicle_identification_no = models.CharField(max_length=50)
-    make = models.CharField(max_length= 50)
-    model = models.CharField(max_length=50)
-    color = models.CharField(max_length= 50)
-    organization_attached_to = models.CharField(max_length=50)
+    image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
+    Vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
