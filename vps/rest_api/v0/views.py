@@ -1,4 +1,5 @@
 from pickle import FALSE
+from pyexpat import model
 from django.shortcuts import get_object_or_404, render
 from rest_framework.permissions import IsAuthenticated
 
@@ -196,97 +197,74 @@ class UserListView(BaseListView):
     def post(self, request):
         return super().get(request)
 
-# GENDER
-@api_view(['GET', 'POST'])
-def gender_list(request, format=None):
+#GENDER
+class gender_list(BaseDetailView):
     """
-    List all genders, or create a gender.
+    list all genders or create a new gender
     """
-    if request.method == 'GET':
-        resources = Gender.objects.all()
-        serializer = GenderSerializer(resources, many=True)
-        return Response(serializer.data)
+    
+    model = Gender
+    serializer_class = GenderSerializer
+    read_serializer_class = GenderSerializer
+    permission_classes = ()
 
-    elif request.method == 'POST':
-        serializer = GenderSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request):
+        return super().get(request)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def gender_detail(request, pk, format=None):
+    def post(self, request):
+        return super().get(request)
+
+class gender_details(BaseDetailView):
     """
-    Retrieve, update or delete a gender.
     """
-    try:
-        resource = Gender.objects.get(pk=pk)
-    except Gender.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    model = Gender
+    serializer_class = GenderSerializer
+    read_serializer_class = GenderSerializer
+    permission_classes = ()
 
-    if request.method == 'GET':
-        serializer = GenderSerializer(resource)
-        return Response(serializer.data)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
 
-    elif request.method == 'PUT':
-        serializer = GenderSerializer(resource, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk=None):
+        return super().put(request, pk)
 
-    elif request.method == 'DELETE':
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
-# COUNTRY
-@api_view(['GET', 'POST'])
-def country_list(request, format=None):
+#COUNTRY
+class country_list(BaseDetailView):
     """
-    List all countries, or create a new country.
+    list all countries or create  a new one
     """
-    if request.method == 'GET':
-        resources = Country.objects.all()
-        serializer = CountrySerializer(resources, many=True)
-        return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = CountrySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    model = Country
+    serializer_class = CountrySerializer
+    read_serializer_class = CountrySerializer
+    permission_classes = ()
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def country_detail(request, pk, format=None):
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super ().get(request)
+
+class country_details(BaseDetailView):
     """
-    Retrieve, update or delete a country.
     """
-    try:
-        resource = Country.objects.get(pk=pk)
-    except Country.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = CountrySerializer(resource)
-        return Response(serializer.data)
+    model = Country
+    serializer_class = CountrySerializer
+    read_serializer_class = CountrySerializer
+    permission_classes = ()
 
-    elif request.method == 'PUT':
-        serializer = CountrySerializer(resource, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
 
-    elif request.method == 'DELETE':
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
 # IPRS PERSON
 @api_view(['GET', 'POST'])
@@ -341,43 +319,23 @@ def iprsPerson_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def iprsPerson_detail(request, pk, format=None):
+
+class iprsPerson_detail(BaseDetailView):
     """
-    Retrieve, update or delete a IPRS person.
     """
-    try:
-        resource = IPRS_Person.objects.get(pk=pk)
-    except IPRS_Person.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    model = IPRS_Person
+    serializer_class = IPRS_PersonSerializerWrite
+    read_serializer_class = IPRS_PersonSerializerRead
+    permission_class = ()
 
-    if request.method == 'GET':
-        serializer = IPRS_PersonSerializerRead(resource)
-        return Response(serializer.data)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
 
-    elif request.method == 'PUT':
-        serializer = IPRS_PersonSerializerWrite(resource, data=request.data, partial=True)
-        if serializer.is_valid():
+    def put(self, request, pk=None):
+        return super().put(request, pk)
 
-            if serializer.validated_data.get("mug_shot", None):
-                resource.mug_shot.delete() # delete the existing mug shot first
-
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        try:
-            delete_folder_in_media(f'iprs_person_{resource.id}', False)
-        except OSError:
-            return Response({"message": "User files not found"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            pass
-
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def iprsPerson_restMug(request, pk, format=None):
@@ -394,97 +352,74 @@ def iprsPerson_restMug(request, pk, format=None):
         resource.mug_shot.delete()
         return Response(serializer.data)
         
-# RANK
-@api_view(['GET', 'POST'])
-def rank_list(request, format=None):
+
+#RANK 
+class rank_list(BaseDetailView):
     """
-    List all ranks, or create a new rank.
+    list all ranks or create a new one
     """
-    if request.method == 'GET':
-        resources = Rank.objects.all()
-        serializer = RankSerializer(resources, many=True)
-        return Response(serializer.data)
+    model = Rank
+    serializer_class = RankSerializer
+    read_serializer_class = RankSerializer
+    Permission_classes = ()
 
-    elif request.method == 'POST':
-        serializer = RankSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request):
+        return super().get(request)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def rank_detail(request, pk, format=None):
+    def post(self, request):
+        return super().get(request)
+
+class rank_details(BaseDetailView):
     """
-    Retrieve, update or delete a rank.
     """
-    try:
-        resource = Rank.objects.get(pk=pk)
-    except Rank.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    model = Rank
+    serializer_class = RankSerializer
+    read_serializer_class = RankSerializer
+    permission_classes = ()
 
-    if request.method == 'GET':
-        serializer = RankSerializer(resource)
-        return Response(serializer.data)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
 
-    elif request.method == 'PUT':
-        serializer = RankSerializer(resource, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk=None):
+        return super().put(request, pk)
 
-    elif request.method == 'DELETE':
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
-# POLICE STATION
-@api_view(['GET', 'POST'])
-def policeStation_list(request, format=None):
+#POLICE STATION
+class policeStation_list(BaseDetailView):
     """
-    List all police stations, or create a new police station.
     """
-    if request.method == 'GET':
-        resources = PoliceStation.objects.all()       
-        serializer = PoliceStationSerializer(resources, many=True)
-        return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = PoliceStationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    model = PoliceStation
+    serializer_class = PoliceStationSerializer
+    read_serializer_class = PoliceStationSerializer
+    permission_classes = ()
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def policeStation_detail(request, pk, format=None):
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().get(request)
+
+class policeStation_details(BaseDetailView):
     """
-    Retrieve, update or delete a police station.
     """
-    try:
-        resource = PoliceStation.objects.get(pk=pk)
-    except PoliceStation.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = PoliceStationSerializer(resource)
-        return Response(serializer.data)
+    model = PoliceStation
+    serializer_class = PoliceStationSerializer
+    read_serializer_class = PoliceStationSerializer
+    permission_classes = ()
 
-    elif request.method == 'PUT':
-        serializer = PoliceStationSerializer(resource, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
 # POLICE OFFICER
 @api_view(['GET', 'POST'])
@@ -509,33 +444,22 @@ def policeOfficer_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def policeOfficer_detail(request, pk, format=None):
+class policeOfficer_detail(BaseDetailView):
     """
-    Retrieve, update or delete a police officer.
     """
-    try:
-        resource = PoliceOfficer.objects.get(pk=pk)
-    except PoliceOfficer.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    model = PoliceOfficer
+    serializer_class = PoliceOfficerWriteSerializer
+    read_serializer_class = PoliceOfficerReadSerializer
+    permission_class = ()
 
-    if request.method == 'GET':
-        serializer = PoliceOfficerReadSerializer(resource)
-        return Response(serializer.data)
+    def get(self, request, pk=None):
+        return super().get(request, pk)
 
-    elif request.method == 'PUT':
-        serializer = PoliceOfficerWriteSerializer(resource, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk=None):
+        return super().put(request, pk)
 
-    elif request.method == 'DELETE':
-        try:
-            resource.delete()
-        except IntegrityError:
-            return Response({"message": "Deleting action not allowed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def policeOfficer_restMug(request, pk, format=None):
