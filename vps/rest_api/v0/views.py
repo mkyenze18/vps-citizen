@@ -1,5 +1,4 @@
 from pickle import FALSE
-from pyexpat import model
 from django.shortcuts import get_object_or_404, render
 from rest_framework.permissions import IsAuthenticated
 
@@ -198,7 +197,7 @@ class UserListView(BaseListView):
         return super().get(request)
 
 #GENDER
-class gender_list(BaseDetailView):
+class GenderListView(BaseDetailView):
     """
     list all genders or create a new gender
     """
@@ -214,8 +213,9 @@ class gender_list(BaseDetailView):
     def post(self, request):
         return super().get(request)
 
-class gender_details(BaseDetailView):
+class GenderDetailView(BaseDetailView):
     """
+    Retrieve , updates and delete an item
     """
     model = Gender
     serializer_class = GenderSerializer
@@ -232,7 +232,7 @@ class gender_details(BaseDetailView):
         return super().delete(request, pk)
 
 #COUNTRY
-class country_list(BaseDetailView):
+class CountryListView(BaseDetailView):
     """
     list all countries or create  a new one
     """
@@ -248,8 +248,9 @@ class country_list(BaseDetailView):
     def post(self, request):
         return super ().get(request)
 
-class country_details(BaseDetailView):
+class CountryDetailView(BaseDetailView):
     """
+    Retrieve , updates and delete a country
     """
 
     model = Country
@@ -320,7 +321,7 @@ def iprsPerson_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class iprsPerson_detail(BaseDetailView):
+class IprsPersonDetailView(BaseDetailView):
     """
     """
     model = IPRS_Person
@@ -354,7 +355,7 @@ def iprsPerson_restMug(request, pk, format=None):
         
 
 #RANK 
-class rank_list(BaseDetailView):
+class RankListView(BaseDetailView):
     """
     list all ranks or create a new one
     """
@@ -369,8 +370,9 @@ class rank_list(BaseDetailView):
     def post(self, request):
         return super().get(request)
 
-class rank_details(BaseDetailView):
+class RankDetailView(BaseDetailView):
     """
+    Retrieve , updates and delete an item
     """
     model = Rank
     serializer_class = RankSerializer
@@ -387,8 +389,9 @@ class rank_details(BaseDetailView):
         return super().delete(request, pk)
 
 #POLICE STATION
-class policeStation_list(BaseDetailView):
+class PoliceStationListView(BaseDetailView):
     """
+    List all police stations or create new one
     """
 
     model = PoliceStation
@@ -402,8 +405,9 @@ class policeStation_list(BaseDetailView):
     def post(self, request):
         return super().get(request)
 
-class policeStation_details(BaseDetailView):
+class PoliceStationDetailView(BaseDetailView):
     """
+    Retrieve , updates and delete a police station
     """
 
     model = PoliceStation
@@ -444,7 +448,7 @@ def policeOfficer_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class policeOfficer_detail(BaseDetailView):
+class PoliceOfficerDetailView(BaseDetailView):
     """
     """
     model = PoliceOfficer
