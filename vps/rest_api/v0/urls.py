@@ -53,8 +53,11 @@ urlpatterns = [
         views.CountryDetailView.as_view(), 
         name=f'{pre}-country-detail'),
 
+    # path('iprs-persons',
+    #     views.iprsPerson_list,
+    #     name=f'{pre}-iprs-person-list'),
     path('iprs-persons',
-        views.iprsPerson_list,
+        views.IPRS_PersonList.as_view(),
         name=f'{pre}-iprs-person-list'),
     path('iprs-persons/<int:pk>',
         views.IprsPersonDetailView.as_view(),

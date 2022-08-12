@@ -106,6 +106,9 @@ from datetime import datetime, timezone, date
 #         snippet.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
+from rest_framework.views import APIView
+from rest_framework import generics
+
 # TODO https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#adding-optional-format-suffixes-to-our-urls
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -146,7 +149,7 @@ from .smile_identity import enhanced_kyc
 import requests
 from smile_id_core import ServerError
 
-from .pagination import VariableResultsSetPagination
+from .pagination import VariableResultsSetPagination, CustomPagination
 
 # SWAGGER
 def swagger(request):
@@ -197,7 +200,7 @@ class UserListView(BaseListView):
         return super().get(request)
 
 #GENDER
-class GenderListView(BaseDetailView):
+class GenderListView(BaseListView):
     """
     list all genders or create a new gender
     """
@@ -215,7 +218,7 @@ class GenderListView(BaseDetailView):
 
 class GenderDetailView(BaseDetailView):
     """
-    Retrieve , updates and delete an item
+    Retrieve , updates and delete a gender
     """
     model = Gender
     serializer_class = GenderSerializer
@@ -232,9 +235,9 @@ class GenderDetailView(BaseDetailView):
         return super().delete(request, pk)
 
 #COUNTRY
-class CountryListView(BaseDetailView):
+class CountryListView(BaseListView):
     """
-    list all countries or create  a new one
+    list all countries or create a new country
     """
 
     model = Country
@@ -320,6 +323,103 @@ def iprsPerson_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class IPRS_PersonList(APIView):
+#     """
+#     List all IPRS Persons, or create a new IPRS Person.
+#     """
+#     def get(self, request, format=None):
+#         items = IPRS_Person.objects.all()
+#         serializer = IPRS_PersonSerializerRead(items, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request, format=None):
+#         serializer = IPRS_PersonSerializerWrite(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class IPRS_PersonList(generics.GenericAPIView):
+#     """
+#     List all IPRS Persons, or create a new IPRS Person.
+#     """
+
+#     queryset = IPRS_Person.objects.all()
+#     pagination_class = CustomPagination
+
+#     def get_serializer_class(self):
+#         if self.request.method == 'POST':
+#             return IPRS_PersonSerializerWrite
+#         return IPRS_PersonSerializerRead
+
+#     def get(self, request, format=None):
+#         items = self.get_queryset()
+#         serializer = self.get_serializer_class()(items, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request, format=None):
+#         serializer = self.get_serializer_class()(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class IPRS_PersonList(generics.ListCreateAPIView):
+    """
+    List all IPRS Persons, or create a new IPRS Person.
+    """
+
+    queryset = IPRS_Person.objects.all()
+    pagination_class = CustomPagination
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return IPRS_PersonSerializerWrite
+        return IPRS_PersonSerializerRead
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = IPRS_Person.objects.all()
+
+        id_no = self.request.query_params.get('id_no', None)
+        if id_no:
+            queryset = queryset.filter(id_no__icontains=id_no)
+            if queryset.count() < 1:
+                try:
+                    success = save_iprs_person_from_smile_identity(self.request, id_no, "NATIONAL_ID")
+                    if success:
+                        queryset = IPRS_Person.objects.filter(id_no__icontains=id_no)
+                except ValueError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                except ServerError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
+                # except BaseException as err:
+                #     print(err)
+                #     raise
+                
+        passport_no = self.request.query_params.get('passport_no', None)
+        if passport_no:
+            queryset = queryset.filter(passport_no__icontains=passport_no)
+            if queryset.count() < 1:
+                try:
+                    success = save_iprs_person_from_smile_identity(self.request, passport_no, "PASSPORT")
+                    if success:
+                        queryset = IPRS_Person.objects.filter(passport_no__icontains=passport_no)
+                except ValueError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                except ServerError:
+                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
+                # except BaseException as err:
+                #     print(err)
+                #     raise
+
+        return queryset
 
 class IprsPersonDetailView(BaseDetailView):
     """
@@ -355,9 +455,9 @@ def iprsPerson_restMug(request, pk, format=None):
         
 
 #RANK 
-class RankListView(BaseDetailView):
+class RankListView(BaseListView):
     """
-    list all ranks or create a new one
+    list all ranks or create a n
     """
     model = Rank
     serializer_class = RankSerializer
@@ -389,7 +489,7 @@ class RankDetailView(BaseDetailView):
         return super().delete(request, pk)
 
 #POLICE STATION
-class PoliceStationListView(BaseDetailView):
+class PoliceStationListView(BaseListView):
     """
     List all police stations or create new one
     """

@@ -271,6 +271,7 @@ class EvidenceItemImageSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = EvidenceItemImage
 
+# ! Focus on traffic module
 class TrafficOffenderDetailsSerializer(BaseModelSerializer):
     """
     """
