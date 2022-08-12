@@ -31,13 +31,14 @@ ALLOWED_HOSTS = [
     'localhost',
     'client.ingenious.or.ke',
     '192.168.1.55',
-    '0.0.0.0'
+    '0.0.0.0',
+    '147.182.236.178'
 ]
 
 # ? what is this
 # TODO https://docs.djangoproject.com/en/4.0/ref/settings/#csrf-trusted-origins
 CSRF_TRUSTED_ORIGINS = [
-    'http://client.ingenious.or.ke:               ',
+    'http://client.ingenious.or.ke:5059',
 ]
 
 # Application definition
