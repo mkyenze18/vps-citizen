@@ -112,9 +112,10 @@ export default function Resource(props) {
   const idInput = useRef(null);
 
   const nameInput = useRef(null);
+  const descriptionInput = useRef(null);
 
   const inputs = {};
-  const inputRefsArray = [nameInput];
+  const inputRefsArray = [nameInput, descriptionInput];
   
   const deleteButton = useRef(null);
   const cancelButton = useRef(null);
@@ -178,6 +179,7 @@ export default function Resource(props) {
 
         idInput.current.value = result["id"];
         nameInput.current.value = result["name"];
+        descriptionInput.current.value = result["description"] ? result["description"] : '';
 
         deleteButton.current.disabled = false
         cancelButton.current.disabled = false
@@ -551,6 +553,7 @@ export default function Resource(props) {
 
     idInput.current.value = "";
     nameInput.current.value = "";
+    descriptionInput.current.value = "";
 
     deleteButton.current.disabled = true
     submitButton.current.disabled = false
@@ -626,6 +629,11 @@ export default function Resource(props) {
                         <div className="field col-md-6 col-sm-12  form-group">
                           <label>Name</label>
                           <input type="text" placeholder="Name" className="form-control" ref={nameInput} name="name" />
+                        </div>
+
+                        <div className="field col-md-12 col-sm-12  form-group">
+                          <label>Description</label>
+                          <textarea className="form-control" rows="3" placeholder="Description" ref={descriptionInput} name="description"></textarea>
                         </div>
 
                     </div>

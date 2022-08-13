@@ -62,6 +62,7 @@ class PoliceOfficer(models.Model):
 # ! Focus on OB (report) module
 class OccurrenceCategory(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
 
 class OccurrenceCategoryInput(models.Model):
     occurrence_category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
