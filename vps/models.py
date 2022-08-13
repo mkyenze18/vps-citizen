@@ -77,7 +77,7 @@ class Occurrence(models.Model):
     police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
     police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
     module = models.CharField(max_length=30)
-    is_incomplete = models.BooleanField(default=True)
+    is_complete = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
     posted_date = models.DateTimeField(auto_now_add=True)
 
