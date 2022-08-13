@@ -178,7 +178,7 @@ export default function Police_Station(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesCountry(response.data);
+      setResourcesCountry(response.data.results);
     })
     .catch(function(error){
       // handle error

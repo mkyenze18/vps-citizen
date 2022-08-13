@@ -229,7 +229,7 @@ export default function Resource(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesPoliceOfficer(response.data);
+      setResourcesPoliceOfficer(response.data.results);
     })
     .catch(function(error){
       // handle error

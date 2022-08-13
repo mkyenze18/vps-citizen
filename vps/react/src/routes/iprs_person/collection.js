@@ -71,7 +71,7 @@ export default function Collection() {
       setIsLoaded(true);
 
       const resources = {}
-      response.data.forEach(element => {
+      response.data.results.forEach(element => {
         resources[element.id] = element.name;
       });
       setResourcesGender(resources);
@@ -96,7 +96,7 @@ export default function Collection() {
       setIsLoaded(true);
 
       const resources = {}
-      response.data.forEach(element => {
+      response.data.results.forEach(element => {
         resources[element.id] = element.nationality;
       });
       setResourcesCountry(resources);
@@ -119,7 +119,7 @@ export default function Collection() {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResources(response.data);
+      setResources(response.data.results);
     })
     .catch(function(error){
       // handle error

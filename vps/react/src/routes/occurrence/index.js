@@ -37,7 +37,7 @@ export default function Occurrences(props) {
           // handle success
           console.log(response);
           setIsLoaded(true);
-          setResourcesPoliceStation(response.data);
+          setResourcesPoliceStation(response.data.results);
         //   setSelectedPoliceStationID();
             const police_station = getQueryVariable('police_station');
             policeStationInput.current.value =  police_station ? police_station : '';

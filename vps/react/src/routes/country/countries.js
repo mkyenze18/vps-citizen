@@ -53,7 +53,7 @@ export default function Countries() {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResources(response.data);
+      setResources(response.data.results);
     })
     .catch(function(error){
       // handle error
