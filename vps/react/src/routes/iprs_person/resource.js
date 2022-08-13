@@ -207,7 +207,7 @@ export default function Resource(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesGender(response.data.data);
+      setResourcesGender(response.data.results);
     })
     .catch(function(error){
       // handle error
@@ -227,7 +227,7 @@ export default function Resource(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesCountry(response.data.data);
+      setResourcesCountry(response.data.results);
     })
     .catch(function(error){
       // handle error
