@@ -138,7 +138,7 @@ export default function First(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesGender(response.data);
+      setResourcesGender(response.data.results);
     })
     .catch(function(error){
       // handle error
@@ -158,7 +158,7 @@ export default function First(props) {
       // handle success
       console.log(response);
       setIsLoaded(true);
-      setResourcesCountry(response.data);
+      setResourcesCountry(response.data.results);
     })
     .catch(function(error){
       // handle error
@@ -179,7 +179,7 @@ export default function First(props) {
       console.log(response);
       const result = response.data
       setIsLoaded(true);
-      setResourcesIPRS_Person(response.data);
+      setResourcesIPRS_Person(response.data.results);
 
       if(result.length) {
         setIPRS_PersonModalShow(true);
