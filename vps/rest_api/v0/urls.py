@@ -80,8 +80,11 @@ urlpatterns = [
         views.RankDetailView.as_view(),
         name=f'{pre}-rank-detail'),
         
+    # path('police-officers',
+    #     views.policeOfficer_list,
+    #     name=f'{pre}-police-officer-list'),
     path('police-officers',
-        views.policeOfficer_list,
+        views.PoliceOfficerList.as_view(),
         name=f'{pre}-police-officer-list'),
     path('police-officers/<int:pk>',
         views.PoliceOfficerDetailView.as_view(),

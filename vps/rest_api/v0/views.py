@@ -548,6 +548,33 @@ def policeOfficer_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PoliceOfficerList(generics.ListCreateAPIView):
+    """
+    List all Police Officers, or create a new Police Officer.
+    """
+
+    queryset = PoliceOfficer.objects.all()
+    pagination_class = CustomPagination
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return PoliceOfficerWriteSerializer
+        return PoliceOfficerReadSerializer
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = PoliceOfficer.objects.all()
+
+        user = self.request.query_params.get('user', None)
+        if user:
+            queryset = queryset.filter(user=user)
+
+        return queryset
+
 class PoliceOfficerDetailView(BaseDetailView):
     """
     """
