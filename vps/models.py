@@ -11,9 +11,15 @@ arrestee_fingerprint_directory_path, evidence_image_directory_path)
 class Gender(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 class Country(models.Model):
     name = models.CharField(max_length=30, unique=True)
     nationality = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.name
     
 class IPRS_Person(models.Model):
     id_no = models.CharField(max_length=100, null=True, blank=True) # ! should be unique?
@@ -71,6 +77,7 @@ class Occurrence(models.Model):
     police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
     police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
     module = models.CharField(max_length=30)
+    is_incomplete = models.BooleanField(default=True)
     is_closed = models.BooleanField(default=False)
     posted_date = models.DateTimeField(auto_now_add=True)
 
@@ -216,8 +223,7 @@ class EvidenceItemImage(models.Model):
     evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT)
     image = models.ImageField(upload_to=evidence_image_directory_path, null=True, blank=True)
 
-
-
+# ! Focus on traffic module
 class Driver(models.Model):
     IPRS_Person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     dl_number = models.CharField(max_length= 20)
@@ -231,7 +237,12 @@ class Vehicle(models.Model):
     color = models.CharField(max_length= 50)
     organization = models.CharField(max_length= 50)
 
-class TrafficOffender(models.Model):
+class TrafficOccurrence(models.Model): # The actual incident
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+    Vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+
+class TrafficOffender(models.Model): # the bugger ressponsible
+    offence = models.ForeignKey(TrafficOccurrence, on_delete=models.PROTECT, null=True)
     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
     phone = models.CharField(max_length= 20)
     county_of_incident = models.CharField(max_length=30)
@@ -239,4 +250,23 @@ class TrafficOffender(models.Model):
     email = models.EmailField()
     age = models.CharField(max_length=8)
     image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
-    Vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+
+# ! Focus on permission module
+class PermissionModule(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.name
+
+class Permission(models.Model):
+    NAME_CHOICE = (
+        ('add', 'Add'),
+        ('update', 'Update'),
+        ('delete', 'Delete'),
+    )
+    module = models.ForeignKey(PermissionModule, on_delete=models.PROTECT)
+    name = models.CharField(max_length=30, choices=NAME_CHOICE)
+    value = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f'{self.module} - {self.name}'

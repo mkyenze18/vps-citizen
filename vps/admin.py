@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (Gender, Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
-EvidenceCategory, EvidenceItemCategory, Evidence, EvidenceItemImage
+EvidenceCategory, EvidenceItemCategory, Evidence, EvidenceItemImage,
+PermissionModule, Permission
 )
 # Register your models here.
 
@@ -22,3 +23,9 @@ admin.site.register(EvidenceCategory)
 admin.site.register(EvidenceItemCategory)
 admin.site.register(Evidence)
 admin.site.register(EvidenceItemImage)
+
+class PermissionAdmin(admin.ModelAdmin):
+    # ...
+    list_display = ('module', 'name', 'value')
+admin.site.register(PermissionModule)
+admin.site.register(Permission, PermissionAdmin)
