@@ -177,7 +177,7 @@ export default function First(props) {
     .then(function (response) {
       // handle success
       console.log(response);
-      const result = response.data
+      const result = response.data.results
       setIsLoaded(true);
       setResourcesIPRS_Person(response.data.results);
 

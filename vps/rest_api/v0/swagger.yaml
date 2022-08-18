@@ -25,9 +25,27 @@ paths:
         "200":
           description: Gender collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/gender'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/gender'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/genders?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/gender'
     post:
       tags:
           - Gender
@@ -115,9 +133,27 @@ paths:
         "200":
           description: Country collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/country'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/country'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/occurrences?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/country'
     post:
       tags:
           - Country
@@ -211,8 +247,26 @@ paths:
           description: IPRS Person collection
           schema:
             type: array
-            items:
-              $ref: '#/definitions/schemas/iprs_Person'
+            # items:
+            #   $ref: '#/definitions/schemas/iprs_Person'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/iprs-persons?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/iprs_Person'
     post:
       tags:
           - IPRS Person
@@ -315,9 +369,27 @@ paths:
         "200":
           description: Police Station collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/police_station'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/police_station'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/police-stations?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/police_station'
     post:
       tags:
           - Police Station
@@ -409,9 +481,27 @@ paths:
         "200":
           description: Rank collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/rank'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/rank'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/ranks?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/rank'
     post:
       tags:
           - Rank
@@ -503,9 +593,27 @@ paths:
         "200":
           description: Police Officer collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/police_officer'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/police_officer'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/police-officers?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/police_officer'
     post:
       tags:
           - Police Officer
@@ -598,9 +706,27 @@ paths:
         "200":
           description: Occurrence Category collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/occurrencecategory'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/occurrencecategory'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/occurrence-categories?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/occurrencecategory'
     post:
       tags:
           - Occurrence Category 
@@ -684,13 +810,32 @@ paths:
       summary: Retrieves the collection of Occurrence resources
       parameters:
         - $ref: '#/definitions/parameters/page'
+        - $ref: '#/definitions/parameters/ob_no_QUERY'
       responses:
         "200":
           description: Occurrence collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/occurrence'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/occurrence'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/occurrences?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/occurrence'
     post:
       tags:
           - Occurrence
@@ -779,9 +924,27 @@ paths:
         "200":
           description: Evidence Category collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/evidencecategory'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/evidencecategory'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/evidence-categories?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/evidencecategory'
     post:
       tags:
           - Evidence Category
@@ -873,7 +1036,25 @@ paths:
         "200":
           description: evidence collection
           schema:
-              $ref: '#/definitions/schemas/evidence_READ'
+            # $ref: '#/definitions/schemas/evidence_READ'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/evidences?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/evidence_READ'
     post:
       tags:
           - Evidence
@@ -961,9 +1142,27 @@ paths:
         "200":
           description: item category collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/itemcategory'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/itemcategory'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/evidence-item-categories?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/itemcategory'
     post:
       tags:
           - Evidence Item Category
@@ -1055,9 +1254,27 @@ paths:
         "200":
           description: item collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/item'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/item'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/evidence-items?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/item'
     post:
       tags:
           - Evidence Item
@@ -1145,9 +1362,27 @@ paths:
         "200":
           description: evidenceimage collection
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/schemas/evidenceimage'
+            # type: array
+            # items:
+            #   $ref: '#/definitions/schemas/evidenceimage'
+            type: object
+            properties:
+              count:
+                type: integer
+                description: The number of items in page
+                example: 2
+              next:
+                type: string
+                description: URL for the next page
+                example: http://127.0.0.1:8000/vps/api/v0/evidence-item-images?page=2
+              previous:
+                type: string
+                description: URL for the next page
+                example: null
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/schemas/evidenceimage'
     post:
       tags:
           - Evidence Item Image
@@ -1686,6 +1921,12 @@ definitions:
       type: string
       allowEmptyValue: true
       default: '123456789'
+    ob_no_QUERY:
+      name: ob_no
+      in: query
+      description: OB Number e.g. OB/2/08/18/2022
+      type: string
+      allowEmptyValue: true
     passport_no:
       name: passport_no
       in: formData

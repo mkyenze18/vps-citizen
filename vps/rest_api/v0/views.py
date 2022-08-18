@@ -369,7 +369,7 @@ class IPRS_PersonList(generics.ListCreateAPIView):
     List all IPRS Persons, or create a new IPRS Person.
     """
 
-    queryset = IPRS_Person.objects.all()
+    # queryset = IPRS_Person.objects.all()
     pagination_class = CustomPagination
 
     def get_serializer_class(self):
@@ -387,7 +387,8 @@ class IPRS_PersonList(generics.ListCreateAPIView):
 
         id_no = self.request.query_params.get('id_no', None)
         if id_no:
-            queryset = queryset.filter(id_no__icontains=id_no)
+            # queryset = queryset.filter(id_no__icontains=id_no)
+            queryset = queryset.filter(id_no=id_no)
             if queryset.count() < 1:
                 try:
                     success = save_iprs_person_from_smile_identity(self.request, id_no, "NATIONAL_ID")
@@ -404,7 +405,8 @@ class IPRS_PersonList(generics.ListCreateAPIView):
                 
         passport_no = self.request.query_params.get('passport_no', None)
         if passport_no:
-            queryset = queryset.filter(passport_no__icontains=passport_no)
+            # queryset = queryset.filter(passport_no__icontains=passport_no)
+            queryset = queryset.filter(passport_no=passport_no)
             if queryset.count() < 1:
                 try:
                     success = save_iprs_person_from_smile_identity(self.request, passport_no, "PASSPORT")
@@ -723,6 +725,10 @@ class OccurrenceListView(BaseListView):
         police_officer = self.request.query_params.get('police_officer')
         if police_officer is not None:
             queryset = queryset.filter(police_officer=police_officer)
+
+        ob_no = self.request.query_params.get('ob_no')
+        if ob_no is not None:
+            queryset = queryset.filter(ob_no=ob_no)
 
         queryset = queryset.order_by('-id')
         return queryset
