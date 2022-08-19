@@ -32,7 +32,8 @@ ALLOWED_HOSTS = [
     'client.ingenious.or.ke',
     '192.168.1.55',
     '0.0.0.0',
-    '147.182.236.178'
+    '147.182.236.178',
+    'ie-vps-portal.ingenious.or.ke'
 ]
 
 # ? what is this
