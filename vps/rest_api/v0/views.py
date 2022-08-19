@@ -197,7 +197,7 @@ class UserListView(BaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super().get(request)
+        return super().post(request)
 
 #GENDER
 class GenderListView(BaseListView):
@@ -214,7 +214,7 @@ class GenderListView(BaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super().get(request)
+        return super().post(request)
 
 class GenderDetailView(BaseDetailView):
     """
@@ -249,7 +249,7 @@ class CountryListView(BaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super ().get(request)
+        return super().post(request)
 
 class CountryDetailView(BaseDetailView):
     """
@@ -470,7 +470,7 @@ class RankListView(BaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super().get(request)
+        return super().post(request)
 
 class RankDetailView(BaseDetailView):
     """
@@ -505,7 +505,7 @@ class PoliceStationListView(BaseListView):
         return super().get(request)
 
     def post(self, request):
-        return super().get(request)
+        return super().post(request)
 
 class PoliceStationDetailView(BaseDetailView):
     """
