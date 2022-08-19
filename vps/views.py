@@ -72,7 +72,7 @@ def index(request, resource=None):
             "police_station" : police_officer.police_station.id,
         }
         
-    return render(request, 'build/index.html', context)
+    return render(request, 'react/build/index.html', context)
 
 # Country
 @login_required

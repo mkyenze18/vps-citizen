@@ -19,6 +19,7 @@ vps/react/coverage
 
 # production
 vps/react/build
+vps/templates/react/build
 
 # misc
 vps/react/.DS_Store

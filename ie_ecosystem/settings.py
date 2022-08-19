@@ -234,6 +234,8 @@ static_path = [os.path.normpath(i) for i in glob.glob("./*/rest_api/*/static")]
 static_path = [os.path.normpath(i) for i in glob.glob("./*/public/static")]
 # ./[vps]/react/build
 static_path = [os.path.normpath(i) for i in glob.glob("./*/react/build/static")]
+# ./[vps]/templates/react/build
+static_path = [os.path.normpath(i) for i in glob.glob("./*/templates/react/build/static")]
 # print(static_path)
 STATICFILES_DIRS = static_path
 
