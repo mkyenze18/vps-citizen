@@ -161,6 +161,7 @@ export default function Last(props) {
           position: toast.POSITION.TOP_RIGHT
         });
 
+        setModalShowEmailAbstract(false);
       })
       .catch(function(error){
         // handle error

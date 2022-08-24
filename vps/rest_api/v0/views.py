@@ -927,7 +927,7 @@ def occurrence_emailAbstract(request, pk, format=None):
 see attachment for the abstract
 """
 
-        reporters = instance.reporter_set.all()
+        reporters = instance.reporters.all()
         reporters_email_array = list(map(lambda recipient: recipient.email_address, reporters))
         recipient_list_email = reporters_email_array
         
@@ -948,7 +948,7 @@ see attachment for the abstract
         email = EmailMessage(
             subject,
             message,
-            'not-reply@task_manager.vps',
+            'no-reply@virtualpolicestation.com',
             recipient_list_email,
             [],
             # reply_to=['another@example.com'],

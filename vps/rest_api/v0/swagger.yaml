@@ -2,8 +2,8 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: "VPS"
-# host: 127.0.0.1:8000
-host: client.ingenious.or.ke:5059
+host: 127.0.0.1:8000
+# host: ie-vps-portal.ingenious.or.ke
 basePath: /vps/api/v0
 schemes:
   - http
@@ -910,7 +910,33 @@ paths:
           description: Occurrence resource deleted
         "404":
           description: Resource not found
-  
+  /occurrences/{id}/email-abstract:    
+    put:
+      tags:
+        - Occurrence
+      description: Emails an Occurrence PDF
+      summary: Emails an Occurrence PDF
+      parameters:
+        - $ref: '#/definitions/parameters/id'
+      responses:
+        "200":
+          description: Occurrence resource updated
+          schema:
+            title: Occurrence PDF email
+            description: An occurrence PDF email
+            type: object
+            properties:
+              status:
+                type: string
+                description: The status of email sent
+                example: successful
+        "400":
+          description: Invalid input
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity
+
   # ! Focus on evidence module
   /evidence-categories:
     get:
