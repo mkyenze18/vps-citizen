@@ -91,9 +91,13 @@ class Reporter(models.Model):
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='reporters')
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=30)
-    email_address = models.EmailField()
+    email_address = models.EmailField(blank=True)
     county_of_residence = models.CharField(max_length=100)
     sub_county_of_residence = models.CharField(max_length=100)
+
+class OccurrenceCounter(models.Model):
+    ob_no = models.IntegerField(default=0)
+    date = models.DateField(auto_now_add=True, unique=True)
 
 # SUSPENDED
 # class BuglaryOccurrence(models.Model):

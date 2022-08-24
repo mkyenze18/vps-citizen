@@ -122,7 +122,8 @@ from vps.models import (
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
     PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
-    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
+    OccurrenceCounter
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
@@ -742,8 +743,16 @@ class OccurrenceListView(BaseListView):
         serializer = self.get_serializer_class()(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            instance.ob_no = f'OB/{instance.id}/{instance.posted_date.strftime("%m/%d/%Y")}'
+            try:
+                counter = OccurrenceCounter.objects.get(date=date.today())
+            except:
+                counter = OccurrenceCounter.objects.create()
+            # instance.ob_no = f'OB/{instance.id}/{instance.posted_date.strftime("%m/%d/%Y")}'
+            instance.ob_no = f'OB/{counter.ob_no + 1}/{instance.posted_date.strftime("%m/%d/%Y")}'
             instance.save()
+
+            counter.ob_no = counter.ob_no + 1
+            counter.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
