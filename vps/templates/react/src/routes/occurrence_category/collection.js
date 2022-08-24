@@ -6,12 +6,14 @@ import { useState,  useEffect } from 'react';
 import {
   useParams,
   useNavigate,
-  Outlet
+  Outlet,
+  useSearchParams
 } from "react-router-dom";
 import { config } from '../../Constants'
 import IPRS_Person from './resource'
 import { handleErrorAxios } from '../../utility/notification';
 import { getResources } from '../../services/countries';
+import { getParameterByName } from '../../utility/url';
 
 const axios = require('axios').default;
 
@@ -22,9 +24,11 @@ var url = config.url.API_URL
 export default function Collection() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [resources, setResources] = useState([]);
+  const [pagination, setPagination] = useState([]);
 
   let navigate = useNavigate();
   let params = useParams();
+  let [searchParams, setSearchParams] = useSearchParams();
 
   // TODO https://axios-http.com/docs/instance
   // const instance = axios.create({
@@ -42,7 +46,7 @@ export default function Collection() {
   // similar to componentDidMount()
   useEffect(() => {
     getResources()
-  }, [params])
+  }, [params, searchParams])
 
   // if (error) {
   //   return <div>Error: {error.message}</div>;
@@ -60,12 +64,25 @@ export default function Collection() {
   //   );
 
   function getResources() {
-    axios.get(`${url}/vps/api/v0/occurrence-categories`)
+    const page = getParameterByName('page');
+
+    axios.get(`${url}/vps/api/v0/occurrence-categories`, {
+      params: {
+        // ID: 12345
+        page: page ? page : 1
+      }
+    })
     .then(function (response) {
       // handle success
       console.log(response);
       setIsLoaded(true);
       setResources(response.data.results);
+
+      const pagination = {
+        'previous': response.data.previous,
+        'next': response.data.next
+      }
+      setPagination(pagination);
     })
     .catch(function(error){
       // handle error
@@ -83,16 +100,38 @@ export default function Collection() {
     navigate(id.toString());
   }
 
+  function navigatePagination(page, e) {
+    if (page) {
+      setSearchParams({page: page});
+    }
+  }
+
   return (
     <div className="row" style={{ display: 'block' }}>
       <div className="col-md-12 col-sm-12  ">
         <div className="x_panel">
-            {/* <div className="x_title">
-            <h2>Occurrence Category <small>Occurrence Categories in the system</small></h2>
+            <div className="x_title">
+            <h2>
+              {/* Occurrence Category <small>Occurrence Categories in the system</small> */}
+            </h2>
             <ul className="nav navbar-right panel_toolbox">
-                <li><a className="collapse-link"><i className="fa fa-chevron-up"></i></a>
+                <li>
+                  <a
+                    className=""
+                    onClick={(e) => navigatePagination(getParameterByName('page', pagination.previous) ? getParameterByName('page', pagination.previous) : 1)}>
+                      <i className="fa fa-chevron-left"></i>
+                    </a>
                 </li>
-                <li className="dropdown">
+                {/* <li><a className=""><i className="fa fa-chevron-up"></i></a>
+                </li> */}
+                <li>
+                  <a
+                    className=""
+                    onClick={(e) => navigatePagination(getParameterByName('page', pagination.next))}>
+                      <i className="fa fa-chevron-right"></i>
+                  </a>
+                </li>
+                {/* <li className="dropdown">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i className="fa fa-wrench"></i></a>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a className="dropdown-item" href="#">Settings 1</a>
@@ -100,10 +139,10 @@ export default function Collection() {
                     </div>
                 </li>
                 <li><a className="close-link"><i className="fa fa-close"></i></a>
-                </li>
+                </li> */}
             </ul>
             <div className="clearfix"></div>
-            </div> */}
+            </div>
             <div className="x_content">
             <table className="table table-hover">
                 <thead>
