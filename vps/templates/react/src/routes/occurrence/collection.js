@@ -33,6 +33,8 @@ export default function Collection() {
   let params = useParams();
   let [searchParams, setSearchParams] = useSearchParams();
 
+  let police_station = null;
+
   // TODO https://axios-http.com/docs/instance
   // const instance = axios.create({
   //   baseURL: url,
@@ -48,13 +50,15 @@ export default function Collection() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    
     const police_station = getQueryVariable("police_station");
     if(police_station) {
-      getResources({police_station: police_station});
-    } else {
-      getResources({police_station: window.police_station});
+      window.police_station = police_station;
+      // getResources({police_station: station});
     }
+    // else {
+    //   getResources({police_station: window.police_station});
+    // }
+    getResources();
   }, [params, location.search])
 
   // if (error) {
@@ -73,7 +77,16 @@ export default function Collection() {
   //   );
 
   function getResources(params={}) {
-    axios.get(`${url}/vps/api/v0/occurrences`, {params})
+    const page = getParameterByName('page');
+
+    // axios.get(`${url}/vps/api/v0/occurrences`, {params})
+    axios.get(`${url}/vps/api/v0/occurrences`, {
+      params: {
+        // ID: 12345
+        police_station: window.police_station,
+        page: page ? page : 1
+      }
+    })
     .then(function (response) {
       // handle success
       console.log(response);
@@ -111,7 +124,7 @@ export default function Collection() {
 
   function navigatePagination(page, e) {
     if (page) {
-      setSearchParams({page: page});
+      setSearchParams({police_station: window.police_station, page: page});
     }
   }
 
@@ -141,9 +154,22 @@ export default function Collection() {
             <ul className="nav navbar-right panel_toolbox">
                 <li>
                   <a
+                    className="">
+                      (page: {getParameterByName('page') ? getParameterByName('page'): 1})
+                    </a>
+                </li>
+                <li>
+                  <a
                     className=""
                     onClick={(e) => navigatePagination(getParameterByName('page', pagination.previous) ? getParameterByName('page', pagination.previous) : 1)}>
                       <i className="fa fa-chevron-left"></i>
+                    </a>
+                </li>
+                <li>
+                  <a
+                    className=""
+                    onClick={(e) => navigatePagination(1)}>
+                      1
                     </a>
                 </li>
                 {/* <li><a className=""><i className="fa fa-chevron-up"></i></a>
