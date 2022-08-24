@@ -876,7 +876,7 @@ import io
 # from django.http import FileResponse
 from reportlab.pdfgen import canvas
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['PUT'])
 def occurrence_emailAbstract(request, pk, format=None):
     """
     Retrieve, update or delete a IPRS person.
