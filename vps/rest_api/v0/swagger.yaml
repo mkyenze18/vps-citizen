@@ -5,8 +5,8 @@ info:
 # host: 127.0.0.1:8000
 host: ie-vps-portal.ingenious.or.ke
 basePath: /vps/api/v0
-schemes:
-  - http
+# schemes:
+#   - http
 consumes:
   - application/json
 produces:
