@@ -921,7 +921,8 @@ def occurrence_emailAbstract(request, pk, format=None):
 
         instance = resource
 
-        subject = f'Police Absract #{resource.id}'
+        # subject = f'Police Absract #{resource.id}'
+        subject = f'Police Absract No. {resource.ob_no}'
 
         message = f"""
 see attachment for the abstract
