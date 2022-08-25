@@ -1709,4 +1709,7 @@ def api_root(request, format=None):
         'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
         'drivers': reverse(f'{app_name}:{pre}-driver', request=request, format=format),
         'vehicle': reverse(f'{app_name}:{pre}-vehicle', request=request, format=format)
+
+      
+
     })

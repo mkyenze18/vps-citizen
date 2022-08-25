@@ -294,3 +294,5 @@ class VehicleSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Vehicle
+
+

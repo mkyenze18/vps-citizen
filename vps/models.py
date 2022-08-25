@@ -75,6 +75,8 @@ class OccurrenceCategoryInput(models.Model):
 class Occurrence(models.Model):
     ob_no = models.CharField(max_length=30, null=True, blank=True)
     location = models.CharField(max_length=100)
+    lat = models.CharField(max_length=40, null = True)
+    long = models.CharField(max_length=40, null = True)
     police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT)
     police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
     module = models.CharField(max_length=30)
@@ -255,6 +257,8 @@ class TrafficOffender(models.Model): # the bugger ressponsible
     email = models.EmailField()
     age = models.CharField(max_length=8)
     image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
+
+
 
 # ! Focus on permission module
 class PermissionModule(models.Model):

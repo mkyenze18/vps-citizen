@@ -254,6 +254,8 @@ urlpatterns = [
         views.VehicleDetailsView.as_view(),
         name=f'{pre}-vehicledetails-details'),
 
+    
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
