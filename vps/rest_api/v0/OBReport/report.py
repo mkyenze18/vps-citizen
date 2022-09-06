@@ -67,8 +67,7 @@ def generate_report(file_name, resource, police_officer):
 		# 	Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
 
 		Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
-		for key, value in detail.details.items():
-			Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
+		Report.append(Paragraph(detail.details, styles["Left"]))
 
 	Report.append(Spacer(1, 12))
 
