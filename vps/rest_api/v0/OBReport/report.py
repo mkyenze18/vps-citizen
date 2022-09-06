@@ -5,6 +5,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 
+import os
+from django.conf import settings
+
 def generate_report(file_name, resource, police_officer):
 	doc = SimpleDocTemplate(
 			file_name,
@@ -23,7 +26,7 @@ def generate_report(file_name, resource, police_officer):
 	Report=[]
 	Report.append(Paragraph('<b>NATIONAL POLICE SERVICE</b>', styles["Center"]))
 	# Report.append(Image("/tmp/npc.png", 1*inch, 1*inch))
-	Report.append(Image("./npc.png", 1*inch, 1*inch))
+	Report.append(Image(os.path.join(settings.BASE_DIR, 'vps', 'rest_api', 'v0', 'OBReport', 'npc.png'), 1*inch, 1*inch))
 	Report.append(Paragraph('<b>THE KENYA POLICE SERVICE</b>', styles["Center"]))
 	Report.append(Spacer(1, 12))
 
