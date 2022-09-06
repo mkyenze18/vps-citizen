@@ -894,9 +894,6 @@ def occurrence_emailAbstract(request, pk, format=None):
         media_folder = f'{settings.MEDIA_ROOT}/abstract'
         os.makedirs(media_folder, exist_ok=True)
 
-        file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
-        generate_report(file_name, resource, police_officer)
-
         # TODO https://docs.djangoproject.com/en/4.0/howto/outputting-pdf/#write-your-view
         # Create a file-like buffer to receive PDF data.
         # buffer = io.BytesIO()
@@ -920,6 +917,10 @@ def occurrence_emailAbstract(request, pk, format=None):
         # present the option to save the file.
         buffer.seek(0)
         # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        
+        # ! Peter & Mutuku using ReportLab
+        file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
+        generate_report(file_name, resource, police_officer)
 
         # TODO https://docs.djangoproject.com/en/4.0/topics/email/#send-mass-mail
         # message1 = ('Subject here', 'Here is the message', 'from@example.com', ['first@example.com', 'other@example.com'])
