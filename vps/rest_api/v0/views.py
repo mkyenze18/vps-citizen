@@ -884,7 +884,7 @@ def occurrence_emailAbstract(request, pk, format=None):
     try:
         resource = Occurrence.objects.get(pk=pk)
         # police_officer = PoliceOfficer.objects.get(iprs_person=resource.pollice_officer.iprs_person_id).user
-        police_officer = resource.police_station
+        police_officer = resource.police_officer
     except Occurrence.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
