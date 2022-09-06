@@ -883,12 +883,18 @@ def occurrence_emailAbstract(request, pk, format=None):
     """
     try:
         resource = Occurrence.objects.get(pk=pk)
+        police_officer = PoliceOfficer.objects.get(iprs_person=resource.pollice_officer.iprs_person_id).user
     except Occurrence.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
+        from OBReport.report import generate_report
+
         media_folder = f'{settings.MEDIA_ROOT}/abstract'
         os.makedirs(media_folder, exist_ok=True)
+
+        file_name = '{media_folder}/Abstract_{resource.id}.pdf'
+        generate_report(file_name, resource, police_officer)
 
         # TODO https://docs.djangoproject.com/en/4.0/howto/outputting-pdf/#write-your-view
         # Create a file-like buffer to receive PDF data.
@@ -924,9 +930,7 @@ def occurrence_emailAbstract(request, pk, format=None):
         # subject = f'Police Absract #{resource.id}'
         subject = f'Police Absract No. {resource.ob_no}'
 
-        message = f"""
-see attachment for the abstract
-"""
+        message = f"see attachment for the abstract"
 
         reporters = instance.reporters.all()
         reporters_email_array = list(map(lambda recipient: recipient.email_address, reporters))
@@ -955,7 +959,7 @@ see attachment for the abstract
             # reply_to=['another@example.com'],
             # headers={'Message-ID': 'foo'},
         )
-        email.attach_file(f'{media_folder}/Abstract_{resource.id}.pdf')
+        email.attach_file(file_name)
         email.send(fail_silently=False)
 
         return Response({'status': 'successful'})
