@@ -889,7 +889,7 @@ def occurrence_emailAbstract(request, pk, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
-        from OBReport.report import generate_report
+        from .OBReport.report import generate_report
 
         media_folder = f'{settings.MEDIA_ROOT}/abstract'
         os.makedirs(media_folder, exist_ok=True)
