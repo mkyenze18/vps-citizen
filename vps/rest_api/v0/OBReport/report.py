@@ -49,15 +49,23 @@ def generate_report(file_name, resource, police_officer):
 	Report.append(Paragraph(f'<b>POLICE STATION:</b> {resource.police_station.name}, {resource.police_station.location}'))
 	Report.append(Spacer(1, 12))
 
-	details = resource.details.get()
+	# details = resource.details.get()
+	details = resource.details
 
-	Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
-	Report.append(Spacer(1, 12))
+	for detail in details:
+		# Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
+		Report.append(Paragraph(f"<b>INVOLVING:</b> {detail.category.name}", styles["Left"]))
+		Report.append(Spacer(1, 12))
 
 
-	Report.append(Paragraph('<b>{} DETAILS</b>'.format(details.category.name).upper(), styles["Left"]))
-	for key, value in details.details['entryTwo'].items():
-		Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
+		# Report.append(Paragraph('<b>{} DETAILS</b>'.format(detail.category.name).upper(), styles["Left"]))
+		# for key, value in details.details['entryTwo'].items():
+		# 	Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
+
+		Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
+		for key, value in detail.details.items():
+			Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
+
 	Report.append(Spacer(1, 12))
 
 	Report.append(Paragraph(f'<b>DATE:</b> {datetime.now().strftime("%a %d %B, %Y  %X")}'))
