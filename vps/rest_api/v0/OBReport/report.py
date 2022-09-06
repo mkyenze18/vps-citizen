@@ -62,7 +62,9 @@ def generate_report(file_name, resource, police_officer):
 
 	Report.append(Paragraph(f'<b>DATE:</b> {datetime.now().strftime("%a %d %B, %Y  %X")}'))
 	Report.append(Spacer(1, 12))
-	full_name = "{} {}".format(police_officer.first_name.title(), police_officer.last_name.title())
+	# full_name = "{} {}".format(police_officer.first_name.title(), police_officer.last_name.title())
+	# full_name = police_officer.iprs_person.str()
+	full_name = police_officer.iprs_person.get_full_name()
 	Report.append(Paragraph(f'<b>OFFICER NAME:</b> {full_name}'))
 	# Report.append(Spacer(1, 20))
 	# Report.append(Paragraph(f'<b>OFFICER SIGNATURE:</b> <u>{office_signature}</u>'))

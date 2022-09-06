@@ -39,6 +39,9 @@ class IPRS_Person(models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.middle_name} {self.last_name}"
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
 class PoliceStation(models.Model):
     name = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
