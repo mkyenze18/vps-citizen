@@ -894,7 +894,7 @@ def occurrence_emailAbstract(request, pk, format=None):
         media_folder = f'{settings.MEDIA_ROOT}/abstract'
         os.makedirs(media_folder, exist_ok=True)
 
-        file_name = '{media_folder}/Abstract_{resource.id}.pdf'
+        file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
         generate_report(file_name, resource, police_officer)
 
         # TODO https://docs.djangoproject.com/en/4.0/howto/outputting-pdf/#write-your-view
