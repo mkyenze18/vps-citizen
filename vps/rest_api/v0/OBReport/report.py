@@ -50,7 +50,7 @@ def generate_report(file_name, resource, police_officer):
 	Report.append(Spacer(1, 12))
 
 	# details = resource.details.get()
-	details = resource.details
+	details = resource.details.all()
 
 	for detail in details:
 		# Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
