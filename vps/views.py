@@ -12,7 +12,7 @@ from django.http import Http404
 
 from django.shortcuts import get_object_or_404
 
-from .models import (Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer)
+from .models import (Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer, Occurrence)
 
 from .forms import Country_Form
 
@@ -73,6 +73,33 @@ def index(request, resource=None):
         }
         
     return render(request, 'react/build/index.html', context)
+
+from rest_framework import status
+from django.conf import settings
+import os
+from django.http import FileResponse
+def occurrence_viewAbstract(request, pk, format=None):
+    """
+    Retrieve, update or delete a IPRS person.
+    """
+    try:
+        resource = Occurrence.objects.get(pk=pk)
+        # police_officer = PoliceOfficer.objects.get(iprs_person=resource.pollice_officer.iprs_person_id).user
+        police_officer = resource.police_officer
+    except Occurrence.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    from .rest_api.v0.OBReport.report import generate_report
+
+    media_folder = f'{settings.MEDIA_ROOT}/abstract'
+    os.makedirs(media_folder, exist_ok=True)
+    
+    # ! Peter & Mutuku using ReportLab
+    file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
+    generate_report(file_name, resource, police_officer)
+
+    response = FileResponse(open(file_name, 'rb'))
+    return response
 
 # Country
 @login_required

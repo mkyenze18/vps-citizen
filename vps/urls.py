@@ -13,6 +13,7 @@ urlpatterns = [
     # path('<int:parking_sessions_id>/vote/', views.vote, name='vote'),
 
     path('', views.index, name='index'),
+    path('abstract/<int:pk>/view', views.occurrence_viewAbstract, name=f'view-abstract'),
 
     # country
     path('countries', views.countries, name='countries'), #c[R]ud
