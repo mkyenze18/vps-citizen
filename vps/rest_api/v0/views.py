@@ -1,6 +1,9 @@
+from http.client import responses
 from pickle import FALSE
 from django.shortcuts import get_object_or_404, render
 from rest_framework.permissions import IsAuthenticated
+from reportlab.pdfgen import canvas
+
 
 # Create your views here.
 
@@ -907,7 +910,7 @@ def occurrence_emailAbstract(request, pk, format=None):
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
         # p.drawString(100, 100, "Hello world.")
-        p.drawString(100, 100, f'Abstract {resource.id}')
+        p.drawString(100, 100, f'Abstract {resource.id}')        
 
         # Close the PDF object cleanly, and we're done.
         p.showPage()

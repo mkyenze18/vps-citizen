@@ -1,6 +1,5 @@
 
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#making-sure-our-url-patterns-are-named
-from unicodedata import name
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 # from snippets import views
