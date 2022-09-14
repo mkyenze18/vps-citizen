@@ -89,7 +89,7 @@ def occurrence_viewAbstract(request, pk, format=None):
     url = f'{request.scheme}://{request.get_host()}/vps/abstract/{resource.id}/view'
     # ! Peter & Mutuku using ReportLab
     file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
-    generate_report(file_name, resource, police_officer, url)
+    generate_report(file_name, resource, police_officer, url, watermark = True)
     
     response = FileResponse(open(file_name, 'rb'))
     return response
