@@ -86,9 +86,10 @@ def occurrence_viewAbstract(request, pk, format=None):
     media_folder = f'{settings.MEDIA_ROOT}/abstract'
     os.makedirs(media_folder, exist_ok=True)
     
+    url = f'{request.scheme}://{request.get_host()}/vps/abstract/{resource.id}/view'
     # ! Peter & Mutuku using ReportLab
     file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
-    generate_report(file_name, resource, police_officer)
+    generate_report(file_name, resource, police_officer, url)
     
     response = FileResponse(open(file_name, 'rb'))
     return response

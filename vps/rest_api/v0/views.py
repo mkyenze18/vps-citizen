@@ -920,10 +920,10 @@ def occurrence_emailAbstract(request, pk, format=None):
         # present the option to save the file.
         buffer.seek(0)
         # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-        
+        url = f'{request.scheme}://{request.get_host()}/vps/abstract/{resource.id}/view'
         # ! Peter & Mutuku using ReportLab
         file_name = f'{media_folder}/Abstract_{resource.id}.pdf'
-        generate_report(file_name, resource, police_officer)
+        generate_report(file_name, resource, police_officer, url)
 
         # TODO https://docs.djangoproject.com/en/4.0/topics/email/#send-mass-mail
         # message1 = ('Subject here', 'Here is the message', 'from@example.com', ['first@example.com', 'other@example.com'])

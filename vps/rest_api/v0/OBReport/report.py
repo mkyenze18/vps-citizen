@@ -10,7 +10,7 @@ import io
 import os
 from django.conf import settings
 
-def generate_report(file_name, resource, police_officer):
+def generate_report(file_name, resource, police_officer, url):
     doc = SimpleDocTemplate(
             file_name,
             pagesize = A4,
@@ -82,7 +82,9 @@ def generate_report(file_name, resource, police_officer):
     # Adding the qrcode
 
     base_url = settings.ALLOWED_HOSTS[-1]
-    img = qrcode.make(f'{base_url}/vps/abstract/{resource.id}/view')
+    # img = qrcode.make(f'{base_url}/vps/abstract/{resource.id}/view')
+    # img = qrcode.make(f'http://{base_url}/vps/abstract/{resource.id}/view')
+    img = qrcode.make(url)
     buffer = io.BytesIO() # Create file in memory
     img.save(buffer, 'jpeg') # Save in file in memory - it has to be 'jpeg' not 'jpg'
     buffer.seek(0) # Move to the beginning of file
