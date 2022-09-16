@@ -26,7 +26,7 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 	styles.add(ParagraphStyle(name='Left', alignment=TA_LEFT))
 
 	Report=[]
-	Report.append(Paragraph('<b>NATIONAL POLICE SERVICE</b>', styles["Center"]))
+	Report.append(Paragraph('<b><h1>NATIONAL POLICE SERVICE</h1></b>', styles["Center"]))
 	Report.append(Image(os.path.join(settings.BASE_DIR, 'vps', 'rest_api', 'v0', 'OBReport', 'npc.png'), 1*inch, 1*inch))
 	Report.append(Paragraph('<b>THE KENYA POLICE SERVICE</b>', styles["Center"]))
 	Report.append(Spacer(1, 12))
@@ -36,42 +36,49 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 
 	reporter = resource.reporters.get()
 	biodata = {
-		'name': 'reporter.name',    'county': reporter.county_of_residence,    'email': reporter.email_address,        
-		'sub-county': reporter.sub_county_of_residence,
-		'phone': reporter.phone_number,
+		'name': '<u> reporter-name&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>',    
+	# 'county of': reporter.county_of_residence,    'email address': reporter.email_address,        
+	# 	'sub-county': reporter.sub_county_of_residence,
+	# 	'phone number': reporter.phone_number,
 	}
 
 	for key, value in biodata.items():
 		Report.append(Paragraph(f'<b>{key.upper()}</b>: {value}'))
-		Report.append(Spacer(1, 4))
-
-	Report.append(Paragraph(f'<b>OCCURRENCE WAS REPORTED AT:</b> {resource.location}'))
-	Report.append(Paragraph(f'<b>POLICE STATION:</b> {resource.police_station.name}, {resource.police_station.location}'))
-	Report.append(Spacer(1, 12))
+		Report.append(Spacer(1, 20))
+	# Report.append(Paragraph(f"<b>Name :</b> {reporter.name}", styles["Left"]))
+	Report.append(Paragraph(f'<b>COUNTY OF:</b>&nbsp&nbsp <u>{reporter.county_of_residence} ' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp' f'<b>EMAIL ADDRESS :</b>&nbsp&nbsp <u>{reporter.email_address} &nbsp&nbsp</u>', styles["Left"]))
+	Report.append(Spacer(1, 20))
+	Report.append(Paragraph(f'<b>SUB COUNTY:</b>&nbsp&nbsp<u> {reporter.sub_county_of_residence}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp&nbsp&nbsp' f'<b>PHONE NUMBER:</b> &nbsp&nbsp<u>{reporter.phone_number}&nbsp&nbsp</u>', styles["Left"]))
+	Report.append(Spacer(1, 20))
+	Report.append(Paragraph(f'<b>OCCURRENCE WAS REPORTED AT:</b>&nbsp&nbsp<u> {resource.location}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>' ))
+	Report.append(Spacer(1, 20))
+	Report.append(Paragraph(f'<b>POLICE STATION:</b>&nbsp&nbsp<u> {resource.police_station.name}, {resource.police_station.location}</u>'))
+	Report.append(Spacer(1, 20))
 
 	# details = resource.details.get()
 	details = resource.details.all()
 
 	for detail in details:
 		# Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
-		Report.append(Paragraph(f"<b>INVOLVING:</b> {detail.category.name}", styles["Left"]))
-		Report.append(Spacer(1, 12))
+		Report.append(Paragraph(f"<b>INVOLVING:</b> &nbsp&nbsp<u>{detail.category.name}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>", styles["Left"]))
+		Report.append(Spacer(1, 20))
 
 		# Report.append(Paragraph('<b>{} DETAILS</b>'.format(detail.category.name).upper(), styles["Left"]))
 		# for key, value in details.details['entryTwo'].items():
 		# 	Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
 
 		Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
-		Report.append(Paragraph(str(detail.details), styles["Left"]))
+		Report.append(Paragraph(f'<u>{detail.details}</u>'))
+		# Report.append(Paragraph(str(detail.details), styles["Left"]))
 
-	Report.append(Spacer(1, 12))
+	Report.append(Spacer(1, 50))
 
-	Report.append(Paragraph(f'<b>DATE:</b> {datetime.now().strftime("%a %d %B, %Y  %X")}' '<div>&nbsp&nbsp&nbsp&nbsp</div>' f'<b>OB NUMBER</b>: {resource.ob_no}'))
-	Report.append(Spacer(1, 12))
+	Report.append(Paragraph(f'<b>DATE:</b>&nbsp&nbsp<u> {datetime.now().strftime("%a %d %B, %Y  %X")}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp' f'<b>OB NUMBER</b>: &nbsp&nbsp<u>{resource.ob_no}&nbsp&nbsp&nbsp</u>'))
+	Report.append(Spacer(1, 30))
 
 	# Report.append(Spacer(1, 12))
 	full_name = police_officer.iprs_person.get_full_name()
-	Report.append(Paragraph(f'<b>OFFICER NAME:</b> {full_name}'))
+	Report.append(Paragraph(f'<b>OFFICER NAME:</b> &nbsp&nbsp<u>{full_name}&nbsp&nbsp&nbsp&nbsp</u>'))
 	# Report.append(Spacer(1, 20))
 	# Report.append(Paragraph(f'<b>OFFICER SIGNATURE:</b> <u>{office_signature}</u>'))
 
@@ -92,5 +99,5 @@ def AddWaterMark(canvas, doc):
 	canvas.setFont('Times-Bold', 160)
 	canvas.setFillColor(Color(255, 0, 0, alpha = 0.5))
 	canvas.rotate(45)
-	canvas.drawString(5 * inch, 1 * inch, 'VALID')
+	canvas.drawString(4 * inch, 1 * inch, 'VALID')
 	canvas.restoreState()
