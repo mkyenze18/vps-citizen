@@ -134,7 +134,7 @@ class OccurrenceReadSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Occurrence
-        fields  = ["id", "ob_no", "location", "police_station", "police_officer", "module", "is_closed",
+        fields  = ["id", "ob_no", "narrative", "location", "police_station", "police_officer", "module", "is_closed",
                     "reporters", "details",
                     "posted_date"] # TODO https://www.django-rest-framework.org/api-guide/relations/#reverse-relations
         depth = 2

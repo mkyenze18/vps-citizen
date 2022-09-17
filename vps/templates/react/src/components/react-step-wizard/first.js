@@ -51,10 +51,11 @@ export default function First(props) {
   const policeStationInput = useRef(null);
   const policeOfficerInput = useRef(null);
   const locationInput = useRef(null);
+  const narrativeInput = useRef(null);
   const moduleInput = useRef(null);
 
   const inputRefsArray = [
-    policeStationInput, policeOfficerInput, locationInput, moduleInput, 
+    policeStationInput, policeOfficerInput, locationInput, narrativeInput, moduleInput, 
 ]
   
   // const idIPRS_PersonInput = useRef(null);
@@ -99,6 +100,7 @@ export default function First(props) {
       if(props.occurrence) {
         populateOccurrenceForm(props.occurrence);
         locationInput.current.disabled = props.occurrence.is_closed;
+        narrativeInput.current.disabled = props.occurrence.is_closed;
         setSelectedResource(props.occurrence);
       }
       getResourcesReporter({occurrence: params.resourceId})
@@ -106,6 +108,7 @@ export default function First(props) {
       idInput.current.value = "";
       resetForm();
       locationInput.current.disabled = false;
+      narrativeInput.current.disabled = false;
     }
 
     initFormValidator();
@@ -584,6 +587,7 @@ export default function First(props) {
     setSelectedResource(null)
 
     locationInput.current.value = "";
+    narrativeInput.current.value = "";
 
     // submitButton.current.disabled = false
   }
@@ -645,6 +649,7 @@ export default function First(props) {
     }
 
     locationInput.current.value = result["location"];
+    narrativeInput.current.value = result["narrative"];
 
     // cancelButton.current.disabled = false
     // submitButton.current.disabled = false
@@ -736,16 +741,26 @@ export default function First(props) {
                         </select>
                     </div>
                     <div className="field col-md-4 col-sm-12  form-group">
-                          <label>Location</label>
-                          <input
-                            type="text"
-                            placeholder="Location"
-                            className="form-control"
-                            ref={locationInput}
-                            // onClick={() => setModalShowGoogleMap(true)}
-                            name="location"
-                            required />
-                      </div>
+                        <label>Location</label>
+                        <input
+                          type="text"
+                          placeholder="Location"
+                          className="form-control"
+                          ref={locationInput}
+                          // onClick={() => setModalShowGoogleMap(true)}
+                          name="location"
+                          required />
+                    </div>
+                    <div className="field col-md-12 col-sm-12  form-group">
+                        <label>Narrative</label>
+                        <textarea
+                          className="form-control"
+                          rows="3"
+                          placeholder="Narrative"
+                          ref={narrativeInput}
+                          name="narrative"
+                        ></textarea>
+                    </div>
                   </div>
 
                   {(!props.occurrence?.is_closed || !params.resourceId) &&

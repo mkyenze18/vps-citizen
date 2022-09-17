@@ -77,6 +77,7 @@ class OccurrenceCategoryInput(models.Model):
 
 class Occurrence(models.Model):
     ob_no = models.CharField(max_length=30, null=True, blank=True)
+    narrative = models.TextField()
     location = models.CharField(max_length=100)
     lat = models.CharField(max_length=40, null = True)
     long = models.CharField(max_length=40, null = True)
