@@ -33,23 +33,29 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 
 	Report.append(Paragraph('<b>REPORT OCCURENCE FROM POLICE RECORDS</b>', styles["Left"]))
 	Report.append(Spacer(1, 12))    
+	FULL_LENGTH_CHARACTER_COUNT = 130
+	reporters = resource.reporters.all()
+	for reporter in reporters:
+		name = reporter.iprs_person.get_full_name()
+		for space in range(FULL_LENGTH_CHARACTER_COUNT - len(name)):
+			name += '&nbsp'
 
-	reporter = resource.reporters.get()
-	biodata = {
-		'name': '<u> reporter-name&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>',    
-	# 'county of': reporter.county_of_residence,    'email address': reporter.email_address,        
-	# 	'sub-county': reporter.sub_county_of_residence,
-	# 	'phone number': reporter.phone_number,
-	}
+		biodata = {
+			'name': f'<u>{name}</u>',    
+		# 'county of': reporter.county_of_residence,    'email address': reporter.email_address,        
+		# 	'sub-county': reporter.sub_county_of_residence,
+		# 	'phone number': reporter.phone_number,
+		}
 
-	for key, value in biodata.items():
-		Report.append(Paragraph(f'<b>{key.upper()}</b>: {value}'))
+		for key, value in biodata.items():
+			Report.append(Paragraph(f'<b>{key.upper()}</b>: {value}'))
+			Report.append(Spacer(1, 20))
+		# Report.append(Paragraph(f"<b>Name :</b> {reporter.name}", styles["Left"]))
+		Report.append(Paragraph(f'<b>COUNTY OF:</b>&nbsp&nbsp <u>{reporter.county_of_residence} ' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp' f'<b>EMAIL ADDRESS :</b>&nbsp&nbsp <u>{reporter.email_address} &nbsp&nbsp</u>', styles["Left"]))
 		Report.append(Spacer(1, 20))
-	# Report.append(Paragraph(f"<b>Name :</b> {reporter.name}", styles["Left"]))
-	Report.append(Paragraph(f'<b>COUNTY OF:</b>&nbsp&nbsp <u>{reporter.county_of_residence} ' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp' f'<b>EMAIL ADDRESS :</b>&nbsp&nbsp <u>{reporter.email_address} &nbsp&nbsp</u>', styles["Left"]))
-	Report.append(Spacer(1, 20))
-	Report.append(Paragraph(f'<b>SUB COUNTY:</b>&nbsp&nbsp<u> {reporter.sub_county_of_residence}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp&nbsp&nbsp' f'<b>PHONE NUMBER:</b> &nbsp&nbsp<u>{reporter.phone_number}&nbsp&nbsp</u>', styles["Left"]))
-	Report.append(Spacer(1, 20))
+		Report.append(Paragraph(f'<b>SUB COUNTY:</b>&nbsp&nbsp<u> {reporter.sub_county_of_residence}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp&nbsp&nbsp' f'<b>PHONE NUMBER:</b> &nbsp&nbsp<u>{reporter.phone_number}&nbsp&nbsp</u>', styles["Left"]))
+		Report.append(Spacer(1, 20))
+
 	Report.append(Paragraph(f'<b>OCCURRENCE WAS REPORTED AT:</b>&nbsp&nbsp<u> {resource.location}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>' ))
 	Report.append(Spacer(1, 20))
 	Report.append(Paragraph(f'<b>POLICE STATION:</b>&nbsp&nbsp<u> {resource.police_station.name}, {resource.police_station.location}</u>'))
@@ -60,16 +66,24 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 
 	for detail in details:
 		# Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
-		Report.append(Paragraph(f"<b>INVOLVING:</b> &nbsp&nbsp<u>{detail.category.name}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>", styles["Left"]))
+		Report.append(Paragraph(f"<b>INVOLVING:</b> &nbsp&nbsp<u>{detail.category.name}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>", styles["Left"]))
+		Report.append(Paragraph(f'<b></b> <u>{resource.narrative}</u>'))
 		Report.append(Spacer(1, 20))
+		
 
-		# Report.append(Paragraph('<b>{} DETAILS</b>'.format(detail.category.name).upper(), styles["Left"]))
-		# for key, value in details.details['entryTwo'].items():
-		# 	Report.append(Paragraph(f"<b>{' '.join(key.split('_')).title()}:</b> {value}", styles["Left"]))
+
+		# Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
+		# Report.append(Paragraph(f'<u>{detail.details}</u>'))
+		# Report.append(Paragraph(f'<div><br></br><br></br></div>'))
+		# # Report.append(Paragraph(str(detail.details), styles["Left"]))
 
 		Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
-		Report.append(Paragraph(f'<u>{detail.details}</u>'))
-		# Report.append(Paragraph(str(detail.details), styles["Left"]))
+		# Report.append(Paragraph(f'<u>{detail.details}</u>'))
+		for name in detail.details:
+			formated_name = name.replace('_', ' ').title()
+			Report.append(Paragraph(f'<b>{formated_name}</b> <u>{detail.details[name]}</u>'))
+			Report.append(Paragraph(f'<div><br></br></div>'))
+		Report.append(Paragraph(f'<div><br></br><br></br></div>'))
 
 	Report.append(Spacer(1, 50))
 
