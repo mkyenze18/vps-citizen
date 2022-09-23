@@ -157,7 +157,7 @@ class Arrestee(models.Model):
     county_of_residence = models.CharField(max_length=100)
     constituency_of_residence = models.CharField(max_length=100)
     remarks = models.TextField()
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='arrests')
     age = models.IntegerField()
     warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT)
     cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT)

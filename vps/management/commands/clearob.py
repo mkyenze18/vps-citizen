@@ -36,6 +36,10 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.WARNING(f'++ Reporter {reporter.id} deleted'))
                         reporter.delete()
 
+                    for arrest in occurrence.arrests.all():
+                        self.stdout.write(self.style.WARNING(f'++ Arrest {arrest.id} deleted'))
+                        arrest.delete()
+
                     self.stdout.write(self.style.NOTICE(f'- {occurrence.id} : {occurrence.ob_no} deleted'))
                     occurrence.delete()
                     
