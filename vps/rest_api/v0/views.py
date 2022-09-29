@@ -505,6 +505,26 @@ class PoliceStationListView(BaseListView):
     read_serializer_class = PoliceStationSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = PoliceStation.objects.all()
+        name = self.request.query_params.get('name')
+        if name is not None:
+            queryset = queryset.filter(name=name)
+
+        queryset = queryset.order_by('id')
+
+        location = self.request.query_params.get('location')
+        if location is not None:
+            queryset = queryset.filter(location=location)
+
+        queryset = queryset.order_by('id')
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
@@ -579,6 +599,10 @@ class PoliceOfficerList(generics.ListCreateAPIView):
         if user:
             queryset = queryset.filter(user=user)
 
+        service_number = self.request.query_params.get('service_number', None)
+        if service_number:
+            queryset = queryset.filter(service_number=service_number)
+
         return queryset
 
 class PoliceOfficerDetailView(BaseDetailView):
@@ -624,6 +648,20 @@ class OccurrenceCategoryListView(BaseListView):
     permission_classes = ()
 
     pagination_class = VariableResultsSetPagination # TODO https://www.django-rest-framework.org/api-guide/pagination/#configuration
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = OccurrenceCategory.objects.all()
+
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset = queryset.filter(name=name)
+
+        return queryset
 
     def get(self, request):
         return super().get(request)
