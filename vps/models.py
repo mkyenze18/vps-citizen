@@ -89,6 +89,9 @@ class Occurrence(models.Model):
     is_closed = models.BooleanField(default=False)
     posted_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f'{self.id} ({self.ob_no})'
+
 class OccurrenceDetail(models.Model):
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='details')
     category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
