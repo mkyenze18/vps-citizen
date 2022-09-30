@@ -61,6 +61,10 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.WARNING(f'  ++ Reporter {reporter.id} deleted'))
                     reporter.delete()
 
+                for reporter in occurrence.unregistered_reporters.all():
+                    self.stdout.write(self.style.WARNING(f'  ++ Unregistered reporter {reporter.id} deleted'))
+                    reporter.delete()
+
                 self.stdout.write(self.style.NOTICE(f'-- {occurrence.id} : {occurrence.ob_no} deleted'))
                 occurrence.delete()
 
