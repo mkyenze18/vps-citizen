@@ -131,6 +131,13 @@ urlpatterns = [
         views.ReporterDetailView.as_view(), 
         name=f'{pre}-reporter-detail'),
 
+    path("unregistered-reporters", 
+        views.UnregisteredReporterListView.as_view(), 
+        name=f'{pre}-unregistered-reporter-list'),
+    path("unregistered-reporters/<int:pk>", 
+        views.UnregisteredReporterDetailView.as_view(), 
+        name=f'{pre}-unregistered-reporter-detail'),
+
     # ! Focus on arrest module
     path("police-cells", 
         views.PoliceCellListView.as_view(), 

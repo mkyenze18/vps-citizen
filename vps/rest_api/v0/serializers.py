@@ -41,7 +41,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
-    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
+    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
     PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
@@ -161,6 +161,20 @@ class ReporterSerializer(BaseModelSerializer):
         model = Reporter
         fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email_address',
         'county_of_residence', 'sub_county_of_residence']
+
+class UnregisteredReporterSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = UnregisteredReporter
+        fields = ['id',
+        'id_no', 'passport_no', 'first_name', 'middle_name', 'last_name',
+        'gender', 'nationality', 'county_of_birth', 'district_of_birth',
+        'division_of_birth', 'location_of_birth', 'date_of_birth',
+        'occurrence', 'phone_number', 'email_address',
+        'county_of_residence', 'sub_county_of_residence', 'constituency_of_residence',
+        'ward_of_residence', 'comments']
 
 # ! Focus on arrest module
 class PoliceCellSerializer(BaseModelSerializer):

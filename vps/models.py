@@ -102,6 +102,35 @@ class Reporter(models.Model):
     county_of_residence = models.CharField(max_length=100)
     sub_county_of_residence = models.CharField(max_length=100)
 
+class UnregisteredReporter(models.Model):
+    id_no = models.CharField(max_length=100, blank=True) # ! should be unique?
+    passport_no = models.CharField(max_length=100, blank=True)
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100)
+    gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
+    nationality = models.ForeignKey(Country, on_delete=models.PROTECT)
+    county_of_birth = models.CharField(max_length=30, blank=True)
+    district_of_birth = models.CharField(max_length=30, blank=True)
+    division_of_birth = models.CharField(max_length=30, blank=True)
+    location_of_birth = models.CharField(max_length=30, blank=True)
+    date_of_birth = models.DateTimeField(null=True, blank=True)
+
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='unregistered_reporters')
+    phone_number = models.CharField(max_length=30, blank=True)
+    email_address = models.EmailField(blank=True)
+    county_of_residence = models.CharField(max_length=100, blank=True)
+    sub_county_of_residence = models.CharField(max_length=100, blank=True)
+    constituency_of_residence = models.CharField(max_length=100, blank=True)
+    ward_of_residence = models.CharField(max_length=100, blank=True)
+    comments = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
 class OccurrenceCounter(models.Model):
     ob_no = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True, unique=True)

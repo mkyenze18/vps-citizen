@@ -122,7 +122,7 @@ from django.conf import settings
 
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
-    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter,
+    OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
     PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
@@ -134,7 +134,7 @@ from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, U
     CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
-    OccurrenceDetailSerializer, ReporterSerializer,
+    OccurrenceDetailSerializer, ReporterSerializer, UnregisteredReporterSerializer,
     PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
@@ -903,6 +903,52 @@ class ReporterDetailView(BaseDetailView):
     model = Reporter
     serializer_class = ReporterSerializer
     read_serializer_class = ReporterSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class UnregisteredReporterListView(BaseListView):
+    """
+    List all items, or create a new item.
+    """
+    model = UnregisteredReporter
+    serializer_class = UnregisteredReporterSerializer
+    read_serializer_class = UnregisteredReporterSerializer
+    permission_classes = ()
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = UnregisteredReporter.objects.all()
+        occurrence = self.request.query_params.get('occurrence')
+        if occurrence is not None:
+            queryset = queryset.filter(occurrence=occurrence)
+
+        return queryset
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class UnregisteredReporterDetailView(BaseDetailView):
+    """
+    Retrieve , updates and delete an item
+    """
+    model = UnregisteredReporter
+    serializer_class = UnregisteredReporterSerializer
+    read_serializer_class = UnregisteredReporterSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1728,6 +1774,7 @@ def api_root(request, format=None):
         'occurrences': reverse(f'{app_name}:{pre}-occurrence-list', request=request, format=format),
         'occurrences details': reverse(f'{app_name}:{pre}-occurrence-detail-list', request=request, format=format),
         'reporters': reverse(f'{app_name}:{pre}-reporter-list', request=request, format=format),
+        'unregistered-reporters': reverse(f'{app_name}:{pre}-unregistered-reporter-list', request=request, format=format),
 
         # ! Focus on arrest module
         'ARREST' : '================',
