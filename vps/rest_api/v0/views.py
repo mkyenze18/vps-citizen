@@ -704,6 +704,8 @@ class OccurrenceCategoryInputListView(BaseListView):
     # ordering_fields = ['order']
     # ordering = ['order'] # https://www.django-rest-framework.org/api-guide/filtering/#specifying-a-default-ordering
 
+    pagination_class = VariableResultsSetPagination # TODO https://www.django-rest-framework.org/api-guide/pagination/#configuration
+
     # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
     def get_queryset(self):
         """
