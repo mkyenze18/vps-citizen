@@ -1053,7 +1053,11 @@ def occurrence_emailAbstract(request, pk, format=None):
 
         reporters = instance.reporters.all()
         reporters_email_array = list(map(lambda recipient: recipient.email_address, reporters))
-        recipient_list_email = reporters_email_array
+
+        unregistered_reporters = instance.unregistered_reporters.all()
+        unregistered_reporters_email_array = list(map(lambda recipient: recipient.email_address, unregistered_reporters))
+
+        recipient_list_email = reporters_email_array + unregistered_reporters_email_array
         
 #         message1 = (subject, message, 'not-reply@task_manager.vps', recipient_list_email)
 #         send_mass_mail((message1,), fail_silently=False)
