@@ -100,10 +100,10 @@ class OccurrenceDetail(models.Model):
 class Reporter(models.Model):
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='reporters')
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
-    phone_number = models.CharField(max_length=30)
+    phone_number = models.CharField(max_length=30, blank=True)
     email_address = models.EmailField(blank=True)
-    county_of_residence = models.CharField(max_length=100)
-    sub_county_of_residence = models.CharField(max_length=100)
+    county_of_residence = models.CharField(max_length=100, blank=True)
+    sub_county_of_residence = models.CharField(max_length=100, blank=True)
 
 class UnregisteredReporter(models.Model):
     id_no = models.CharField(max_length=100, blank=True) # ! should be unique?
