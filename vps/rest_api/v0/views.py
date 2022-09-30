@@ -214,6 +214,20 @@ class GenderListView(BaseListView):
     read_serializer_class = GenderSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Gender.objects.all()
+
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset = queryset.filter(name=name)
+
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
@@ -248,6 +262,20 @@ class CountryListView(BaseListView):
     serializer_class = CountrySerializer
     read_serializer_class = CountrySerializer
     permission_classes = ()
+
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Country.objects.all()
+
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset = queryset.filter(name=name)
+
+        return queryset
 
     def get(self, request):
         return super().get(request)
