@@ -1824,7 +1824,6 @@ def api_root(request, format=None):
         'occurrences details': reverse(f'{app_name}:{pre}-occurrence-detail-list', request=request, format=format),
         'reporters': reverse(f'{app_name}:{pre}-reporter-list', request=request, format=format),
         'unregistered-reporters': reverse(f'{app_name}:{pre}-unregistered-reporter-list', request=request, format=format),
-        'sync occurrence': reverse(f'{app_name}:{pre}-occurrence-sync', request=request, format=format),
 
         # ! Focus on arrest module
         'ARREST' : '================',
