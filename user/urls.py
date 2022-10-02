@@ -52,5 +52,5 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 # https://www.django-rest-framework.org/api-guide/authentication/#generating-tokens
 from rest_framework.authtoken import views
 urlpatterns += [
-    path('api-token-auth/', views.obtain_auth_token)
+    path('api-token-auth/', views.obtain_auth_token, name='token-auth')
 ]

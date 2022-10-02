@@ -1803,6 +1803,10 @@ def api_root(request, format=None):
     return Response({
         'swagger': reverse(f'{app_name}:{pre}-swagger', request=request, format=format),
 
+        'Login & Registration' : '================',
+        'Token Auth': reverse(f'user:token-auth', request=request, format=format),
+
+        'Core System' : '================',
         'users': reverse(f'{app_name}:{pre}-user-list', request=request, format=format),
 
         'genders': reverse(f'{app_name}:{pre}-gender-list', request=request, format=format),
@@ -1820,6 +1824,7 @@ def api_root(request, format=None):
         'occurrences details': reverse(f'{app_name}:{pre}-occurrence-detail-list', request=request, format=format),
         'reporters': reverse(f'{app_name}:{pre}-reporter-list', request=request, format=format),
         'unregistered-reporters': reverse(f'{app_name}:{pre}-unregistered-reporter-list', request=request, format=format),
+        'sync occurrence': reverse(f'{app_name}:{pre}-occurrence-sync', request=request, format=format),
 
         # ! Focus on arrest module
         'ARREST' : '================',
