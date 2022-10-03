@@ -929,6 +929,10 @@ class ReporterListView(BaseListView):
         if occurrence is not None:
             queryset = queryset.filter(occurrence=occurrence)
 
+        id_no = self.request.query_params.get('id_no')
+        if id_no is not None:
+            queryset = queryset.filter(iprs_person__id_no=id_no)
+
         return queryset
 
     def get(self, request):
@@ -974,6 +978,10 @@ class UnregisteredReporterListView(BaseListView):
         occurrence = self.request.query_params.get('occurrence')
         if occurrence is not None:
             queryset = queryset.filter(occurrence=occurrence)
+
+        id_no = self.request.query_params.get('id_no')
+        if id_no is not None:
+            queryset = queryset.filter(iprs_person__id_no=id_no)
 
         return queryset
 
