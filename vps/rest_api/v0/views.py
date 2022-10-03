@@ -981,7 +981,7 @@ class UnregisteredReporterListView(BaseListView):
 
         id_no = self.request.query_params.get('id_no')
         if id_no is not None:
-            queryset = queryset.filter(iprs_person__id_no=id_no)
+            queryset = queryset.filter(id_no=id_no)
 
         return queryset
 
