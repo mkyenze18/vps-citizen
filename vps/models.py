@@ -59,7 +59,7 @@ class PoliceOfficer(models.Model):
     rank = models.ForeignKey(Rank, on_delete=models.PROTECT)
     # date_of_retirement = models.DateTimeField()
     # date_of_death = models.DateTimeField()
-    police_station = models.OneToOneField(PoliceStation, on_delete=models.PROTECT, null=True, blank=True)
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT, null=True, blank=True)
     mug_shot = models.ImageField(upload_to=policeOfficer_mugshot_directory_path, null=True, blank=True)
 
 # ! Focus on OB (report) module
