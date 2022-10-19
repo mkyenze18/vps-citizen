@@ -831,8 +831,8 @@ class OccurrenceListView(BaseListView):
                 counter = OccurrenceCounter.objects.get(date=date.today())
             except:
                 counter = OccurrenceCounter.objects.create()
-            # instance.ob_no = f'OB/{instance.id}/{instance.posted_date.strftime("%m/%d/%Y")}'
-            instance.ob_no = f'OB/{counter.ob_no + 1}/{instance.posted_date.strftime("%m/%d/%Y")}'
+            # instance.ob_no = f'OB/{instance.id}/{instance.posted_date.strftime("%d/%m/%Y")}'
+            instance.ob_no = f'OB/{counter.ob_no + 1}/{instance.posted_date.strftime("%d/%m/%Y")}'
             instance.save()
 
             counter.ob_no = counter.ob_no + 1
