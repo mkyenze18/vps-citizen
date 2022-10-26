@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     '147.182.236.178',
     'ie-vps-portal.ingenious.or.ke',
-    '*.virtualpolicestation.com',
+    '.virtualpolicestation.com', # + https://docs.djangoproject.com/en/4.1/ref/settings/#allowed-hosts
 ]
 
 # ? what is this
