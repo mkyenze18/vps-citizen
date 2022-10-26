@@ -111,7 +111,7 @@ def ad_hoc(request):
         import csv
         with open('eggs.csv', 'w', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
-                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                                    quotechar=',', quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow([
                 'Date',
                 'Station',
