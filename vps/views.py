@@ -94,6 +94,41 @@ def occurrence_viewAbstract(request, pk, format=None):
     response = FileResponse(open(file_name, 'rb'))
     return response
 
+from django.http import JsonResponse # + https://docs.djangoproject.com/en/4.1/ref/request-response/#id5
+
+def ad_hoc(request):
+    report_type = request.GET.get('type')
+    report_format = request.GET.get('format')
+    
+    if not report_type:
+        return JsonResponse({'message': 'type is required'})
+
+    # if not report_format:
+    #     return JsonResponse({'message': 'format is required'})
+
+    if report_type == 'occurrence':
+        # + https://docs.python.org/3/library/csv.html#csv.writer
+        import csv
+        with open('eggs.csv', 'w', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=' ',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow([
+                'Date',
+                'Station',
+                'Division',
+                'Category'
+            ])
+            for occurrence in Occurrence.objects.all():
+                for detail in occurrence.details.all():
+                    spamwriter.writerow([
+                        occurrence.posted_date,
+                        occurrence.police_station.name,
+                        '',
+                        detail.category.name
+                    ])
+
+        return FileResponse(open('eggs.csv', 'rb'))
+
 # Country
 @login_required
 def countries(request):

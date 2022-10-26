@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('abstract/<int:pk>/view', views.occurrence_viewAbstract, name=f'view-abstract'),
+    path('ad_hoc', views.ad_hoc, name=f'ad_hoc'),
 
     # country
     path('countries', views.countries, name='countries'), #c[R]ud
