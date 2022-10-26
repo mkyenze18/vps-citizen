@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
     '192.168.1.55',
     '0.0.0.0',
     '147.182.236.178',
-    'ie-vps-portal.ingenious.or.ke'
+    'ie-vps-portal.ingenious.or.ke',
     '*.virtualpolicestation.com',
 ]
 
