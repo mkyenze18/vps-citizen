@@ -194,8 +194,8 @@ class Arrestee(models.Model):
     # remarks = models.TextField()
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='arrests')
     # age = models.IntegerField()
-    warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT, blank=True)
-    cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True)
+    warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT, blank=True, null=True)
+    cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True, null=True)
     posted_date = models.DateTimeField(auto_now_add=True)
 
 class Accomplice(models.Model):
