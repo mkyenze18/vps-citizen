@@ -197,6 +197,7 @@ class ArresteeSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
+        depth = 1
 
 class AccompliceSerializer(BaseModelSerializer):
     """
