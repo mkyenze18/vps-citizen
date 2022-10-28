@@ -158,7 +158,21 @@ urlpatterns = [
         name=f'{pre}-arrestee-list'), 
     path("arrestees/<int:pk>", 
         views.ArresteeDetailView.as_view(), 
-        name=f'{pre}-arrestee-details'), 
+        name=f'{pre}-arrestee-details'),
+
+    path("accomplices", 
+        views.AccompliceListView.as_view(), 
+        name=f'{pre}-accomplice-list'), 
+    path("accomplices/<int:pk>", 
+        views.AccompliceDetailView.as_view(), 
+        name=f'{pre}-accomplice-details'), 
+
+    path("gangs", 
+        views.GangListView.as_view(), 
+        name=f'{pre}-gang-list'), 
+    path("gangs/<int:pk>", 
+        views.GangDetailView.as_view(), 
+        name=f'{pre}-gang-details'), 
 
     path("next-of-keen", 
         views.NextofkeenListView.as_view(), 

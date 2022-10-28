@@ -1,7 +1,6 @@
 
 # TODO https://www.django-rest-framework.org/tutorial/1-serialization/#creating-a-serializer-class
 
-from xml.etree.ElementInclude import include
 from rest_framework import serializers
 # from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 
@@ -42,7 +41,8 @@ from django.contrib.auth.models import User
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_keen,
+    MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
 )
@@ -197,6 +197,20 @@ class ArresteeSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
+
+class AccompliceSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Accomplice
+
+class GangSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Gang
 
 class NextofkeenSerializer(BaseModelSerializer):
     """

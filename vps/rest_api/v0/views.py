@@ -123,7 +123,8 @@ from django.conf import settings
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Next_of_keen, MugShots, FingerPrints,
+    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_keen,
+    MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
     OccurrenceCounter
@@ -135,7 +136,8 @@ from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, U
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
     OccurrenceDetailSerializer, ReporterSerializer, UnregisteredReporterSerializer,
-    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeSerializer, NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
+    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeSerializer, AccompliceSerializer, GangSerializer,
+    NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
 )
@@ -1211,6 +1213,74 @@ class ArresteeDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 # ================================================
+class AccompliceListView(BaseListView):
+    """
+    List all accomplice, or create a new accomplice.
+    """
+    model = Accomplice
+    serializer_class = AccompliceSerializer
+    read_serializer_class = AccompliceSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class AccompliceDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an accomplice.
+    """
+    model = Accomplice
+    serializer_class = AccompliceSerializer
+    read_serializer_class = AccompliceSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
+class GangListView(BaseListView):
+    """
+    List all gang, or create a new gang.
+    """
+    model = Gang
+    serializer_class = GangSerializer
+    read_serializer_class = GangSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        return super().get(request)
+
+    def post(self, request):
+        return super().post(request)
+
+class GangDetailView(BaseDetailView):
+
+    """
+    Retrieve , updates and delete an gang.
+    """
+    model = Gang
+    serializer_class = GangSerializer
+    read_serializer_class = GangSerializer
+    permission_classes = ()
+
+    def get(self, request, pk=None):
+        return super().get(request, pk)
+
+    def put(self, request, pk=None):
+        return super().put(request, pk)
+
+    def delete(self, request, pk=None):
+        return super().delete(request, pk)
+# ================================================
 class NextofkeenListView(BaseListView):
     """
     List all Nextofkeen, or create a new Nextofkeen.
@@ -1838,6 +1908,8 @@ def api_root(request, format=None):
         'police cells': reverse(f'{app_name}:{pre}-police-cell-list', request=request, format=format),
         'warrants of arrest': reverse(f'{app_name}:{pre}-warrant-of-arrest-list', request=request, format=format),
         'arrestees': reverse(f'{app_name}:{pre}-arrestee-list', request=request, format=format),
+        'accomplices': reverse(f'{app_name}:{pre}-accomplice-list', request=request, format=format),
+        'gang': reverse(f'{app_name}:{pre}-gang-list', request=request, format=format),
         'next of keen': reverse(f'{app_name}:{pre}-next-of-keen-list', request=request, format=format),
         'mugshots': reverse(f'{app_name}:{pre}-mugshot-list', request=request, format=format),
         'fingerprints': reverse(f'{app_name}:{pre}-fingerprint-list', request=request, format=format),
