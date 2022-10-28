@@ -186,17 +186,17 @@ class Warrant_of_arrest(models.Model):
 
 class Arrestee(models.Model):
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
-    phone_number = models.CharField(max_length=100)
-    email = models.EmailField()
-    county_of_residence = models.CharField(max_length=100)
-    sub_county_of_residence = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+    county_of_residence = models.CharField(max_length=100, blank=True)
+    sub_county_of_residence = models.CharField(max_length=100, blank=True)
     # constituency_of_residence = models.CharField(max_length=100)
     # remarks = models.TextField()
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='arrests')
     # age = models.IntegerField()
-    warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT)
-    cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT)
-    posted_date = models.DateTimeField()
+    warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT, blank=True)
+    cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True)
+    posted_date = models.DateTimeField(auto_now_add=True)
 
 class Accomplice(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
