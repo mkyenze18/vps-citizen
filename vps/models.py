@@ -197,6 +197,8 @@ class Arrestee(models.Model):
     warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT, blank=True, null=True)
     cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True, null=True)
     arresting_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT, blank=True, null=True)
+    cell_type = models.CharField(max_length=30)
+    arrestee_condition = models.TextField(blank=True)
     posted_date = models.DateTimeField(auto_now_add=True)
 
 class Accomplice(models.Model):
