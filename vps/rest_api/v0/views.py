@@ -136,7 +136,7 @@ from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, U
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
     OccurrenceDetailSerializer, ReporterSerializer, UnregisteredReporterSerializer,
-    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeSerializer, AccompliceSerializer, GangSerializer,
+    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeReadSerializer, ArresteeWriteSerializer, AccompliceSerializer, GangSerializer,
     NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
@@ -1184,8 +1184,8 @@ class ArresteeListView(BaseListView):
     List all arrestee, or create a new arrestee.
     """
     model = Arrestee
-    serializer_class = ArresteeSerializer
-    read_serializer_class = ArresteeSerializer
+    serializer_class = ArresteeWriteSerializer
+    read_serializer_class = ArresteeReadSerializer
     permission_classes = ()
 
     def get(self, request):

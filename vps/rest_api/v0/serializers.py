@@ -191,13 +191,20 @@ class WarrantofarrestSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Warrant_of_arrest
 
-class ArresteeSerializer(BaseModelSerializer):
+class ArresteeReadSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
         depth = 1
+
+class ArresteeWriteSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Arrestee
 
 class AccompliceSerializer(BaseModelSerializer):
     """
