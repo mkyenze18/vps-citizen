@@ -1200,8 +1200,8 @@ class ArresteeDetailView(BaseDetailView):
     Retrieve , updates and delete an arrestee.
     """
     model = Arrestee
-    serializer_class = ArresteeSerializer
-    read_serializer_class = ArresteeSerializer
+    serializer_class = ArresteeWriteSerializer
+    read_serializer_class = ArresteeReadSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):
@@ -1286,8 +1286,8 @@ class NextofkeenListView(BaseListView):
     List all Nextofkeen, or create a new Nextofkeen.
     """
     model = Arrestee
-    serializer_class = ArresteeSerializer
-    read_serializer_class = ArresteeSerializer
+    serializer_class = NextofkeenSerializer
+    read_serializer_class = NextofkeenSerializer
     permission_classes = ()
 
     def get(self, request):
