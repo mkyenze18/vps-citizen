@@ -1188,6 +1188,37 @@ class ArresteeListView(BaseListView):
     read_serializer_class = ArresteeReadSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Arrestee.objects.all()
+        police_station = self.request.query_params.get('police_station')
+        if police_station is not None:
+            queryset = queryset.filter(police_station=police_station)
+
+        arresting_officer = self.request.query_params.get('arresting_officer')
+        if arresting_officer is not None:
+            queryset = queryset.filter(arresting_officer=arresting_officer)
+
+        ob_no = self.request.query_params.get('ob_no')
+        if ob_no is not None:
+            queryset = queryset.filter(occurrence__ob_no=ob_no)
+
+        id_no = self.request.query_params.get('id_no')
+        if id_no is not None:
+            queryset = queryset.filter(iprs_person__id_no=id_no)
+
+        is_closed = self.request.query_params.get('is_closed')
+        if is_closed is not None:
+            is_closed = is_closed.lower() in ['true',] # + https://stackoverflow.com/a/715455
+            queryset = queryset.filter(occurrence__is_closed=is_closed)
+
+        queryset = queryset.order_by('-id')
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
