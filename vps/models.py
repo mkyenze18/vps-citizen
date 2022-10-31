@@ -217,7 +217,7 @@ class Gang(models.Model):
 class Next_of_kin(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=30)
+    phone = models.CharField(max_length=30, blank=True)
     relationship = models.CharField(max_length=30)
 
 class MugShots(models.Model):
