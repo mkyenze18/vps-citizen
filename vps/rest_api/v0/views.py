@@ -1940,8 +1940,8 @@ def api_root(request, format=None):
         'warrants of arrest': reverse(f'{app_name}:{pre}-warrant-of-arrest-list', request=request, format=format),
         'arrestees': reverse(f'{app_name}:{pre}-arrestee-list', request=request, format=format),
         'accomplices': reverse(f'{app_name}:{pre}-accomplice-list', request=request, format=format),
-        'gang': reverse(f'{app_name}:{pre}-gang-list', request=request, format=format),
-        'next of keen': reverse(f'{app_name}:{pre}-next-of-keen-list', request=request, format=format),
+        'gangs': reverse(f'{app_name}:{pre}-gang-list', request=request, format=format),
+        'next of keens': reverse(f'{app_name}:{pre}-next-of-keen-list', request=request, format=format),
         'mugshots': reverse(f'{app_name}:{pre}-mugshot-list', request=request, format=format),
         'fingerprints': reverse(f'{app_name}:{pre}-fingerprint-list', request=request, format=format),
 

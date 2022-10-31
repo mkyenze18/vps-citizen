@@ -203,16 +203,16 @@ class Arrestee(models.Model):
 
 class Accomplice(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
-    name = models.CharField(max_length=100)
-    alias = models.CharField(max_length=100)
-    residence = models.CharField(max_length=100)
-    remarks = models.TextField()
+    name = models.CharField(max_length=100, blank=True)
+    alias = models.CharField(max_length=100, blank=True)
+    residence = models.CharField(max_length=100, blank=True)
+    remarks = models.TextField(blank=True)
 
 class Gang(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    remarks = models.TextField()
+    location = models.CharField(max_length=100, blank=True)
+    remarks = models.TextField(blank=True)
 
 class Next_of_keen(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
