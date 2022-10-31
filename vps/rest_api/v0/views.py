@@ -1330,7 +1330,7 @@ class NextofkinListView(BaseListView):
     """
     List all next of kins, or create a new next of kin,.
     """
-    model = Arrestee
+    model = Next_of_kin
     serializer_class = NextofkinSerializer
     read_serializer_class = NextofkinSerializer
     permission_classes = ()
