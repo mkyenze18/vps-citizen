@@ -174,12 +174,12 @@ urlpatterns = [
         views.GangDetailView.as_view(), 
         name=f'{pre}-gang-details'), 
 
-    path("next-of-keen", 
+    path("next-of-kins", 
         views.NextofkeenListView.as_view(), 
-        name=f'{pre}-next-of-keen-list'), 
-    path("next-of-keen/<int:pk>", 
+        name=f'{pre}-next-of-kin-list'), 
+    path("next-of-kins/<int:pk>", 
         views.NextofkeenDetailView.as_view(), 
-        name=f'{pre}-next-of-keen-details'),
+        name=f'{pre}-next-of-kin-details'),
 
     path("mugshots", 
         views.MugShotsListView.as_view(), 

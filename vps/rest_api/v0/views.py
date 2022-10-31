@@ -1955,7 +1955,7 @@ def api_root(request, format=None):
         'arrestees': reverse(f'{app_name}:{pre}-arrestee-list', request=request, format=format),
         'accomplices': reverse(f'{app_name}:{pre}-accomplice-list', request=request, format=format),
         'gangs': reverse(f'{app_name}:{pre}-gang-list', request=request, format=format),
-        'next of keens': reverse(f'{app_name}:{pre}-next-of-keen-list', request=request, format=format),
+        'next of kins': reverse(f'{app_name}:{pre}-next-of-kin-list', request=request, format=format),
         'mugshots': reverse(f'{app_name}:{pre}-mugshot-list', request=request, format=format),
         'fingerprints': reverse(f'{app_name}:{pre}-fingerprint-list', request=request, format=format),
 
