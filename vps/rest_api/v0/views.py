@@ -1335,6 +1335,20 @@ class NextofkinListView(BaseListView):
     read_serializer_class = NextofkinSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Accomplice.objects.all()
+        arrestee = self.request.query_params.get('arrestee')
+        if arrestee is not None:
+            queryset = queryset.filter(arrestee=arrestee)
+
+        queryset = queryset.order_by('-id')
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
