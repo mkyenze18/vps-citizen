@@ -1341,7 +1341,7 @@ class NextofkinListView(BaseListView):
         Optionally restricts the returned purchases to a given user,
         by filtering against a `username` query parameter in the URL.
         """
-        queryset = Accomplice.objects.all()
+        queryset = Next_of_kin.objects.all()
         arrestee = self.request.query_params.get('arrestee')
         if arrestee is not None:
             queryset = queryset.filter(arrestee=arrestee)
