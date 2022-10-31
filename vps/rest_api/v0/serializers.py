@@ -41,7 +41,7 @@ from django.contrib.auth.models import User
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_keen,
+    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
@@ -220,12 +220,12 @@ class GangSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Gang
 
-class NextofkeenSerializer(BaseModelSerializer):
+class NextofkinSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
-        model = Next_of_keen
+        model = Next_of_kin
 
 class MugShotsSerializer(BaseModelSerializer):
     """

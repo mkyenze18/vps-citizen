@@ -123,7 +123,7 @@ from django.conf import settings
 from vps.models import (
     Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_keen,
+    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
@@ -137,7 +137,7 @@ from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, U
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
     OccurrenceDetailSerializer, ReporterSerializer, UnregisteredReporterSerializer,
     PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeReadSerializer, ArresteeWriteSerializer, AccompliceSerializer, GangSerializer,
-    NextofkeenSerializer, MugShotsSerializer, FingerPrintsSerializer,
+    NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
 )
@@ -1326,13 +1326,13 @@ class GangDetailView(BaseDetailView):
     def delete(self, request, pk=None):
         return super().delete(request, pk)
 # ================================================
-class NextofkeenListView(BaseListView):
+class NextofkinListView(BaseListView):
     """
-    List all Nextofkeen, or create a new Nextofkeen.
+    List all next of kins, or create a new next of kin,.
     """
     model = Arrestee
-    serializer_class = NextofkeenSerializer
-    read_serializer_class = NextofkeenSerializer
+    serializer_class = NextofkinSerializer
+    read_serializer_class = NextofkinSerializer
     permission_classes = ()
 
     def get(self, request):
@@ -1341,14 +1341,14 @@ class NextofkeenListView(BaseListView):
     def post(self, request):
         return super().post(request)
 
-class NextofkeenDetailView(BaseDetailView):
+class NextofkinDetailView(BaseDetailView):
 
     """
-    Retrieve , updates and delete an Nextofkeen.
+    Retrieve , updates and delete an next of kin.
     """
-    model = Next_of_keen
-    serializer_class = NextofkeenSerializer
-    read_serializer_class = NextofkeenSerializer
+    model = Next_of_kin
+    serializer_class = NextofkinSerializer
+    read_serializer_class = NextofkinSerializer
     permission_classes = ()
 
     def get(self, request, pk=None):

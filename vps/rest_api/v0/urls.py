@@ -175,10 +175,10 @@ urlpatterns = [
         name=f'{pre}-gang-details'), 
 
     path("next-of-kins", 
-        views.NextofkeenListView.as_view(), 
+        views.NextofkinListView.as_view(), 
         name=f'{pre}-next-of-kin-list'), 
     path("next-of-kins/<int:pk>", 
-        views.NextofkeenDetailView.as_view(), 
+        views.NextofkinDetailView.as_view(), 
         name=f'{pre}-next-of-kin-details'),
 
     path("mugshots", 

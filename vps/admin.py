@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (Gender, Country, IPRS_Person, Rank, PoliceStation, PoliceOfficer,
 OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-PoliceCell, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_keen, MugShots, FingerPrints,
+PoliceCell, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin, MugShots, FingerPrints,
 EvidenceCategory, EvidenceItemCategory, Evidence, EvidenceItemImage,
 PermissionModule, Permission
 )
@@ -33,7 +33,7 @@ admin.site.register(Warrant_of_arrest)
 admin.site.register(Arrestee)
 admin.site.register(Accomplice)
 admin.site.register(Gang)
-admin.site.register(Next_of_keen)
+admin.site.register(Next_of_kin)
 admin.site.register(MugShots)
 admin.site.register(FingerPrints)
 

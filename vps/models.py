@@ -214,7 +214,7 @@ class Gang(models.Model):
     location = models.CharField(max_length=100, blank=True)
     remarks = models.TextField(blank=True)
 
-class Next_of_keen(models.Model):
+class Next_of_kin(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=30)
