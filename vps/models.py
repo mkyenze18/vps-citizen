@@ -217,7 +217,7 @@ class Gang(models.Model):
     remarks = models.TextField(blank=True)
 
 class Next_of_kin(models.Model):
-    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
+    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='next_of_kins')
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=30, blank=True)
     relationship = models.CharField(max_length=30)
