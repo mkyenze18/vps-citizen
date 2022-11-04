@@ -217,7 +217,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
         depth = 2
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
         'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
-        'iprs_person', 'occurrence', 'warrant', 'cell', 'arresting_officer', 'accomplices', 'next_of_kins']
+        'iprs_person', 'occurrence', 'warrant', 'cell', 'arresting_officer', 'accomplices', 'gangs', 'next_of_kins']
 
 class ArresteeWriteSerializer(BaseModelSerializer):
     """
