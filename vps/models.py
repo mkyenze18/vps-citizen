@@ -184,6 +184,12 @@ class PoliceCell(models.Model):
 class Warrant_of_arrest(models.Model):
     reference_no = models.CharField(max_length=30)
 
+class Gang(models.Model):
+    # arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, blank=True)
+    remarks = models.TextField(blank=True)
+
 class Arrestee(models.Model):
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=100, blank=True)
@@ -202,18 +208,13 @@ class Arrestee(models.Model):
     date_of_arrest = models.DateField()
     time_of_arrest = models.TimeField(blank=True, null=True)
     posted_date = models.DateTimeField(auto_now_add=True)
+    gangs = models.ManyToManyField(Gang)
 
 class Accomplice(models.Model):
-    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
+    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='accomplices')
     name = models.CharField(max_length=100, blank=True)
     alias = models.CharField(max_length=100, blank=True)
     residence = models.CharField(max_length=100, blank=True)
-    remarks = models.TextField(blank=True)
-
-class Gang(models.Model):
-    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100, blank=True)
     remarks = models.TextField(blank=True)
 
 class Next_of_kin(models.Model):

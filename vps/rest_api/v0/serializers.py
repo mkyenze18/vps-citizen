@@ -191,6 +191,13 @@ class WarrantofarrestSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Warrant_of_arrest
 
+class AccompliceSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Accomplice
+
 class NextofkinSerializer(BaseModelSerializer):
     """
     """
@@ -202,6 +209,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
     """
     """
     # TODO https://www.django-rest-framework.org/api-guide/relations/#example
+    accomplices = AccompliceSerializer(many=True, read_only=True)
     next_of_kins = NextofkinSerializer(many=True, read_only=True)
 
     class Meta(BaseModelSerializer.Meta):
@@ -209,7 +217,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
         depth = 2
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
         'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
-        'iprs_person', 'occurrence', 'warrant', 'cell', 'arresting_officer', 'next_of_kins']
+        'iprs_person', 'occurrence', 'warrant', 'cell', 'arresting_officer', 'accomplices', 'next_of_kins']
 
 class ArresteeWriteSerializer(BaseModelSerializer):
     """
@@ -217,13 +225,6 @@ class ArresteeWriteSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
-
-class AccompliceSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = Accomplice
 
 class GangSerializer(BaseModelSerializer):
     """
