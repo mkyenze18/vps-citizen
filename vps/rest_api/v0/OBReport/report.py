@@ -33,12 +33,12 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 
 	Report.append(Paragraph('<b>REPORT OCCURENCE FROM POLICE RECORDS</b>', styles["Left"]))
 	Report.append(Spacer(1, 12))    
-	FULL_LENGTH_CHARACTER_COUNT = 130
+	# FULL_LENGTH_CHARACTER_COUNT = 130
 	reporters = resource.reporters.all()
 	for reporter in reporters:
 		name = reporter.iprs_person.get_full_name()
-		for space in range(FULL_LENGTH_CHARACTER_COUNT - len(name)):
-			name += '&nbsp'
+		# for space in range(FULL_LENGTH_CHARACTER_COUNT - len(name)):
+			# name += '&nbsp'
 
 		biodata = {
 			'name': f'<u>{name}</u>',    
@@ -48,17 +48,17 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 		}
 
 		for key, value in biodata.items():
-			Report.append(Paragraph(f'<b>{key.upper()}</b>: {value}'))
+			Report.append(Paragraph(f' {key.upper()} : {value}'))
 			Report.append(Spacer(1, 20))
 		# Report.append(Paragraph(f"<b>Name :</b> {reporter.name}", styles["Left"]))
-		Report.append(Paragraph(f'<b>COUNTY OF:</b>&nbsp&nbsp <u>{reporter.county_of_residence} ' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp' f'<b>EMAIL ADDRESS :</b>&nbsp&nbsp <u>{reporter.email_address} &nbsp&nbsp</u>', styles["Left"]))
+		Report.append(Paragraph(f' COUNTY OF: &nbsp&nbsp <u>{reporter.county_of_residence} ' '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' f' EMAIL ADDRESS : &nbsp&nbsp <u>{reporter.email_address} &nbsp&nbsp</u>', styles["Left"]))
 		Report.append(Spacer(1, 20))
-		Report.append(Paragraph(f'<b>SUB COUNTY:</b>&nbsp&nbsp<u> {reporter.sub_county_of_residence}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp&nbsp&nbsp' f'<b>PHONE NUMBER:</b> &nbsp&nbsp<u>{reporter.phone_number}&nbsp&nbsp</u>', styles["Left"]))
+		Report.append(Paragraph(f' SUB COUNTY: &nbsp&nbsp<u> {reporter.sub_county_of_residence}' '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' f' PHONE NUMBER: &nbsp&nbsp<u>{reporter.phone_number}&nbsp&nbsp</u>', styles["Left"]))
 		Report.append(Spacer(1, 20))
 
-	Report.append(Paragraph(f'<b>OCCURRENCE WAS REPORTED AT:</b>&nbsp&nbsp<u> {resource.location}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>' ))
+	Report.append(Paragraph(f' OCCURRENCE WAS REPORTED AT: &nbsp&nbsp<u> {resource.location}' '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>' ))
 	Report.append(Spacer(1, 20))
-	Report.append(Paragraph(f'<b>POLICE STATION:</b>&nbsp&nbsp<u> {resource.police_station.name}, {resource.police_station.location}</u>'))
+	Report.append(Paragraph(f' POLICE STATION: &nbsp&nbsp<u> {resource.police_station.name}, {resource.police_station.location}</u>'))
 	Report.append(Spacer(1, 20))
 
 	# details = resource.details.get()
@@ -66,8 +66,9 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 
 	for detail in details:
 		# Report.append(Paragraph(f"<b>INVOLVING:</b> {details.details['entryOne']}", styles["Left"]))
-		Report.append(Paragraph(f"<b>INVOLVING:</b> &nbsp&nbsp<u>{detail.category.name}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>", styles["Left"]))
-		Report.append(Paragraph(f'<b></b> <u>{resource.narrative}</u>'))
+		Report.append(Paragraph(f" INVOLVING:  &nbsp&nbsp<u>{detail.category.name}&nbsp&nbsp</u>", styles["Left"]))
+		Report.append(Spacer(1, 5))
+		Report.append(Paragraph(f' NARATIVE : <u>{resource.narrative}</u>'))
 		Report.append(Spacer(1, 20))
 		
 
@@ -77,22 +78,23 @@ def generate_report(file_name, resource, police_officer, url, **kwargs):
 		# Report.append(Paragraph(f'<div><br></br><br></br></div>'))
 		# # Report.append(Paragraph(str(detail.details), styles["Left"]))
 
-		Report.append(Paragraph('<b>DETAILS</b>', styles["Left"]))
+		Report.append(Paragraph(' DETAILS ', styles["Left"]))
+		Report.append(Spacer(1, 5))
 		# Report.append(Paragraph(f'<u>{detail.details}</u>'))
 		for name in detail.details:
 			formated_name = name.replace('_', ' ').title()
-			Report.append(Paragraph(f'<b>{formated_name}</b> <u>{detail.details[name]}</u>'))
+			Report.append(Paragraph(f' {formated_name}  <u>{detail.details[name]}</u>'))
 			Report.append(Paragraph(f'<div><br></br></div>'))
 		Report.append(Paragraph(f'<div><br></br><br></br></div>'))
 
 	Report.append(Spacer(1, 50))
 
-	Report.append(Paragraph(f'<b>DATE:</b>&nbsp&nbsp<u> {datetime.now().strftime("%a %d %B, %Y  %X")}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp' f'<b>OB NUMBER</b>: &nbsp&nbsp<u>{resource.ob_no}&nbsp&nbsp&nbsp</u>'))
+	Report.append(Paragraph(f' DATE: &nbsp&nbsp<u> {datetime.now().strftime("%a %d %B, %Y  %X")}' '<div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></u>&nbsp&nbsp&nbsp' f' OB NUMBER : &nbsp&nbsp<u>{resource.ob_no}&nbsp&nbsp&nbsp</u>'))
 	Report.append(Spacer(1, 30))
 
 	# Report.append(Spacer(1, 12))
 	full_name = police_officer.iprs_person.get_full_name()
-	Report.append(Paragraph(f'<b>OFFICER NAME:</b> &nbsp&nbsp<u>{full_name}&nbsp&nbsp&nbsp&nbsp</u>'))
+	Report.append(Paragraph(f' OFFICER NAME:  &nbsp&nbsp<u>{full_name}&nbsp&nbsp&nbsp&nbsp</u>'))
 	# Report.append(Spacer(1, 20))
 	# Report.append(Paragraph(f'<b>OFFICER SIGNATURE:</b> <u>{office_signature}</u>'))
 
