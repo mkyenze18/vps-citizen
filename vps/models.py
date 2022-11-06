@@ -211,7 +211,7 @@ class Arrestee(models.Model):
     date_of_arrest = models.DateField()
     time_of_arrest = models.TimeField(blank=True, null=True)
     posted_date = models.DateTimeField(auto_now_add=True)
-    gangs = models.ManyToManyField(Gang)
+    gangs = models.ManyToManyField(Gang, blank=True)
 
 class Accomplice(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='accomplices')
