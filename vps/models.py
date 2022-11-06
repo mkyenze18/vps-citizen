@@ -190,6 +190,9 @@ class Gang(models.Model):
     location = models.CharField(max_length=100, blank=True)
     remarks = models.TextField(blank=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 class Arrestee(models.Model):
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=100, blank=True)
@@ -217,11 +220,17 @@ class Accomplice(models.Model):
     residence = models.CharField(max_length=100, blank=True)
     remarks = models.TextField(blank=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 class Next_of_kin(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='next_of_kins')
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=30, blank=True)
     relationship = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.name
 
 class MugShots(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
