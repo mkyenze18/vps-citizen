@@ -233,7 +233,7 @@ class Next_of_kin(models.Model):
         return self.name
 
 class MugShots(models.Model):
-    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
+    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='mugshots')
     left_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
     front_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
     right_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
