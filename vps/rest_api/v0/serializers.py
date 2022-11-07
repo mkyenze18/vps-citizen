@@ -215,6 +215,11 @@ class MugShotsSerializer(BaseModelSerializer):
 class ArresteeReadSerializer(BaseModelSerializer):
     """
     """
+    # TODO https://www.django-rest-framework.org/api-guide/relations/#example
+    warrants = WarrantofarrestSerializer(many=True, read_only=True)
+    accomplices = AccompliceSerializer(many=True, read_only=True)
+    next_of_kins = NextofkinSerializer(many=True, read_only=True)
+    # mugshots = MugShotsSerializer(many=True, read_only=True)
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
