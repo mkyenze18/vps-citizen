@@ -1301,6 +1301,24 @@ class GangListView(BaseListView):
     read_serializer_class = GangSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Gang.objects.all()
+        arrestee = self.request.query_params.get('arrestee')
+        if arrestee is not None:
+            queryset = queryset.filter(arrestee=arrestee)
+
+        name = self.request.query_params.get('name')
+        if name is not None:
+            queryset = queryset.filter(name=name)
+
+        queryset = queryset.order_by('-id')
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
