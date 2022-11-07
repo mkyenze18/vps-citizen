@@ -203,7 +203,7 @@ class Arrestee(models.Model):
     # remarks = models.TextField()
     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='arrests')
     # age = models.IntegerField()
-    warrant = models.ForeignKey(Warrant_of_arrest, on_delete=models.PROTECT, blank=True, null=True)
+    warrants = models.ManyToManyField(Warrant_of_arrest, blank=True)
     cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True, null=True)
     arresting_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT, blank=True, null=True)
     cell_type = models.CharField(max_length=30)
