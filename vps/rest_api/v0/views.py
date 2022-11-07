@@ -1154,6 +1154,24 @@ class WarrantofarrestListView(BaseListView):
     read_serializer_class = WarrantofarrestSerializer
     permission_classes = ()
 
+    # TODO https://www.django-rest-framework.org/api-guide/filtering/#filtering-against-query-parameters
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Warrant_of_arrest.objects.all()
+        arrestee = self.request.query_params.get('arrestee')
+        if arrestee is not None:
+            queryset = queryset.filter(arrestee=arrestee)
+
+        reference_no = self.request.query_params.get('reference_no')
+        if reference_no is not None:
+            queryset = queryset.filter(reference_no=reference_no)
+
+        queryset = queryset.order_by('-id')
+        return queryset
+
     def get(self, request):
         return super().get(request)
 
