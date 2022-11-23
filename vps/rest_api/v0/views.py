@@ -420,6 +420,8 @@ class IPRS_PersonList(generics.ListCreateAPIView):
         queryset = IPRS_Person.objects.all()
 
         country_isoCode = self.request.query_params.get('country_isoCode', None)
+        if country_isoCode:
+            queryset = queryset.filter(nationality__iso_code=country_isoCode)
 
         id_no = self.request.query_params.get('id_no', None)
         if id_no:
