@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ['id', 'name', 'nationality']
+        fields = ['id', 'name', 'nationality', 'iso_code']
 
 class GenderSerializer(serializers.ModelSerializer):
     # TODO https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
