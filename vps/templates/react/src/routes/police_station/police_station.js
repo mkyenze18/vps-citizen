@@ -443,7 +443,7 @@ export default function Police_Station(props) {
               <div className="form-group row">
                 <div className="col-md-9 col-sm-9  offset-md-3">
                   <button className="btn btn-danger" type="button" ref={deleteButton} onClick={() => setModalShow(true)} disabled={!isLoaded}>Delete</button>
-                  <button type="button" className="btn btn-primary" ref={cancelButton} onClick={() => {resetForm()}} disabled={!isLoaded}>Cancel</button>
+                  <button type="button" className="btn btn-primary" ref={cancelButton} onClick={() => {resetForm()}} disabled={!isLoaded}>Add new</button>
                   <button type="submit" className="btn btn-success" ref={submitButton} disabled={!isLoaded}>
                     {!isLoaded &&
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
