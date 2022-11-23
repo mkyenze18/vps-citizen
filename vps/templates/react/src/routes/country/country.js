@@ -105,7 +105,8 @@ export default function Country(props) {
   const idInput = useRef(null);
   const nameInput = useRef(null);
   const nationalityInput = useRef(null);
-  const inputRefsArray = [nameInput, nationalityInput]
+  const isoCodeInput = useRef(null);
+  const inputRefsArray = [nameInput, nationalityInput, isoCodeInput]
   
   const deleteButton = useRef(null);
   const cancelButton = useRef(null);
@@ -181,6 +182,7 @@ export default function Country(props) {
       idInput.current.value = result["id"]
       nameInput.current.value = result["name"]
       nationalityInput.current.value = result["nationality"]
+      isoCodeInput.current.value = result["iso_code"]
 
       deleteButton.current.disabled = false
       cancelButton.current.disabled = false
@@ -316,6 +318,7 @@ export default function Country(props) {
     idInput.current.value = ""
     nameInput.current.value = ""
     nationalityInput.current.value = ""
+    isoCodeInput.current.value = ""
 
     deleteButton.current.disabled = true
     submitButton.current.disabled = false
@@ -340,10 +343,12 @@ export default function Country(props) {
     const id = idInput.current.value;
     const name = nameInput.current.value;
     const nationality = nationalityInput.current.value;
+    const isoCode = isoCodeInput.current.value;
 
     const data = {
       'name': name,
       'nationality': nationality,
+      'iso_code': isoCode,
     }
 
     if(selectedResource) {
@@ -395,6 +400,13 @@ export default function Country(props) {
                 <label className="col-form-label col-md-3 col-sm-3 ">Nationality</label>
                 <div className="col-md-9 col-sm-9 ">
                   <input type="text" className="form-control" placeholder="nationality" ref={nationalityInput} required="required"/>
+                </div>
+              </div>
+
+              <div className="field item form-group">
+                <label className="col-form-label col-md-3 col-sm-3 ">ISO Code</label>
+                <div className="col-md-9 col-sm-9 ">
+                  <input type="text" className="form-control" placeholder="iso code" ref={isoCodeInput} required="required"/>
                 </div>
               </div>
 
