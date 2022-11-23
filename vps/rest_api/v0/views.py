@@ -419,13 +419,15 @@ class IPRS_PersonList(generics.ListCreateAPIView):
         """
         queryset = IPRS_Person.objects.all()
 
+        country_isoCode = self.request.query_params.get('country_isoCode', None)
+
         id_no = self.request.query_params.get('id_no', None)
         if id_no:
             # queryset = queryset.filter(id_no__icontains=id_no)
             queryset = queryset.filter(id_no=id_no)
             if queryset.count() < 1:
                 try:
-                    success = save_iprs_person_from_smile_identity(self.request, id_no, "NATIONAL_ID")
+                    success = save_iprs_person_from_smile_identity(self.request, id_no, "NATIONAL_ID", country_isoCode)
                     if success:
                         queryset = IPRS_Person.objects.filter(id_no__icontains=id_no)
                 except ValueError:
@@ -443,7 +445,7 @@ class IPRS_PersonList(generics.ListCreateAPIView):
             queryset = queryset.filter(passport_no=passport_no)
             if queryset.count() < 1:
                 try:
-                    success = save_iprs_person_from_smile_identity(self.request, passport_no, "PASSPORT")
+                    success = save_iprs_person_from_smile_identity(self.request, passport_no, "PASSPORT", country_isoCode)
                     if success:
                         queryset = IPRS_Person.objects.filter(passport_no__icontains=passport_no)
                 except ValueError:
@@ -1782,8 +1784,8 @@ class EvidenceImageDetailView(ImageBaseDetailView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-def save_iprs_person_from_smile_identity(request, id_number, id_type):
-    iprs_person = enhanced_kyc(id_number, id_type) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
+def save_iprs_person_from_smile_identity(request, id_number, id_type, country=None):
+    iprs_person = enhanced_kyc(id_number, id_type, country) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
     iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
     # print(iprs_person)
     if iprs_person['ResultCode'] != "1012":
