@@ -17,7 +17,7 @@ class Gender(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=30, unique=True)
     nationality = models.CharField(max_length=30)
-    iso_code = models.CharField(max_length=10)
+    iso_code = models.CharField(max_length=10, unique=True)
 
     def __str__(self) -> str:
         return self.name
