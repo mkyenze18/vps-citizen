@@ -241,9 +241,31 @@ class MugShots(models.Model):
 
 class FingerPrints(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
-    thumb = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
-    left_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
-    right_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
+    # thumb = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
+    # left_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
+    # right_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
+    right_thumb = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_index = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_middle = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_ring = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_little = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_thumb = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_index = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_middle = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_ring = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_little = models.FileField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+
+    right_thumb_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_index_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_middle_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_ring_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    right_little_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_thumb_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_index_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_middle_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_ring_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+    left_little_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
+
 
 # ! Focus on charge sheet module
 class Offense(models.Model):
