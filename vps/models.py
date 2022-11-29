@@ -60,7 +60,7 @@ class PoliceOfficer(models.Model):
     rank = models.ForeignKey(Rank, on_delete=models.PROTECT)
     # date_of_retirement = models.DateTimeField()
     # date_of_death = models.DateTimeField()
-    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT, null=True, blank=True)
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT) # ! A police officer must be assigned to a police station ?
     mug_shot = models.ImageField(upload_to=policeOfficer_mugshot_directory_path, null=True, blank=True)
 
 # ! Focus on OB (report) module
@@ -266,6 +266,8 @@ class FingerPrints(models.Model):
     left_ring_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
     left_little_preview = models.ImageField(upload_to=arrestee_fingerprint_directory_path, blank=True, null=True)
 
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.PROTECT, blank=True, null=True) # ! A police officer must be assigned to a police station ?
+    posted_date = models.DateTimeField(auto_now_add=True)
 
 # ! Focus on charge sheet module
 class Offense(models.Model):
