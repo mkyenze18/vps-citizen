@@ -235,9 +235,9 @@ class Next_of_kin(models.Model):
 
 class MugShots(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='mugshots')
-    left_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
-    front_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
-    right_view = models.ImageField(upload_to=arrestee_mugshot_directory_path)
+    left_view = models.ImageField(upload_to=arrestee_mugshot_directory_path, blank=True)
+    front_view = models.ImageField(upload_to=arrestee_mugshot_directory_path, blank=True)
+    right_view = models.ImageField(upload_to=arrestee_mugshot_directory_path, blank=True)
 
 class FingerPrints(models.Model):
     arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
