@@ -812,6 +812,10 @@ class OccurrenceListView(BaseListView):
         if id_no is not None:
             queryset = queryset.filter(reporters__iprs_person__id_no=id_no)
 
+        module = self.request.query_params.get('module')
+        if module is not None:
+            queryset = queryset.filter(module=module)
+
         is_closed = self.request.query_params.get('is_closed')
         if is_closed is not None:
             is_closed = is_closed.lower() in ['true',] # + https://stackoverflow.com/a/715455
