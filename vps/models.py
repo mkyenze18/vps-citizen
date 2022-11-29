@@ -240,7 +240,7 @@ class MugShots(models.Model):
     right_view = models.ImageField(upload_to=arrestee_mugshot_directory_path, blank=True)
 
 class FingerPrints(models.Model):
-    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT)
+    arrestee = models.ForeignKey(Arrestee, on_delete=models.PROTECT, related_name='fingerprints')
     # thumb = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
     # left_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
     # right_hand = models.ImageField(upload_to=arrestee_fingerprint_directory_path)
