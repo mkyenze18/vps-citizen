@@ -212,6 +212,13 @@ class MugShotsSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = MugShots
 
+class FingerPrintsSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = FingerPrints
+
 class ArresteeReadSerializer(BaseModelSerializer):
     """
     """
@@ -220,6 +227,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
     accomplices = AccompliceSerializer(many=True, read_only=True)
     next_of_kins = NextofkinSerializer(many=True, read_only=True)
     # mugshots = MugShotsSerializer(many=True, read_only=True)
+    # fingerprints = FingerPrintsSerializer(many=True, read_only=True)
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
@@ -227,7 +235,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
         'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
         'iprs_person', 'occurrence', 'warrants', 'cell', 'arresting_officer', 'accomplices', 'gangs',
-        'next_of_kins', 'mugshots']
+        'next_of_kins', 'mugshots', 'fingerprints']
 
 class ArresteeWriteSerializer(BaseModelSerializer):
     """
@@ -251,13 +259,6 @@ class GangSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Gang
-
-class FingerPrintsSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = FingerPrints
 
 # ! Focus on charge sheet module
 class OffenseSerializer(BaseModelSerializer):
