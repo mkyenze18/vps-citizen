@@ -227,7 +227,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
     accomplices = AccompliceSerializer(many=True, read_only=True)
     next_of_kins = NextofkinSerializer(many=True, read_only=True)
     mugshots = MugShotsSerializer(many=True, read_only=True)
-    # fingerprints = FingerPrintsSerializer(many=True, read_only=True)
+    fingerprints = FingerPrintsSerializer(many=True, read_only=True)
 
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
