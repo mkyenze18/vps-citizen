@@ -233,7 +233,7 @@ class ArresteeReadSerializer(BaseModelSerializer):
         model = Arrestee
         depth = 2
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
-        'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
+        'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'release_date', 'posted_date',
         'iprs_person', 'occurrence', 'warrants', 'cell', 'arresting_officer', 'accomplices', 'gangs',
         'next_of_kins', 'mugshots', 'fingerprints']
 
@@ -250,7 +250,7 @@ class ArresteeWriteSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Arrestee
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
-        'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
+        'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'release_date', 'posted_date',
         'iprs_person', 'occurrence', 'warrants', 'cell', 'arresting_officer', 'accomplices', 'gangs',
         'next_of_kins', 'mugshots', 'fingerprints']
 
