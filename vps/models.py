@@ -211,6 +211,7 @@ class Arrestee(models.Model):
     arrestee_condition = models.TextField(blank=True)
     date_of_arrest = models.DateField()
     time_of_arrest = models.TimeField(blank=True, null=True)
+    release_date = models.DateTimeField(blank=True, null=True)
     posted_date = models.DateTimeField(auto_now_add=True)
     gangs = models.ManyToManyField(Gang, blank=True)
 
