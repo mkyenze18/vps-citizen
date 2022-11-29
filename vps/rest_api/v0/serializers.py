@@ -244,6 +244,7 @@ class ArresteeWriteSerializer(BaseModelSerializer):
     accomplices = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     next_of_kins = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     mugshots = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    fingerprints = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
 
     class Meta(BaseModelSerializer.Meta):
@@ -251,7 +252,7 @@ class ArresteeWriteSerializer(BaseModelSerializer):
         fields = ['id', 'phone_number', 'email', 'county_of_residence', 'sub_county_of_residence',
         'cell_type', 'arrestee_condition', 'date_of_arrest', 'time_of_arrest', 'posted_date',
         'iprs_person', 'occurrence', 'warrants', 'cell', 'arresting_officer', 'accomplices', 'gangs',
-        'next_of_kins', 'mugshots']
+        'next_of_kins', 'mugshots', 'fingerprints']
 
 class GangSerializer(BaseModelSerializer):
     """
