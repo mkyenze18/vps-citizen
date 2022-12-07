@@ -419,7 +419,7 @@ class IPRS_PersonList(generics.ListCreateAPIView):
         """
         queryset = IPRS_Person.objects.all()
 
-        country_isoCode = self.request.query_params.get('country_isoCode', None)
+        country_isoCode = self.request.query_params.get('country_isoCode', "KE")
         if country_isoCode:
             queryset = queryset.filter(nationality__iso_code=country_isoCode)
 
@@ -1790,10 +1790,10 @@ class EvidenceImageDetailView(ImageBaseDetailView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-def save_iprs_person_from_smile_identity(request, id_number, id_type, country=None):
+def save_iprs_person_from_smile_identity(request, id_number, id_type, country):
     iprs_person = enhanced_kyc(id_number, id_type, country) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
     iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
-    # print(iprs_person)
+    print(iprs_person)
     if iprs_person['ResultCode'] != "1012":
         return
     
