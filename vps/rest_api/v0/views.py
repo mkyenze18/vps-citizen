@@ -1827,7 +1827,7 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country=No
 
     id_no = None
     passport_no = None
-    if id_type == 'NATIONAL_ID':
+    if 'NATIONAL_ID' in id_type:
         id_no = id_number
     
     if id_type == 'PASSPORT':
@@ -1837,30 +1837,33 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country=No
     district_of_birth = None
     division_of_birth = None
     location_of_birth = None
-    
-    place_of_birth = iprs_person['FullData']['Place_of_Birth'] # KISUMU EAST\nDISTRICT - KISUMU EAST
-    place_of_birth = place_of_birth.split("\n")
-    for place_entry in place_of_birth:
-        place = place_entry.split('-')
-        print(place)
-        if len(place) > 1:
-            # ['DISTRICT ', ' NOT INDICATED']
-            if place[1].strip().lower() == 'not indicated':
-                continue
 
-            if place[0].strip().lower() == 'county':
-                county_of_birth = place[1].strip().title()
-            elif place[0].strip().lower() == 'district':
-                district_of_birth = place[1].strip().title()
-            elif place[0].strip().lower() == 'division':
-                division_of_birth = place[1].strip().title()
-            elif place[0].strip().lower() == 'location':
-                location_of_birth = place[1].strip().title()
+    if iprs_person['FullData'].get('Place_of_Birth'):
+        place_of_birth = iprs_person['FullData']['Place_of_Birth'] # KISUMU EAST\nDISTRICT - KISUMU EAST
+        place_of_birth = place_of_birth.split("\n")
+        for place_entry in place_of_birth:
+            place = place_entry.split('-')
+            if len(place) > 1:
+                # ['DISTRICT ', ' NOT INDICATED']
+                if place[1].strip().lower() == 'not indicated':
+                    continue
+
+                if place[0].strip().lower() == 'county':
+                    county_of_birth = place[1].strip().title()
+                elif place[0].strip().lower() == 'district':
+                    district_of_birth = place[1].strip().title()
+                elif place[0].strip().lower() == 'division':
+                    division_of_birth = place[1].strip().title()
+                elif place[0].strip().lower() == 'location':
+                    location_of_birth = place[1].strip().title()
 
     # TODO https://www.programiz.com/python-programming/examples/string-to-datetime
-    my_date_string = iprs_person['FullData']['Date_of_Birth'] # 6/1/1998 12:00:00 AM
-    datetime_object = datetime.strptime(my_date_string, '%m/%d/%Y %I:%M:%S %p')
-
+    if iprs_person['FullData'].get('Date_of_Birth'):
+        my_date_string = iprs_person['FullData']['Date_of_Birth'] # 6/1/1998 12:00:00 AM
+        datetime_object = datetime.strptime(my_date_string, '%m/%d/%Y %I:%M:%S %p')
+    else:
+        my_date_string = iprs_person['FullData']['dateOfBirth'] # "1978-02-10T00:00:00"
+        datetime_object = datetime.strptime(my_date_string, '%Y-%m-%dT%H:%M:%S')
 
     # + https://requests.readthedocs.io/en/latest/user/quickstart/#more-complicated-post-requests
     payload = {
