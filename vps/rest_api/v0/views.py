@@ -1814,7 +1814,7 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country="K
         return
     
     # nationality = get_object_or_404(Country, nationality__iexact=iprs_person["FullData"]['Citizenship'])
-    nationality = get_object_or_404(Country, nationality__iexact=iprs_person["Country"])
+    nationality = get_object_or_404(Country, iso_code=iprs_person["Country"])
 
     GENDER_CHOICES = {
         "M": "male",
