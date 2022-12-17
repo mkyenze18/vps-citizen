@@ -37,6 +37,17 @@ sid_server = 1
 
 connection = IdApi(partner_id, api_key, sid_server)
 
+SUPPORTED_ID_TYPES = {
+    'KE': {
+        'NATIONAL_ID': 'NATIONAL_ID',
+        'ALIEN_CARD': 'ALIEN_CARD',
+        'ALIEN_CARD': 'ALIEN_CARD',
+    },
+    'UG': {
+        'NATIONAL_ID': 'NATIONAL_ID_NO_PHOTO'
+    }
+}
+
 def enhanced_kyc(id_number, id_type, country="KE"):
     # Create required tracking parameters
     # partner_params = {
@@ -60,6 +71,12 @@ def enhanced_kyc(id_number, id_type, country="KE"):
     # "dob": "<date of birth>", # yyyy-mm-dd
     # "phone_number": "<phone number>" 
     # }
+
+    try:
+        id_type = SUPPORTED_ID_TYPES[country][id_type]
+    except:
+        raise Exception("ID type lookup not supported")
+
     id_info_params = {
     "country": country,
     "id_type": id_type,
@@ -86,6 +103,12 @@ def enhanced_kyc(id_number, id_type, country="KE"):
 
 if __name__ == '__main__':
     # Execute when the module is not initialized from an import statement.
-    response = enhanced_kyc(id_number="26034567", id_type="NATIONAL_ID", country="UG")
+    
+    # KENYA
+    # response = enhanced_kyc(id_number="26034567", id_type="NATIONAL_ID", country="KE")
+    # print(response)
+    # print(response.json())
+    # UGANDA
+    response = enhanced_kyc(id_number="CM780371069N5G", id_type="NATIONAL_ID_NO_PHOTO", country="UG")
     print(response)
     print(response.json())

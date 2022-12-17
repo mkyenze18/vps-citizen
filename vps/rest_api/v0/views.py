@@ -322,9 +322,13 @@ def iprsPerson_list(request, format=None):
                     if success:
                         resources = IPRS_Person.objects.filter(id_no__icontains=id_no)
                 except ValueError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    return []
                 except ServerError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return []
+                except:
+                    return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
                 #     print(err)
@@ -339,9 +343,13 @@ def iprsPerson_list(request, format=None):
                     if success:
                         resources = IPRS_Person.objects.filter(passport_no__icontains=passport_no)
                 except ValueError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    return []
                 except ServerError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return []
+                except:
+                    return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
                 #     print(err)
@@ -438,6 +446,8 @@ class IPRS_PersonList(generics.ListCreateAPIView):
                 except ServerError:
                     # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     return []
+                except:
+                    return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
                 #     print(err)
@@ -457,6 +467,8 @@ class IPRS_PersonList(generics.ListCreateAPIView):
                     return []
                 except ServerError:
                     # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return []
+                except:
                     return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
