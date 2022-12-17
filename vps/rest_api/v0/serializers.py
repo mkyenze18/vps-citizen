@@ -335,7 +335,6 @@ class TrafficOffenderDetailsSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = TrafficOffender
 
-
 class DriverSerializer(BaseModelSerializer):
     """
     """
@@ -343,12 +342,9 @@ class DriverSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Driver
 
-
 class VehicleSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
         model = Vehicle
-
-

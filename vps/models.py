@@ -351,8 +351,6 @@ class TrafficOffender(models.Model): # the bugger ressponsible
     age = models.CharField(max_length=8)
     image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
 
-
-
 # ! Focus on permission module
 class PermissionModule(models.Model):
     name = models.CharField(max_length=30)

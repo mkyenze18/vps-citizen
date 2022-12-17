@@ -433,9 +433,11 @@ class IPRS_PersonList(generics.ListCreateAPIView):
                     if success:
                         queryset = IPRS_Person.objects.filter(id_no__icontains=id_no)
                 except ValueError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    return []
                 except ServerError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
                 #     print(err)
@@ -451,9 +453,11 @@ class IPRS_PersonList(generics.ListCreateAPIView):
                     if success:
                         queryset = IPRS_Person.objects.filter(passport_no__icontains=passport_no)
                 except ValueError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_400_BAD_REQUEST)
+                    return []
                 except ServerError:
-                    return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    # return Response('Error getting IPRS Person', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return []
                 # + https://docs.python.org/3/tutorial/errors.html#handling-exceptions
                 # except BaseException as err:
                 #     print(err)
@@ -1790,10 +1794,10 @@ class EvidenceImageDetailView(ImageBaseDetailView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-def save_iprs_person_from_smile_identity(request, id_number, id_type, country):
+def save_iprs_person_from_smile_identity(request, id_number, id_type, country=None):
     iprs_person = enhanced_kyc(id_number, id_type, country) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
     iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
-    print(iprs_person)
+    # print(iprs_person)
     if iprs_person['ResultCode'] != "1012":
         return
     

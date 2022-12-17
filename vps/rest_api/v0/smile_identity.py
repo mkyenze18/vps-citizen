@@ -83,3 +83,9 @@ def enhanced_kyc(id_number, id_type, country="KE"):
         # Server returned an error
         print("handle ServerError")
         raise ValueError
+
+if __name__ == '__main__':
+    # Execute when the module is not initialized from an import statement.
+    response = enhanced_kyc(id_number="26034567", id_type="NATIONAL_ID", country="UG")
+    print(response)
+    print(response.json())
