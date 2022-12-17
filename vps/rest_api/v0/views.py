@@ -1813,13 +1813,17 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country=No
     if iprs_person['ResultCode'] != "1012":
         return
     
-    nationality = get_object_or_404(Country, nationality__iexact=iprs_person["FullData"]['Citizenship'])
+    # nationality = get_object_or_404(Country, nationality__iexact=iprs_person["FullData"]['Citizenship'])
+    nationality = get_object_or_404(Country, nationality__iexact=iprs_person["Country"])
 
     GENDER_CHOICES = {
         "M": "male",
         "F": "female"
     }
-    gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['Gender']])
+    if iprs_person['FullData'].get('Gender'):
+        gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['Gender']])
+    else:
+        gender = get_object_or_404(Gender, name__iexact=GENDER_CHOICES[iprs_person['FullData']['sex']])
 
     id_no = None
     passport_no = None
