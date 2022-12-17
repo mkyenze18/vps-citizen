@@ -1806,7 +1806,7 @@ class EvidenceImageDetailView(ImageBaseDetailView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-def save_iprs_person_from_smile_identity(request, id_number, id_type, country=None):
+def save_iprs_person_from_smile_identity(request, id_number, id_type, country="KE"):
     iprs_person = enhanced_kyc(id_number, id_type, country) # TODO https://docs.smileidentity.com/supported-id-types/for-individuals-kyc/backed-by-id-authority#know-your-customer-kyc
     iprs_person = iprs_person.json() # TODO https://requests.readthedocs.io/en/latest/user/quickstart/#json-response-content
     # print(iprs_person)
@@ -1865,15 +1865,32 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country=No
         my_date_string = iprs_person['FullData']['dateOfBirth'] # "1978-02-10T00:00:00"
         datetime_object = datetime.strptime(my_date_string, '%Y-%m-%dT%H:%M:%S')
 
+    first_name = None
+    middle_name = None
+    surname = None
+
+    if iprs_person['FullData'].get('First_Name'):
+        first_name = iprs_person['FullData']['First_Name'].capitalize()
+    else:
+        first_name = iprs_person['FullData']['givenNames'].capitalize()
+
+    if iprs_person['FullData'].get('Other_Name'):
+        middle_name = iprs_person['FullData']['Other_Name'].title()
+
+    if iprs_person['FullData'].get('Surname'):
+        surname = iprs_person['FullData']['Surname'].capitalize()
+    else:
+        surname = iprs_person['FullData']['surname'].capitalize()
+
     # + https://requests.readthedocs.io/en/latest/user/quickstart/#more-complicated-post-requests
     payload = {
         # 'id_no': iprs_person['FullData']['ID_Number'],
         # 'passport_no': iprs_person['FullData']['value2'],
         'id_no': id_no,
         'passport_no': passport_no,
-        'first_name': iprs_person['FullData']['First_Name'].capitalize(),
-        'middle_name': iprs_person['FullData']['Other_Name'].title(),
-        'last_name': iprs_person['FullData']['Surname'].capitalize(),
+        'first_name': first_name,
+        'middle_name': middle_name,
+        'last_name': surname,
         'nationality': nationality.id,
         'gender': gender.id,
         'county_of_birth': county_of_birth,

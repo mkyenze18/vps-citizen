@@ -109,6 +109,6 @@ if __name__ == '__main__':
     # print(response)
     # print(response.json())
     # UGANDA
-    response = enhanced_kyc(id_number="CM780371069N5G", id_type="NATIONAL_ID_NO_PHOTO", country="UG")
+    response = enhanced_kyc(id_number="CM780371069N5G", id_type="NATIONAL_ID", country="UG")
     print(response)
     print(response.json())
