@@ -126,7 +126,7 @@ class OccurrenceCategorySerializer(BaseModelSerializer):
 class OccurrenceCategoryInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = OccurrenceCategoryInput
-        fields = ['id', 'occurrence_category', 'label', 'type', 'name', 'order', 'choices', 'required' ]
+        fields = ['id', 'occurrence_category', 'label', 'type', 'name', 'order', 'choices', 'required', 'dependency', 'dependency_value' ]
 
 class OccurrenceReadSerializer(BaseModelSerializer):
     """
