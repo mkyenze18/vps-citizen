@@ -68,6 +68,9 @@ class OccurrenceCategory(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 class OccurrenceCategoryInput(models.Model):
     occurrence_category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
     label = models.CharField(max_length=100)
