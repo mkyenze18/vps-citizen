@@ -183,6 +183,8 @@ def swagger(request):
             # Marshall the YAML into the variable defined above
             swagger = yaml.load(infile, Loader=yaml.FullLoader)
 
+            swagger['host'] = request.get_host() # chaning the host dynamically
+
     swagger_json = json.dumps(swagger)
 
     context = {

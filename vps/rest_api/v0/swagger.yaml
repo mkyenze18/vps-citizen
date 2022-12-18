@@ -4,7 +4,7 @@ info:
   title: "VPS"
 # host: 127.0.0.1:8000
 # host: ie-vps-portal.ingenious.or.ke # SUSPENDED Cause of CSRF issues
-host: client.ingenious.or.ke:5059 
+host: test-portal.virtualpolicestation.com
 basePath: /vps/api/v0
 schemes:
   - http
