@@ -6,8 +6,8 @@ info:
 # host: ie-vps-portal.ingenious.or.ke # SUSPENDED Cause of CSRF issues
 host: test-portal.virtualpolicestation.com
 basePath: /vps/api/v0
-schemes:
-  - http
+# schemes:
+#   - http
 consumes:
   - application/json
 produces:
