@@ -39,12 +39,13 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from vps.models import (
-    Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
+    Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
+    PoliceCell, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
-    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage
+    EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
+    Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
@@ -328,23 +329,44 @@ class EvidenceItemImageSerializer(BaseModelSerializer):
         model = EvidenceItemImage
 
 # ! Focus on traffic module
-class TrafficOffenderDetailsSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = TrafficOffender
-
-class DriverSerializer(BaseModelSerializer):
-    """
-    """
-
-    class Meta(BaseModelSerializer.Meta):
-        model = Driver
-
 class VehicleSerializer(BaseModelSerializer):
     """
     """
 
     class Meta(BaseModelSerializer.Meta):
         model = Vehicle
+
+class InspectionSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = Inspection
+
+class TrafficSubjectSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = TrafficSubject
+
+class UnregisteredTrafficSubjectSerializer(BaseModelSerializer):
+    """
+    """
+
+    class Meta(BaseModelSerializer.Meta):
+        model = UnregisteredTrafficSubject
+
+# class TrafficOffenderDetailsSerializer(BaseModelSerializer):
+#     """
+#     """
+
+#     class Meta(BaseModelSerializer.Meta):
+#         model = TrafficOffender
+
+# class DriverSerializer(BaseModelSerializer):
+#     """
+#     """
+
+#     class Meta(BaseModelSerializer.Meta):
+#         model = Driver

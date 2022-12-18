@@ -253,29 +253,48 @@ urlpatterns = [
         views.EvidenceImageDetailView.as_view(), 
         name=f'{pre}-evidence-item-image-details'),
 
-    path("traffic-offenders",
-        views.TrafficOffenderListView.as_view(),
-        name=f'{pre}-trafficoffenders'),
-    path("trafficoffenders/<int:pk>",
-        views.TrafficOffenderDetailsView.as_view(),
-        name=f'{pre}-trafficoffenderdetails-details'),
+    # ! Focus on traffic module
+    path("vehicles",
+        views.VehicleList.as_view(),
+        name=f'{pre}-vehicle-list'),
+    path("vehicles/<int:pk>",
+        views.VehicleDetail.as_view(),
+        name=f'{pre}-vehicle-detail'),
 
-    path("driver",
-        views.DriverListView.as_view(),
-        name=f'{pre}-driver'),
-    path("driver/<int:pk>",
-        views.DriverDetailsView.as_view(),
-        name=f'{pre}-driverdetails-details'),
-
-    path("vehicle",
-        views.VehicleListView.as_view(),
-        name=f'{pre}-vehicle'),
+    path("inspections",
+        views.InspectionList.as_view(),
+        name=f'{pre}-inspection-list'),
     path("vehivle/<int:pk>",
-        views.VehicleDetailsView.as_view(),
-        name=f'{pre}-vehicledetails-details'),
+        views.InspectionDetail.as_view(),
+        name=f'{pre}-inspection-detail'),
 
-    
+    path("traffic-subjects",
+        views.TrafficSubjectList.as_view(),
+        name=f'{pre}-traffic-subject-list'),
+    path("vehivle/<int:pk>",
+        views.TrafficSubjectDetail.as_view(),
+        name=f'{pre}-traffic-subject-detail'),
 
+    path("unregistered-traffic-subjects",
+        views.UnregisteredTrafficSubjectList.as_view(),
+        name=f'{pre}-unregistered-traffic-subject-list'),
+    path("vehivle/<int:pk>",
+        views.UnregisteredTrafficSubjectDetail.as_view(),
+        name=f'{pre}-unregistered-traffic-subject-detail'),
+
+    # path("traffic-offenders",
+    #     views.TrafficOffenderListView.as_view(),
+    #     name=f'{pre}-trafficoffenders'),
+    # path("trafficoffenders/<int:pk>",
+    #     views.TrafficOffenderDetailsView.as_view(),
+    #     name=f'{pre}-trafficoffenderdetails-details'),
+
+    # path("driver",
+    #     views.DriverListView.as_view(),
+    #     name=f'{pre}-driver'),
+    # path("driver/<int:pk>",
+    #     views.DriverDetailsView.as_view(),
+    #     name=f'{pre}-driverdetails-details'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

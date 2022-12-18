@@ -340,32 +340,79 @@ class EvidenceItemImage(models.Model):
     image = models.ImageField(upload_to=evidence_image_directory_path, null=True, blank=True)
 
 # ! Focus on traffic module
-class Driver(models.Model):
-    IPRS_Person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
-    dl_number = models.CharField(max_length= 20)
-    expiry_date = models.DateTimeField()
-
 class Vehicle(models.Model):
-    vehicle_reg_no = models.CharField(max_length= 50)
-    vehicle_identification_no = models.CharField(max_length= 50)
+    reg_no = models.CharField(max_length= 50)
+    chassis_no = models.CharField(max_length= 50, blank=True) # AKA VIN
     make = models.CharField(max_length= 50)
     model = models.CharField(max_length= 50)
-    color = models.CharField(max_length= 50)
-    organization = models.CharField(max_length= 50)
+    # color = models.CharField(max_length= 50)
+    # organization = models.CharField(max_length= 50)
+    insurance_expiry_date = models.DateTimeField(blank=True, null=True)
 
-class TrafficOccurrence(models.Model): # The actual incident
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
-    Vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+    def __str__(self) -> str:
+        return self.reg_no
 
-class TrafficOffender(models.Model): # the bugger ressponsible
-    offence = models.ForeignKey(TrafficOccurrence, on_delete=models.PROTECT, null=True)
+class Inspection(models.Model):
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+    police_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT)
+
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, blank=True, null=True)
+    penal_code = models.CharField(max_length=100, blank=True)
+    date_modified = models.DateTimeField(auto_now=True) # could help with detecting tampering
+    date_posted = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self) -> str:
+        return f"{self.vehicle.reg_no} - {self.date_posted} "
+
+class TrafficSubject(models.Model):
+    inspection = models.ForeignKey(Inspection, on_delete=models.PROTECT)
+    iprs_person  = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+    dl_expiry_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        return f"{self.iprs_person.first_name} {self.iprs_person.middle_name} {self.iprs_person.last_name}"
+
+class UnregisteredTrafficSubject(models.Model):
+    inspection = models.ForeignKey(Inspection, on_delete=models.PROTECT)
+    id_no = models.CharField(max_length=100, blank=True)
+    passport_no = models.CharField(max_length=100, blank=True)
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100)
     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
-    phone = models.CharField(max_length= 20)
-    county_of_incident = models.CharField(max_length=30)
-    constituency = models.CharField(max_length= 40)
-    email = models.EmailField()
-    age = models.CharField(max_length=8)
-    image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
+    nationality = models.ForeignKey(Country, on_delete=models.PROTECT)
+    county_of_birth = models.CharField(max_length=30, blank=True)
+    district_of_birth = models.CharField(max_length=30, blank=True)
+    division_of_birth = models.CharField(max_length=30, blank=True)
+    location_of_birth = models.CharField(max_length=30, blank=True)
+    date_of_birth = models.DateTimeField(null=True, blank=True)
+
+    dl_expiry_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
+# class TrafficOccurrence(models.Model): # The actual incident
+#     occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT)
+#     Vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+
+# class Driver(models.Model):
+#     IPRS_Person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+#     dl_number = models.CharField(max_length= 20)
+#     expiry_date = models.DateTimeField()
+
+# class TrafficOffender(models.Model): # the bugger ressponsible
+#     offence = models.ForeignKey(TrafficOccurrence, on_delete=models.PROTECT, null=True)
+#     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
+#     phone = models.CharField(max_length= 20)
+#     county_of_incident = models.CharField(max_length=30)
+#     constituency = models.CharField(max_length= 40)
+#     email = models.EmailField()
+#     age = models.CharField(max_length=8)
+#     image = models.ImageField(upload_to=offender_image_directory_path, null=True, blank=True)
 
 # ! Focus on permission module
 class PermissionModule(models.Model):

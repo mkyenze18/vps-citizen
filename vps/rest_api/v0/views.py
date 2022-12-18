@@ -121,25 +121,27 @@ from django.conf import settings
 
 
 from vps.models import (
-    Driver, Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
+    Gender, Country, IPRS_Person, PoliceStation, Rank, PoliceOfficer,
     OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
-    PoliceCell, TrafficOffender, Vehicle, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
+    PoliceCell, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin,
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
+    Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject,
     OccurrenceCounter
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
 from vps.rest_api.v0.common.views import BaseDetailView, BaseListView, ImageBaseDetailView, ImageBaseListView
-from .serializers import ( DriverSerializer, TrafficOffenderDetailsSerializer, UserSerializer,
+from .serializers import (UserSerializer,
     CountrySerializer, GenderSerializer, IPRS_PersonSerializerRead, IPRS_PersonSerializerWrite, RankSerializer,
     PoliceStationSerializer, PoliceOfficerReadSerializer, PoliceOfficerWriteSerializer,
     OccurrenceCategorySerializer, OccurrenceCategoryInputSerializer, OccurrenceReadSerializer, OccurrenceWriteSerializer,
     OccurrenceDetailSerializer, ReporterSerializer, UnregisteredReporterSerializer,
-    PoliceCellSerializer, VehicleSerializer, WarrantofarrestSerializer, ArresteeReadSerializer, ArresteeWriteSerializer, AccompliceSerializer, GangSerializer,
+    PoliceCellSerializer, WarrantofarrestSerializer, ArresteeReadSerializer, ArresteeWriteSerializer, AccompliceSerializer, GangSerializer,
     NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
-    EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer
+    EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer,
+    VehicleSerializer, InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
 )
 
 import yaml
@@ -1906,110 +1908,300 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country="K
     r.raise_for_status()
     return True
 
-
-class TrafficOffenderListView(BaseListView):
+# ! Focus on traffic module
+# VEHICLE
+class VehicleList(generics.ListCreateAPIView):
     """
-    List all TrafficOffenderDetails, or create a new trafficOffenderDetails.
+    List all vehicles, or create a new vehicle.
     """
-    model = TrafficOffender
-    serializer_class = TrafficOffenderDetailsSerializer
-    read_serializer_class = TrafficOffenderDetailsSerializer
-    permission_classes = ()
 
-    def get(self, request):
-        return super().get(request)
+    pagination_class = CustomPagination
 
-    def post(self, request):
-        return super().post(request)
+    def get_queryset(self):
+        queryset = Vehicle.objects.all()
+        return queryset
 
-class TrafficOffenderDetailsView(BaseDetailView):
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(reg_no=reg_no)
 
+        chassis_no = self.request.query_params.get('chassis_no', None)
+        if chassis_no:
+            queryset = queryset.filter(chassis_no=chassis_no)
+
+        inspection = self.request.query_params.get('inspection', None)
+        if inspection:
+            queryset = queryset.filter(inspection=inspection)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return VehicleSerializer
+
+class VehicleDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    Retrieve , updates and delete an TrafficOffenderDetails.
+    Update, Delete, or View a Vehicle
     """
-    model = TrafficOffender
-    serializer_class = TrafficOffenderDetailsSerializer
-    read_serializer_class = TrafficOffenderDetailsSerializer
-    permission_classes = ()
 
-    def get(self, request, pk=None):
-        return super().get(request, pk)
+    # permission_classes = [IsStaffOrReadOnly]
 
-    def put(self, request, pk=None):
-        return super().put(request, pk)
+    def get_serializer_class(self):
+        return VehicleSerializer
 
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Vehicle.objects.all()
+        return queryset
 
-
-class DriverListView(BaseListView):
+# INSPECTION
+class InspectionList(generics.ListCreateAPIView):
     """
-    List all DriverDetails, or create a new DriverDetails.
+    List all inspections, or create a new inspection.
     """
-    model = Driver
-    serializer_class = DriverSerializer
-    read_serializer_class = DriverSerializer
-    permission_classes = ()
 
-    def get(self, request):
-        return super().get(request)
+    pagination_class = CustomPagination
 
-    def post(self, request):
-        return super().post(request)
+    def get_queryset(self):
+        queryset = Inspection.objects.all()
+        return queryset
 
-class DriverDetailsView(BaseDetailView):
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(vehicle__reg_no=reg_no)
 
+        police_officer = self.request.query_params.get('police_officer', None)
+        if police_officer:
+            queryset = queryset.filter(police_officer__service_number=police_officer)
+
+        penal_code = self.request.query_params.get('penal_code', None)
+        if penal_code:
+            queryset = queryset.filter(penal_code=penal_code)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return InspectionSerializer
+
+class InspectionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    Retrieve DriverDetails.
+    Update, Delete, or View a Inspection
     """
-    model = Driver
-    serializer_class = DriverSerializer
-    read_serializer_class = DriverSerializer
-    permission_classes = ()
 
-    def get(self, request, pk=None):
-        return super().get(request, pk)
+    # permission_classes = [IsStaffOrReadOnly]
 
-    def put(self, request, pk=None):
-        return super().put(request, pk)
+    def get_serializer_class(self):
+        return InspectionSerializer
 
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Inspection.objects.all()
+        return queryset
 
-
-class VehicleListView(BaseListView):
+# TRAFFIC SUBJECT
+class TrafficSubjectList(generics.ListCreateAPIView):
     """
-    List all VehicleDetails, or create a new VehicleDetails.
+    List all traffic subjects, or create a new traffic subject.
     """
-    model = Vehicle
-    serializer_class = VehicleSerializer
-    read_serializer_class = VehicleSerializer
-    permission_classes = ()
 
-    def get(self, request):
-        return super().get(request)
+    pagination_class = CustomPagination
 
-    def post(self, request):
-        return super().post(request)
+    def get_queryset(self):
+        queryset = TrafficSubject.objects.all()
+        return queryset
 
-class VehicleDetailsView(BaseDetailView):
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(vehicle__reg_no=reg_no)
 
+        police_officer = self.request.query_params.get('police_officer', None)
+        if police_officer:
+            queryset = queryset.filter(police_officer__service_number=police_officer)
+
+        penal_code = self.request.query_params.get('penal_code', None)
+        if penal_code:
+            queryset = queryset.filter(penal_code=penal_code)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return TrafficSubjectSerializer
+
+class TrafficSubjectDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    Retrieve vehicleDetails.
+    Update, Delete, or View a TrafficSubject
     """
-    model = Vehicle
-    serializer_class = VehicleSerializer
-    read_serializer_class = VehicleSerializer
-    permission_classes = ()
 
-    def get(self, request, pk=None):
-        return super().get(request, pk)
+    # permission_classes = [IsStaffOrReadOnly]
 
-    def put(self, request, pk=None):
-        return super().put(request, pk)
+    def get_serializer_class(self):
+        return TrafficSubjectSerializer
 
-    def delete(self, request, pk=None):
-        return super().delete(request, pk)
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = TrafficSubject.objects.all()
+        return queryset
+
+# UNREGISTERED TRAFFIC SUBJECT
+class UnregisteredTrafficSubjectList(generics.ListCreateAPIView):
+    """
+    List all unregistered traffic subjects, or create a new unregistered traffic subject.
+    """
+
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = UnregisteredTrafficSubject.objects.all()
+        return queryset
+
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(vehicle__reg_no=reg_no)
+
+        police_officer = self.request.query_params.get('police_officer', None)
+        if police_officer:
+            queryset = queryset.filter(police_officer__service_number=police_officer)
+
+        penal_code = self.request.query_params.get('penal_code', None)
+        if penal_code:
+            queryset = queryset.filter(penal_code=penal_code)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return UnregisteredTrafficSubjectSerializer
+
+class UnregisteredTrafficSubjectDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Update, Delete, or View a unregistered traffic subject
+    """
+
+    # permission_classes = [IsStaffOrReadOnly]
+
+    def get_serializer_class(self):
+        return UnregisteredTrafficSubjectSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = UnregisteredTrafficSubject.objects.all()
+        return queryset
+
+# class TrafficOffenderListView(BaseListView):
+#     """
+#     List all TrafficOffenderDetails, or create a new trafficOffenderDetails.
+#     """
+#     model = TrafficOffender
+#     serializer_class = TrafficOffenderDetailsSerializer
+#     read_serializer_class = TrafficOffenderDetailsSerializer
+#     permission_classes = ()
+
+#     def get(self, request):
+#         return super().get(request)
+
+#     def post(self, request):
+#         return super().post(request)
+
+# class TrafficOffenderDetailsView(BaseDetailView):
+
+#     """
+#     Retrieve , updates and delete an TrafficOffenderDetails.
+#     """
+#     model = TrafficOffender
+#     serializer_class = TrafficOffenderDetailsSerializer
+#     read_serializer_class = TrafficOffenderDetailsSerializer
+#     permission_classes = ()
+
+#     def get(self, request, pk=None):
+#         return super().get(request, pk)
+
+#     def put(self, request, pk=None):
+#         return super().put(request, pk)
+
+#     def delete(self, request, pk=None):
+#         return super().delete(request, pk)
+
+# class DriverListView(BaseListView):
+#     """
+#     List all DriverDetails, or create a new DriverDetails.
+#     """
+#     model = Driver
+#     serializer_class = DriverSerializer
+#     read_serializer_class = DriverSerializer
+#     permission_classes = ()
+
+#     def get(self, request):
+#         return super().get(request)
+
+#     def post(self, request):
+#         return super().post(request)
+
+# class DriverDetailsView(BaseDetailView):
+
+#     """
+#     Retrieve DriverDetails.
+#     """
+#     model = Driver
+#     serializer_class = DriverSerializer
+#     read_serializer_class = DriverSerializer
+#     permission_classes = ()
+
+#     def get(self, request, pk=None):
+#         return super().get(request, pk)
+
+#     def put(self, request, pk=None):
+#         return super().put(request, pk)
+
+#     def delete(self, request, pk=None):
+#         return super().delete(request, pk)
+
+# class VehicleListView(BaseListView):
+#     """
+#     List all VehicleDetails, or create a new VehicleDetails.
+#     """
+#     model = Vehicle
+#     serializer_class = VehicleSerializer
+#     read_serializer_class = VehicleSerializer
+#     permission_classes = ()
+
+#     def get(self, request):
+#         return super().get(request)
+
+#     def post(self, request):
+#         return super().post(request)
+
+# class VehicleDetailsView(BaseDetailView):
+
+#     """
+#     Retrieve vehicleDetails.
+#     """
+#     model = Vehicle
+#     serializer_class = VehicleSerializer
+#     read_serializer_class = VehicleSerializer
+#     permission_classes = ()
+
+#     def get(self, request, pk=None):
+#         return super().get(request, pk)
+
+#     def put(self, request, pk=None):
+#         return super().put(request, pk)
+
+#     def delete(self, request, pk=None):
+#         return super().delete(request, pk)
 
 # TODO https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api
 # from rest_framework.decorators import api_view
@@ -2074,10 +2266,10 @@ def api_root(request, format=None):
 
         # !Focus on traffic module
         'TRAFFIC' : '================',
-        'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
-        'drivers': reverse(f'{app_name}:{pre}-driver', request=request, format=format),
-        'vehicle': reverse(f'{app_name}:{pre}-vehicle', request=request, format=format)
-
-      
-
+        'vehicle': reverse(f'{app_name}:{pre}-vehicle-list', request=request, format=format),
+        'inspection': reverse(f'{app_name}:{pre}-inspection-list', request=request, format=format),
+        'traffic-subject': reverse(f'{app_name}:{pre}-traffic-subject-list', request=request, format=format),
+        'unregistered-traffic-subject': reverse(f'{app_name}:{pre}-unregistered-traffic-subject-list', request=request, format=format),
+        # 'traffic offenders': reverse(f'{app_name}:{pre}-trafficoffenders', request=request, format=format),
+        # 'drivers': reverse(f'{app_name}:{pre}-driver', request=request, format=format),
     })

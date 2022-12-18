@@ -4,6 +4,7 @@ from .models import (Gender, Country, IPRS_Person, Rank, PoliceStation, PoliceOf
 OccurrenceCategory, OccurrenceCategoryInput, Occurrence, OccurrenceDetail, Reporter, UnregisteredReporter,
 PoliceCell, Warrant_of_arrest, Arrestee, Accomplice, Gang, Next_of_kin, MugShots, FingerPrints,
 EvidenceCategory, EvidenceItemCategory, Evidence, EvidenceItemImage,
+Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject,
 PermissionModule, Permission
 )
 # Register your models here.
@@ -56,6 +57,12 @@ admin.site.register(EvidenceCategory)
 admin.site.register(EvidenceItemCategory)
 admin.site.register(Evidence)
 admin.site.register(EvidenceItemImage)
+
+# ! Focus on traffic module
+admin.site.register(Vehicle)
+admin.site.register(Inspection)
+admin.site.register(TrafficSubject)
+admin.site.register(UnregisteredTrafficSubject)
 
 # ! Focus on permission module
 class PermissionAdmin(admin.ModelAdmin):
