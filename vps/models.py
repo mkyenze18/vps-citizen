@@ -79,8 +79,11 @@ class OccurrenceCategoryInput(models.Model):
     choices = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0)
     required = models.BooleanField(default=True)
-    dependency = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT, related_name='dependencies', blank=True, null=True)
+    dependency = models.ForeignKey('OccurrenceCategoryInput', on_delete=models.PROTECT, related_name='dependencies', blank=True, null=True)
     dependency_value = models.CharField(max_length=100, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.occurrence_category.name} >> {self.name}'
 
 class Occurrence(models.Model):
     ob_no = models.CharField(max_length=30, null=True, blank=True)
