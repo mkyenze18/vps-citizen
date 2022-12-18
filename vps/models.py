@@ -91,7 +91,7 @@ class OccurrenceCategoryInput(models.Model):
     dependency_value = models.CharField(max_length=100, blank=True)
 
     def __str__(self) -> str:
-        return f'{self.occurrence_category.name} >> {self.name}'
+        return f'{self.occurrence_category.name} >> {self.label}'
 
 class Occurrence(models.Model):
     ob_no = models.CharField(max_length=30, null=True, blank=True)
