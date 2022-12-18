@@ -72,11 +72,19 @@ class OccurrenceCategory(models.Model):
         return self.name
 
 class OccurrenceCategoryInput(models.Model):
+    TYPE_CHOICE = (
+        ('text', 'Single line Text'),
+        ('textarea', 'Multi line Text '),
+        ('select', 'Select'),
+        ('radio', 'Radio'),
+        ('checkbox', 'Checkbox'),
+        ('date', 'Date'),
+    )
     occurrence_category = models.ForeignKey(OccurrenceCategory, on_delete=models.PROTECT)
     label = models.CharField(max_length=100)
-    type = models.CharField(max_length=10)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICE)
     name = models.CharField(max_length=100)
-    choices = models.TextField(null=True, blank=True)
+    choices = models.TextField(blank=True)
     order = models.IntegerField(default=0)
     required = models.BooleanField(default=True)
     dependency = models.ForeignKey('OccurrenceCategoryInput', on_delete=models.PROTECT, related_name='dependencies', blank=True, null=True)
