@@ -837,6 +837,12 @@ class OccurrenceCategoryInputDetailView(BaseDetailView):
     permission_classes = ()
 
     def get(self, request, pk=None):
+        layout = self.request.query_params.get('layout')
+        if layout == 'nested':
+            item = self.get_object(request, pk)
+            nested_dict = build_nested_input_dict(item, True)
+            return Response(nested_dict)
+
         return super().get(request, pk)
 
     def put(self, request, pk=None):
