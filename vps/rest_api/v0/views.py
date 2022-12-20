@@ -118,6 +118,9 @@ from django.db import IntegrityError
 from django.core.mail import send_mass_mail
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.db.models import Q
+from django.urls import reverse
+from django.core.paginator import Paginator
 
 
 from vps.models import (
@@ -775,6 +778,49 @@ class OccurrenceCategoryInputListView(BaseListView):
         return queryset
 
     def get(self, request):
+        layout = self.request.query_params.get('layout')
+        if layout == 'nested':
+            query_string = ''
+            for key, value in self.request.query_params.items():
+                if key == 'page':
+                    continue
+                query_string += f'{key}={value}&'
+            # query_string = query_string[:-1] # remove ampersand (&)
+
+            limit = self.request.query_params.get('limit', 10)
+
+            queryset = self.get_queryset()
+            queryset = queryset.filter(dependency__isnull=True)
+            # TODO https://docs.djangoproject.com/en/4.1/topics/pagination/#using-paginator-in-a-view-function
+            input_list = []
+            for input in queryset:
+                nested_dict = build_nested_input_dict(input, True)
+                input_list.append(nested_dict)
+
+            paginator = Paginator(input_list, limit) # Show 25 contacts per page.
+
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
+            reverse_url = reverse(f'{app_name}:{pre}-occurrence-category-input-list')
+
+            next = None
+            if page_obj.has_next():
+                next = f'{request.scheme}://{request.get_host()}{reverse_url}?{query_string}page={page_obj.next_page_number()}'
+
+            previous = None
+            if page_obj.has_previous():
+                previous = f'{request.scheme}://{request.get_host()}{reverse_url}?{query_string}page={page_obj.previous_page_number()}'
+
+            response = {
+                "count": paginator.count,
+                "next": next,
+                "previous": previous,
+                "results": page_obj.object_list,
+            }
+
+            return Response(response)
+            
         return super().get(request)
 
     def post(self, request):
@@ -798,6 +844,23 @@ class OccurrenceCategoryInputDetailView(BaseDetailView):
 
     def delete(self, request, pk=None):
         return super().delete(request, pk)
+
+def build_nested_input_dict(input, include_occurrence_category=False):
+    input_dict = {}
+
+    if include_occurrence_category:
+        input_dict['occurrence_category'] = input.occurrence_category.id
+
+    input_dict["label"] = input.label
+    input_dict["type"] = input.type
+    input_dict["name"] = input.name
+    input_dict["choices"] = input.choices
+    input_dict["order"] = input.order
+    input_dict["required"] = input.required
+
+    for dependency in input.dependencies.all():
+        input_dict[dependency.dependency_value] = build_nested_input_dict(dependency)
+    return input_dict
 # ================================================
 class OccurrenceListView(BaseListView):
     """

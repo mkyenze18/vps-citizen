@@ -27,11 +27,17 @@ class PoliceOfficerAdmin(admin.ModelAdmin):
 admin.site.register(PoliceOfficer, PoliceOfficerAdmin)
 
 # ! Focus on OB (report) module
-admin.site.register(OccurrenceCategory)
+class OccurrenceCategoryInline(admin.StackedInline):
+    model = OccurrenceCategoryInput
+    extra = 3
+class OccurrenceCategoryAdmin(admin.ModelAdmin):
+    inlines = [OccurrenceCategoryInline]
+admin.site.register(OccurrenceCategory, OccurrenceCategoryAdmin)
 
 class OccurrenceCategoryInputAdmin(admin.ModelAdmin):
-    list_display = ('id', 'label', 'type', 'dependency', 'dependency_value')
-    list_filter = ['dependency']
+    list_display = ('id', 'label', 'type', 'occurrence_category', 'dependency', 'dependency_value')
+    list_filter = ['occurrence_category', 'dependency']
+    search_fields = ['label']
 admin.site.register(OccurrenceCategoryInput, OccurrenceCategoryInputAdmin)
 
 class OccurrenceAdmin(admin.ModelAdmin):
