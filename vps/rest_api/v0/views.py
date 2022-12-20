@@ -852,7 +852,9 @@ class OccurrenceCategoryInputDetailView(BaseDetailView):
         return super().delete(request, pk)
 
 def build_nested_input_dict(input, include_occurrence_category=False):
-    input_dict = {}
+    input_dict = {
+        "id": input.id
+    }
 
     if include_occurrence_category:
         input_dict['occurrence_category'] = input.occurrence_category.id
