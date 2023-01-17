@@ -340,6 +340,25 @@ class EvidenceItemImage(models.Model):
     image = models.ImageField(upload_to=evidence_image_directory_path, null=True, blank=True)
 
 # ! Focus on traffic module
+class RegisteredVehicle(models.Model):
+    reg_no = models.CharField(max_length= 50)
+    chassis_no = models.CharField(max_length= 50, blank=True) # AKA VIN
+    engine_no = models.CharField(max_length= 50)
+    make = models.CharField(max_length= 50)
+    model = models.CharField(max_length= 50)
+    year_of_manufacture = models.IntegerField()
+    licensed_to_carry = models.BooleanField(null=True, blank=True)
+    tonnage = models.IntegerField(null=True, blank=True)
+
+class InsurancePolicy(models.Model):
+    certificate_no = models.CharField(max_length= 50)
+    certificate_type = models.CharField(max_length= 50)
+    reg_no = models.CharField(max_length= 50)
+    insurer = models.CharField(max_length= 50)
+    policy_no = models.CharField(max_length= 50)
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+
 class Vehicle(models.Model):
     reg_no = models.CharField(max_length= 50)
     chassis_no = models.CharField(max_length= 50, blank=True) # AKA VIN

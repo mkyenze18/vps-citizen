@@ -254,6 +254,20 @@ urlpatterns = [
         name=f'{pre}-evidence-item-image-details'),
 
     # ! Focus on traffic module
+    path("registered-vehicles",
+        views.RegisteredVehicleList.as_view(),
+        name=f'{pre}-registered-vehicle-list'),
+    path("registered-vehicles/<int:pk>",
+        views.RegisteredVehicleDetail.as_view(),
+        name=f'{pre}-registered-vehicle-detail'),
+    
+    path("insurance-policies",
+        views.InsurancePolicyList.as_view(),
+        name=f'{pre}-insurance-policy-list'),
+    path("insurance-policies/<int:pk>",
+        views.InsurancePolicyDetail.as_view(),
+        name=f'{pre}-insurance-policy-detail'),
+
     path("vehicles",
         views.VehicleList.as_view(),
         name=f'{pre}-vehicle-list'),

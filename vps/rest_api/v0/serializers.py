@@ -45,7 +45,7 @@ from vps.models import (
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
-    Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject
+    RegisteredVehicle, InsurancePolicy, Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
 
@@ -329,6 +329,18 @@ class EvidenceItemImageSerializer(BaseModelSerializer):
         model = EvidenceItemImage
 
 # ! Focus on traffic module
+class RegisteredVehicleSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = RegisteredVehicle
+        fields = ['id', 'reg_no', 'chassis_no', 'engine_no', 'make', 'model', 'year_of_manufacture', 'licensed_to_carry', 'tonnage']
+
+class InsurancePolicySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = InsurancePolicy
+        fields = ['id', 'certificate_no', 'certificate_type', 'insurer', 'policy_no', 'date_start', 'date_end']
+
 class VehicleSerializer(BaseModelSerializer):
     """
     """

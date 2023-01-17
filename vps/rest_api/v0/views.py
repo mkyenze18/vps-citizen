@@ -130,7 +130,7 @@ from vps.models import (
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
-    Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject,
+    RegisteredVehicle, InsurancePolicy, Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject,
     OccurrenceCounter
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
@@ -144,7 +144,7 @@ from .serializers import (UserSerializer,
     NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer,
-    VehicleSerializer, InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
+    RegisteredVehicleSerializer, InsurancePolicySerializer, VehicleSerializer, InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
 )
 
 import yaml
@@ -1982,6 +1982,103 @@ def save_iprs_person_from_smile_identity(request, id_number, id_type, country="K
     return True
 
 # ! Focus on traffic module
+# REGISTRED VEHICLE
+class RegisteredVehicleList(generics.ListCreateAPIView):
+    """
+    List all regsitered vehicles, or create a new regsitered vehicle.
+    """
+
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = RegisteredVehicle.objects.all()
+        return queryset
+
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(reg_no=reg_no)
+
+        chassis_no = self.request.query_params.get('chassis_no', None)
+        if chassis_no:
+            queryset = queryset.filter(chassis_no=chassis_no)
+
+        inspection = self.request.query_params.get('inspection', None)
+        if inspection:
+            queryset = queryset.filter(inspection=inspection)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return RegisteredVehicleSerializer
+
+class RegisteredVehicleDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Update, Delete, or View a RegisteredVehicle
+    """
+
+    # permission_classes = [IsStaffOrReadOnly]
+
+    def get_serializer_class(self):
+        return RegisteredVehicleSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = RegisteredVehicle.objects.all()
+        return queryset
+
+# VEHICLE
+class InsurancePolicyList(generics.ListCreateAPIView):
+    """
+    List all insurance policies, or create a new insurance policies.
+    """
+
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = InsurancePolicy.objects.all()
+        return queryset
+
+    def filter_queryset(self, queryset):
+        reg_no = self.request.query_params.get('reg_no', None)
+        if reg_no:
+            queryset = queryset.filter(reg_no=reg_no)
+
+        chassis_no = self.request.query_params.get('chassis_no', None)
+        if chassis_no:
+            queryset = queryset.filter(chassis_no=chassis_no)
+
+        inspection = self.request.query_params.get('inspection', None)
+        if inspection:
+            queryset = queryset.filter(inspection=inspection)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return InsurancePolicySerializer
+
+class InsurancePolicyDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Update, Delete, or View a InsurancePolicy
+    """
+
+    # permission_classes = [IsStaffOrReadOnly]
+
+    def get_serializer_class(self):
+        return InsurancePolicySerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = InsurancePolicy.objects.all()
+        return queryset
+
+
 # VEHICLE
 class VehicleList(generics.ListCreateAPIView):
     """
@@ -2339,6 +2436,8 @@ def api_root(request, format=None):
 
         # !Focus on traffic module
         'TRAFFIC' : '================',
+        'registered-vehicles': reverse(f'{app_name}:{pre}-registered-vehicle-list', request=request, format=format),
+        'insurance-policies': reverse(f'{app_name}:{pre}-insurance-policy-list', request=request, format=format),
         'vehicle': reverse(f'{app_name}:{pre}-vehicle-list', request=request, format=format),
         'inspection': reverse(f'{app_name}:{pre}-inspection-list', request=request, format=format),
         'traffic-subject': reverse(f'{app_name}:{pre}-traffic-subject-list', request=request, format=format),
