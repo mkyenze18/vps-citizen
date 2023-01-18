@@ -720,6 +720,10 @@ class OccurrenceCategoryListView(BaseListView):
         if name:
             queryset = queryset.filter(name=name)
 
+        module = self.request.query_params.get('module', None)
+        if module:
+            queryset = queryset.filter(module=module)
+
         return queryset
 
     def get(self, request):
