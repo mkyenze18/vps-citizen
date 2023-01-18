@@ -145,8 +145,8 @@ from .serializers import (UserSerializer,
     NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer,
-    RegisteredVehicleSerializer, InsurancePolicySerializer, DrivingLicenseSerializer, TrafficOffenderSerializer, VehicleSerializer,
-    InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
+    RegisteredVehicleSerializer, InsurancePolicySerializer, DrivingLicenseSerializer, TrafficOffenderReadSerializer, TrafficOffenderWriteSerializer, 
+    VehicleSerializer, InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
 )
 
 import yaml
@@ -2151,8 +2151,13 @@ class TrafficOffenderList(generics.ListCreateAPIView):
 
         return queryset
 
+    # def get_serializer_class(self):
+    #     return TrafficOffenderSerializer
+
     def get_serializer_class(self):
-        return TrafficOffenderSerializer
+        if self.request.method == 'POST':
+            return TrafficOffenderWriteSerializer
+        return TrafficOffenderReadSerializer
 
 class TrafficOffenderDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -2161,8 +2166,13 @@ class TrafficOffenderDetail(generics.RetrieveUpdateDestroyAPIView):
 
     # permission_classes = [IsStaffOrReadOnly]
 
+    # def get_serializer_class(self):
+    #     return TrafficOffenderSerializer
+
     def get_serializer_class(self):
-        return TrafficOffenderSerializer
+        if self.request.method == 'PUT':
+            return TrafficOffenderWriteSerializer
+        return TrafficOffenderReadSerializer
 
     def get_queryset(self):
         """

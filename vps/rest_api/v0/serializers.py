@@ -348,7 +348,15 @@ class DrivingLicenseSerializer(serializers.ModelSerializer):
         model = DrivingLicense
         fields = ['id', 'license_no', 'license_class', 'date_expiry', 'iprs_person']
 
-class TrafficOffenderSerializer(BaseModelSerializer):
+class TrafficOffenderReadSerializer(BaseModelSerializer):
+
+    class Meta:
+        model = TrafficOffender
+        fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email',
+        'county_of_residence', 'sub_county_of_residence', 'date_of_booking', 'time_of_booking', 'posted_date']
+        depth = 2
+        
+class TrafficOffenderWriteSerializer(BaseModelSerializer):
 
     class Meta:
         model = TrafficOffender
