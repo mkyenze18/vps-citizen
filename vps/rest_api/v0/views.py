@@ -2003,10 +2003,6 @@ class RegisteredVehicleList(generics.ListCreateAPIView):
         if chassis_no:
             queryset = queryset.filter(chassis_no=chassis_no)
 
-        inspection = self.request.query_params.get('inspection', None)
-        if inspection:
-            queryset = queryset.filter(inspection=inspection)
-
         return queryset
 
     def get_serializer_class(self):
@@ -2043,17 +2039,17 @@ class InsurancePolicyList(generics.ListCreateAPIView):
         return queryset
 
     def filter_queryset(self, queryset):
+        policy_no = self.request.query_params.get('policy_no', None)
+        if policy_no:
+            queryset = queryset.filter(policy_no=policy_no)
+
+        certificate_no = self.request.query_params.get('certificate_no', None)
+        if certificate_no:
+            queryset = queryset.filter(certificate_no=certificate_no)
+
         reg_no = self.request.query_params.get('reg_no', None)
         if reg_no:
             queryset = queryset.filter(reg_no=reg_no)
-
-        chassis_no = self.request.query_params.get('chassis_no', None)
-        if chassis_no:
-            queryset = queryset.filter(chassis_no=chassis_no)
-
-        inspection = self.request.query_params.get('inspection', None)
-        if inspection:
-            queryset = queryset.filter(inspection=inspection)
 
         return queryset
 
