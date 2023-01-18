@@ -353,7 +353,7 @@ class TrafficOffenderSerializer(BaseModelSerializer):
     class Meta:
         model = TrafficOffender
         fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email',
-        'county_of_residence', 'sub_county_of_residence', 'date_of_arrest', 'time_of_arrest', 'posted_date']
+        'county_of_residence', 'sub_county_of_residence', 'date_of_booking', 'time_of_booking', 'posted_date']
 
 class VehicleSerializer(BaseModelSerializer):
     """

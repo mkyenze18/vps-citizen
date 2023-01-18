@@ -372,8 +372,8 @@ class TrafficOffender(models.Model):
     email = models.EmailField(blank=True)
     county_of_residence = models.CharField(max_length=100, blank=True)
     sub_county_of_residence = models.CharField(max_length=100, blank=True)
-    date_of_arrest = models.DateField()
-    time_of_arrest = models.TimeField(blank=True, null=True)
+    date_of_booking = models.DateField()
+    time_of_booking = models.TimeField(blank=True, null=True)
     posted_date = models.DateTimeField(auto_now_add=True)
 
 class Vehicle(models.Model):
