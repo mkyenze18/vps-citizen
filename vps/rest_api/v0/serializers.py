@@ -339,7 +339,7 @@ class InsurancePolicySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = InsurancePolicy
-        fields = ['id', 'certificate_no', 'certificate_type', 'insurer', 'policy_no', 'date_start', 'date_end']
+        fields = ['id', 'certificate_no', 'certificate_type', 'reg_no', 'insurer', 'policy_no', 'date_start', 'date_end']
 
 class VehicleSerializer(BaseModelSerializer):
     """
