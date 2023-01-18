@@ -130,7 +130,7 @@ from vps.models import (
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
-    RegisteredVehicle, InsurancePolicy, DrivingLicense, Vehicle, Inspection, TrafficSubject,
+    RegisteredVehicle, InsurancePolicy, DrivingLicense, TrafficOffender, Vehicle, Inspection, TrafficSubject,
     UnregisteredTrafficSubject,
     OccurrenceCounter
 )
@@ -145,8 +145,8 @@ from .serializers import (UserSerializer,
     NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer,
-    RegisteredVehicleSerializer, InsurancePolicySerializer, DrivingLicenseSerializer, VehicleSerializer, InspectionSerializer,
-    TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
+    RegisteredVehicleSerializer, InsurancePolicySerializer, DrivingLicenseSerializer, TrafficOffenderSerializer, VehicleSerializer,
+    InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
 )
 
 import yaml
@@ -2124,6 +2124,50 @@ class DrivingLicenseDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = DrivingLicense.objects.all()
         return queryset
 
+# TRAFFIC OFFENDER
+class TrafficOffenderList(generics.ListCreateAPIView):
+    """
+    List all traffic offender, or create a new traffic offenders.
+    """
+
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = TrafficOffender.objects.all()
+        return queryset
+
+    def filter_queryset(self, queryset):
+        id_no = self.request.query_params.get('id_no', None)
+        if id_no:
+            queryset = queryset.filter(iprs_person__id_no=id_no)
+
+        passport_no = self.request.query_params.get('passport_no', None)
+        if passport_no:
+            queryset = queryset.filter(iprs_person__passport_no=passport_no)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return TrafficOffenderSerializer
+
+class TrafficOffenderDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Update, Delete, or View a TrafficOffender
+    """
+
+    # permission_classes = [IsStaffOrReadOnly]
+
+    def get_serializer_class(self):
+        return TrafficOffenderSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = TrafficOffender.objects.all()
+        return queryset
+
 # VEHICLE
 class VehicleList(generics.ListCreateAPIView):
     """
@@ -2484,6 +2528,7 @@ def api_root(request, format=None):
         'registered-vehicles': reverse(f'{app_name}:{pre}-registered-vehicle-list', request=request, format=format),
         'insurance-policies': reverse(f'{app_name}:{pre}-insurance-policy-list', request=request, format=format),
         'driving-licenses': reverse(f'{app_name}:{pre}-driving-license-list', request=request, format=format),
+        'traffic-offenders': reverse(f'{app_name}:{pre}-traffic-offender-list', request=request, format=format),
         'vehicle': reverse(f'{app_name}:{pre}-vehicle-list', request=request, format=format),
         'inspection': reverse(f'{app_name}:{pre}-inspection-list', request=request, format=format),
         'traffic-subject': reverse(f'{app_name}:{pre}-traffic-subject-list', request=request, format=format),

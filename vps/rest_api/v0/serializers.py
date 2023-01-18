@@ -45,7 +45,7 @@ from vps.models import (
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
-    RegisteredVehicle, InsurancePolicy, DrivingLicense, Vehicle, Inspection, TrafficSubject,
+    RegisteredVehicle, InsurancePolicy, DrivingLicense, TrafficOffender, Vehicle, Inspection, TrafficSubject,
     UnregisteredTrafficSubject
 )
 from vps.rest_api.v0.common.serializers import BaseModelSerializer
@@ -347,6 +347,13 @@ class DrivingLicenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = DrivingLicense
         fields = ['id', 'license_no', 'license_class', 'date_expiry', 'iprs_person']
+
+class TrafficOffenderSerializer(BaseModelSerializer):
+
+    class Meta:
+        model = TrafficOffender
+        fields = ['id', 'occurrence', 'iprs_person', 'phone_number', 'email',
+        'county_of_residence', 'sub_county_of_residence', 'date_of_arrest', 'time_of_arrest', 'posted_date']
 
 class VehicleSerializer(BaseModelSerializer):
     """

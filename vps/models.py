@@ -222,7 +222,7 @@ class Arrestee(models.Model):
     # age = models.IntegerField()
     warrants = models.ManyToManyField(Warrant_of_arrest, blank=True)
     cell = models.ForeignKey(PoliceCell, on_delete=models.PROTECT, blank=True, null=True)
-    arresting_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT, blank=True, null=True)
+    arresting_officer = models.ForeignKey(PoliceOfficer, on_delete=models.PROTECT, blank=True, null=True) # ! is this not a duplicate of what is Occurence, Maybe I left to ease db queries?
     cell_type = models.CharField(max_length=30)
     arrestee_condition = models.TextField(blank=True)
     date_of_arrest = models.DateField()
@@ -364,6 +364,17 @@ class DrivingLicense(models.Model):
     license_class = models.CharField(max_length= 50)
     date_expiry = models.DateTimeField()
     iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+
+class TrafficOffender(models.Model):
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.PROTECT, related_name='traffic_offenders')
+    iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+    phone_number = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+    county_of_residence = models.CharField(max_length=100, blank=True)
+    sub_county_of_residence = models.CharField(max_length=100, blank=True)
+    date_of_arrest = models.DateField()
+    time_of_arrest = models.TimeField(blank=True, null=True)
+    posted_date = models.DateTimeField(auto_now_add=True)
 
 class Vehicle(models.Model):
     reg_no = models.CharField(max_length= 50)

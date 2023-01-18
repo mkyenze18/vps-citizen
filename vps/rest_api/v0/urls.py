@@ -275,6 +275,13 @@ urlpatterns = [
         views.DrivingLicenseDetail.as_view(),
         name=f'{pre}-driving-license-detail'),
 
+    path("traffic-offenders",
+        views.TrafficOffenderList.as_view(),
+        name=f'{pre}-traffic-offender-list'),
+    path("traffic-offenders/<int:pk>",
+        views.TrafficOffenderDetail.as_view(),
+        name=f'{pre}-traffic-offender-detail'),
+
     path("vehicles",
         views.VehicleList.as_view(),
         name=f'{pre}-vehicle-list'),
