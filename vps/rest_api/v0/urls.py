@@ -269,10 +269,10 @@ urlpatterns = [
         name=f'{pre}-insurance-policy-detail'),
 
     path("driving-licenses",
-        views.InsurancePolicyList.as_view(),
+        views.DrivingLicenseList.as_view(),
         name=f'{pre}-driving-license-list'),
     path("driving-licenses/<int:pk>",
-        views.InsurancePolicyDetail.as_view(),
+        views.DrivingLicenseDetail.as_view(),
         name=f'{pre}-driving-license-detail'),
 
     path("vehicles",
