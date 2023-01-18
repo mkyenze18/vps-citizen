@@ -268,6 +268,13 @@ urlpatterns = [
         views.InsurancePolicyDetail.as_view(),
         name=f'{pre}-insurance-policy-detail'),
 
+    path("driving-licenses",
+        views.InsurancePolicyList.as_view(),
+        name=f'{pre}-driving-license-list'),
+    path("driving-licenses/<int:pk>",
+        views.InsurancePolicyDetail.as_view(),
+        name=f'{pre}-driving-license-detail'),
+
     path("vehicles",
         views.VehicleList.as_view(),
         name=f'{pre}-vehicle-list'),

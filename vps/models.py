@@ -359,6 +359,12 @@ class InsurancePolicy(models.Model):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
 
+class DrivingLicense(models.Model):
+    license_no = models.CharField(max_length= 50)
+    license_class = models.CharField(max_length= 50)
+    date_expiry = models.DateTimeField()
+    iprs_person = models.ForeignKey(IPRS_Person, on_delete=models.PROTECT)
+
 class Vehicle(models.Model):
     reg_no = models.CharField(max_length= 50)
     chassis_no = models.CharField(max_length= 50, blank=True) # AKA VIN

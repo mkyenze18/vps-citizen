@@ -130,7 +130,8 @@ from vps.models import (
     MugShots, FingerPrints,
     Offense, ChargeSheet_Person, ChargeSheet, CourtFile,
     EvidenceCategory, Evidence, EvidenceItemCategory, EvidenceItemImage,
-    RegisteredVehicle, InsurancePolicy, Vehicle, Inspection, TrafficSubject, UnregisteredTrafficSubject,
+    RegisteredVehicle, InsurancePolicy, DrivingLicense, Vehicle, Inspection, TrafficSubject,
+    UnregisteredTrafficSubject,
     OccurrenceCounter
 )
 from helpers.file_system_manipulation import delete_file_in_media, delete_folder_in_media
@@ -144,7 +145,8 @@ from .serializers import (UserSerializer,
     NextofkinSerializer, MugShotsSerializer, FingerPrintsSerializer,
     OffenseSerializer, ChargeSheetSerializer, ChargeSheetPersonSerializer, CourtFileSerializer,
     EvidenceCategorySerializer, EvidenceItemCategorySerializer, EvidenceReadSerializer, EvidenceWriteSerializer, EvidenceItemImageSerializer,
-    RegisteredVehicleSerializer, InsurancePolicySerializer, VehicleSerializer, InspectionSerializer, TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
+    RegisteredVehicleSerializer, InsurancePolicySerializer, DrivingLicenseSerializer, VehicleSerializer, InspectionSerializer,
+    TrafficSubjectSerializer, UnregisteredTrafficSubjectSerializer
 )
 
 import yaml
@@ -2026,7 +2028,7 @@ class RegisteredVehicleDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = RegisteredVehicle.objects.all()
         return queryset
 
-# VEHICLE
+# INSURANCE POLICY
 class InsurancePolicyList(generics.ListCreateAPIView):
     """
     List all insurance policies, or create a new insurance policies.
@@ -2074,6 +2076,53 @@ class InsurancePolicyDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = InsurancePolicy.objects.all()
         return queryset
 
+# DRIVING LICENSE
+class DrivingLicenseList(generics.ListCreateAPIView):
+    """
+    List all driving license, or create a new driving licenses.
+    """
+
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = DrivingLicense.objects.all()
+        return queryset
+
+    def filter_queryset(self, queryset):
+        license_no = self.request.query_params.get('license_no', None)
+        if license_no:
+            queryset = queryset.filter(license_no=license_no)
+
+        id_no = self.request.query_params.get('id_no', None)
+        if id_no:
+            queryset = queryset.filter(iprs_person__id_no=id_no)
+
+        passport_no = self.request.query_params.get('passport_no', None)
+        if passport_no:
+            queryset = queryset.filter(iprs_person__passport_no=passport_no)
+
+        return queryset
+
+    def get_serializer_class(self):
+        return DrivingLicenseSerializer
+
+class DrivingLicenseDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Update, Delete, or View a DrivingLicense
+    """
+
+    # permission_classes = [IsStaffOrReadOnly]
+
+    def get_serializer_class(self):
+        return DrivingLicenseSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = DrivingLicense.objects.all()
+        return queryset
 
 # VEHICLE
 class VehicleList(generics.ListCreateAPIView):
@@ -2434,6 +2483,7 @@ def api_root(request, format=None):
         'TRAFFIC' : '================',
         'registered-vehicles': reverse(f'{app_name}:{pre}-registered-vehicle-list', request=request, format=format),
         'insurance-policies': reverse(f'{app_name}:{pre}-insurance-policy-list', request=request, format=format),
+        'driving-licenses': reverse(f'{app_name}:{pre}-driving-license-list', request=request, format=format),
         'vehicle': reverse(f'{app_name}:{pre}-vehicle-list', request=request, format=format),
         'inspection': reverse(f'{app_name}:{pre}-inspection-list', request=request, format=format),
         'traffic-subject': reverse(f'{app_name}:{pre}-traffic-subject-list', request=request, format=format),
