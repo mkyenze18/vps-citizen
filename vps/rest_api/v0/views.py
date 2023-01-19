@@ -1186,7 +1186,7 @@ def occurrence_emailAbstract(request, pk, format=None):
         unregistered_reporters_email_array = list(map(lambda recipient: recipient.email_address, unregistered_reporters))
 
         traffic_offenders = instance.traffic_offenders.all()
-        traffic_offenders_email_array = list(map(lambda recipient: recipient.email_address, traffic_offenders))
+        traffic_offenders_email_array = list(map(lambda recipient: recipient.email, traffic_offenders))
 
         recipient_list_email = reporters_email_array + unregistered_reporters_email_array + traffic_offenders_email_array
         
